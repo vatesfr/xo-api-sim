@@ -1,10 +1,10 @@
 import express from 'express'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSpec from '../swagger.json'
-import { dataStore } from './data-store'
+import type { MockDataStore } from './data-store'
 import { registerSwaggerRoutes } from './routes/swagger-routes'
 
-export async function startServer(port: number) {
+export async function startServer(port: number, dataStore: MockDataStore) {
   const app = express()
   
   // Middleware
@@ -20,7 +20,7 @@ export async function startServer(port: number) {
   })
   
   // Register all swagger routes
-  registerSwaggerRoutes(app)
+  registerSwaggerRoutes(app, dataStore)
   
   // Error handling middleware
   app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -1,0 +1,58 @@
+[
+  {
+    "auto_poweron": true,
+    "current_operations": {},
+    "default_SR": "3465240e-4037-f185-444e-378ddc1df235",
+    "HA_enabled": false,
+    "haSrs": [],
+    "master": "cfa26844-002e-4844-930b-97fa0fff1c34",
+    "tags": [
+      "anonymized"
+    ],
+    "name_description": "Anonymized lab pool 1",
+    "name_label": "pool-01",
+    "migrationCompression": false,
+    "otherConfig": {},
+    "cpus": {
+      "cores": 120,
+      "sockets": 3
+    },
+    "zstdSupported": true,
+    "vtpmSupported": true,
+    "platform_version": "3.4.0",
+    "id": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "type": "pool",
+    "uuid": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "href": "/rest/v0/pools/6e0c5f16-923f-2971-a07d-ad1486f67309"
+  },
+  {
+    "auto_poweron": false,
+    "current_operations": {},
+    "default_SR": "b3f6db91-a48c-a751-6979-029f3d6eca12",
+    "HA_enabled": false,
+    "haSrs": [],
+    "master": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
+    "tags": [
+      "anonymized"
+    ],
+    "name_description": "Anonymized lab pool 2",
+    "name_label": "pool-02",
+    "migrationCompression": false,
+    "otherConfig": {},
+    "cpus": {
+      "cores": 32,
+      "sockets": 2
+    },
+    "zstdSupported": true,
+    "vtpmSupported": true,
+    "platform_version": "3.4.0",
+    "id": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "type": "pool",
+    "uuid": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "href": "/rest/v0/pools/3679fe1a-d058-4055-b800-d30e1bd2af48"
+  }
+]

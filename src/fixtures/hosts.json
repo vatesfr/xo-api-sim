@@ -1,0 +1,209 @@
+[
+  {
+    "name_label": "node-01",
+    "name_description": "Moonshot cartridge host",
+    "memory": {
+      "usage": 25206964224,
+      "size": 34359738368
+    },
+    "power_state": "Running",
+    "powerOnMode": "",
+    "tags": [
+      "anonymized"
+    ],
+    "version": "8.3.0",
+    "PIFs": [
+      "454a125a-582a-9f6c-30f4-b92bfe7d9a81",
+      "9161bf4e-f9bb-8946-2e15-620a4cf26343",
+      "dbe880d9-22ce-0281-4255-16039b7c1cec",
+      "a554e23f-63de-f554-a4d2-1472cf82e652",
+      "ca21e720-2399-7236-4c65-e0026bc68f25",
+      "8758d5a7-eaf6-3eea-d1a2-b09b33849231"
+    ],
+    "$PBDs": [
+      "effbc152-1e54-bfc3-b26f-1be22b0863c8",
+      "658e3e95-8176-e1ec-6197-58997b888a77",
+      "101860f8-31c8-5999-5cf2-f60db216b4a7",
+      "36c57d84-39d6-a091-0e2e-23c2d06f1775",
+      "8095d62a-b2c4-3961-ec07-1d874e306a2b",
+      "c0d3c0c7-6daa-9fc3-5105-67bf41070e75",
+      "28c44878-d45e-3db0-1645-354588d786c5",
+      "4e758fcc-69a8-0869-6fa6-7578feeb9644",
+      "01393140-26fb-eddc-98b4-66bfe85daf17"
+    ],
+    "id": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
+    "type": "host",
+    "uuid": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "cpus": {
+      "cores": 16,
+      "sockets": 1
+    },
+    "build": "8.3.0",
+    "enabled": true,
+    "hostname": "node-01.lab.local",
+    "address": "10.0.0.11"
+  },
+  {
+    "name_label": "node-02",
+    "name_description": "Dell R640 compute host",
+    "memory": {
+      "usage": 175904227328,
+      "size": 411243118592
+    },
+    "power_state": "Running",
+    "powerOnMode": "",
+    "tags": [
+      "anonymized"
+    ],
+    "version": "8.3.0",
+    "PIFs": [
+      "cdc7a221-b26c-7539-7a5a-b80f10f9b8ac",
+      "5e5af331-297a-0bb7-f466-8c9ef828ebf2",
+      "64b3d4ae-90cf-6e33-9f40-f6df474b743c"
+    ],
+    "$PBDs": [
+      "1398e309-7de6-0b7a-ba16-6550c446f288",
+      "7ac34db8-57e5-f682-07e5-7f8ebe1e381a",
+      "71c85716-57b1-71fa-4cf0-6e55131e3c4d",
+      "43421dbb-97aa-6148-c305-7c21357951b2",
+      "68043ff3-2fae-54ab-3154-55e67d07dc2c",
+      "d70db0c7-d1b8-afcd-0edc-ec7f8785491d"
+    ],
+    "id": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
+    "type": "host",
+    "uuid": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "cpus": {
+      "cores": 40,
+      "sockets": 1
+    },
+    "build": "8.3.0",
+    "enabled": true,
+    "hostname": "node-02.lab.local",
+    "address": "10.0.0.12"
+  },
+  {
+    "name_label": "node-03",
+    "name_description": "Dell R640 compute host",
+    "memory": {
+      "usage": 156398997504,
+      "size": 411243118592
+    },
+    "power_state": "Running",
+    "powerOnMode": "",
+    "tags": [
+      "anonymized"
+    ],
+    "version": "8.3.0",
+    "PIFs": [
+      "add6dac4-e2da-40e3-f875-f96dc097c7f3",
+      "cfc38e53-cfd5-2f52-8a4f-c8e40430a15c",
+      "be1808f1-99fa-eea7-9e44-a81d28d659c5"
+    ],
+    "$PBDs": [
+      "e7fe703f-0a3d-9448-d5bf-a4a884df0db5",
+      "3d9c8b88-b13c-2bd8-fd54-44c4da97f600",
+      "ebf5c35b-ffcf-78fe-a802-e706081ebf1f",
+      "3c8fd976-cb23-54d3-169d-ce71801a5a1d",
+      "4b379bfc-1f07-21b0-1851-93da7bd2af84",
+      "7ab19eba-6593-3099-ca8b-36912b8fdd09"
+    ],
+    "id": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
+    "type": "host",
+    "uuid": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "cpus": {
+      "cores": 40,
+      "sockets": 1
+    },
+    "build": "8.3.0",
+    "enabled": true,
+    "hostname": "node-03.lab.local",
+    "address": "10.0.0.13"
+  },
+  {
+    "name_label": "node-04",
+    "name_description": "Moonshot cartridge host",
+    "memory": {
+      "usage": 23041757184,
+      "size": 34359738368
+    },
+    "power_state": "Running",
+    "powerOnMode": "",
+    "tags": [
+      "anonymized"
+    ],
+    "version": "8.3.0",
+    "PIFs": [
+      "e7a5a216-5adb-2c56-e310-fb55d19698a6",
+      "5d359685-8fa8-ddb5-2ec9-d8e973467de5",
+      "7ad5a1c0-b34c-1078-0e94-668cba94bd07",
+      "9d54789d-7d52-dbdb-71eb-46cf1e6f5f33",
+      "03f00725-97d2-85d1-d168-81d0cd718aaa",
+      "8f349272-c03f-0cc2-800b-0a3c9a8262e9"
+    ],
+    "$PBDs": [
+      "6a5e86da-194e-b473-fec7-0e4cc7bcfe4d",
+      "777a158f-4565-9b20-fe9c-dd088920d4be",
+      "82d07a2e-135d-adcf-b6c5-f8f9a7d43808",
+      "0ee57319-2156-7475-b52c-15f422c16e40",
+      "e88e7d72-62c7-75f5-afd7-c026be25c520",
+      "5d1091ac-a41e-ec7e-2cf0-4714d80affee",
+      "8e196fa8-a1ee-cd62-ad6f-f03dd4b1e92e",
+      "61186568-2db1-308c-a371-8f95c2df5d1a",
+      "2e8d6592-a0bd-63a0-b8ff-8db9a4dda047"
+    ],
+    "id": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
+    "type": "host",
+    "uuid": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "cpus": {
+      "cores": 16,
+      "sockets": 1
+    },
+    "build": "8.3.0",
+    "enabled": true,
+    "hostname": "node-04.lab.local",
+    "address": "10.0.0.14"
+  },
+  {
+    "name_label": "node-05",
+    "name_description": "Dell R640 compute host",
+    "memory": {
+      "usage": 119609790464,
+      "size": 411243118592
+    },
+    "power_state": "Running",
+    "powerOnMode": "",
+    "tags": [
+      "anonymized"
+    ],
+    "version": "8.3.0",
+    "PIFs": [
+      "b007e79b-62f8-9f8f-8e2f-8a417cedb2eb",
+      "b836e8a0-d195-fd55-446d-4e8bfecf26c9",
+      "dabf2512-aa57-c3eb-ef85-aceb54b67beb"
+    ],
+    "$PBDs": [
+      "f0d5e287-7583-f91e-c34c-4de4652330ee",
+      "621b7c16-7c0e-918f-bb54-630accc4cc99",
+      "12b52b8c-ab8c-75ff-9fef-516297f8dee8",
+      "6a34c95f-b3e6-79ce-2251-0969691ea302",
+      "4ba14917-b678-6e45-7e79-9f9766063af1",
+      "0be6d0b0-d68f-30bb-fd61-6081e59b0161"
+    ],
+    "id": "cfa26844-002e-4844-930b-97fa0fff1c34",
+    "type": "host",
+    "uuid": "cfa26844-002e-4844-930b-97fa0fff1c34",
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "cpus": {
+      "cores": 40,
+      "sockets": 1
+    },
+    "build": "8.3.0",
+    "enabled": true,
+    "hostname": "node-05.lab.local",
+    "address": "10.0.0.15"
+  }
+]

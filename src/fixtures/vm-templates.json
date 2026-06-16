@@ -1,0 +1,210 @@
+[
+  {
+    "type": "VM-template",
+    "addresses": {},
+    "auto_poweron": false,
+    "bios_strings": {
+      "bios-vendor": "Xen",
+      "bios-version": "",
+      "system-manufacturer": "Xen",
+      "system-product-name": "HVM domU",
+      "system-version": "",
+      "system-serial-number": "",
+      "hp-rombios": "",
+      "oem-1": "Xen",
+      "oem-2": "MS_VM_CERT/SHA1/bdbeb6e0a816d43fa6d3fe8aaef04c2bad9d3e3d"
+    },
+    "blockedOperations": {},
+    "boot": {
+      "order": "cd"
+    },
+    "CPUs": {
+      "max": 2,
+      "number": 2
+    },
+    "current_operations": {},
+    "expNestedHvm": false,
+    "isNestedVirtEnabled": false,
+    "viridian": false,
+    "high_availability": "",
+    "isFirmwareSupported": true,
+    "memory": {
+      "dynamic": [
+        2147483648,
+        2147483648
+      ],
+      "static": [
+        134217728,
+        2147483648
+      ],
+      "size": 2147483648
+    },
+    "installTime": null,
+    "name_description": "Debian 12 Cloud-Init Ready Hub Template",
+    "name_label": "Debian 12 Cloud-Init (Hub)",
+    "needsVtpm": false,
+    "other": {
+      "xo:resource:xva:id": "9f889084-d277-56d6-e22e-2b2ddfb83210",
+      "xo:resource:installedTemplate:uuid": "653f9237-3612-b08e-fd43-5302cf2d537b",
+      "xo:resource:xva:version": "1.2.0",
+      "xo:resource:namespace": "Debian12",
+      "import_task": "OpaqueRef:10540f18-ded4-bd19-bc0d-f84dd6963c4f",
+      "mac_seed": "00000000-0000-0000-0000-000000000000",
+      "vgpu_pci": "",
+      "base_template_name": "Debian Jessie 8.0",
+      "install-methods": "cdrom,nfs,http,ftp",
+      "linux_template": "true"
+    },
+    "os_version": {
+      "name": "Debian GNU/Linux 11 (bullseye)",
+      "uname": "5.10.0-11-amd64",
+      "distro": "debian",
+      "major": "11",
+      "minor": "11"
+    },
+    "power_state": "Halted",
+    "hasVendorDevice": false,
+    "snapshots": [],
+    "startDelay": 0,
+    "startTime": null,
+    "secureBoot": false,
+    "tags": [
+      "anonymized"
+    ],
+    "VIFs": [
+      "9eb2f3e5-bf4c-0efd-5ed8-c44b057cb718"
+    ],
+    "VTPMs": [],
+    "virtualizationMode": "hvm",
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$VBDs": [
+      "99939eb4-542f-4511-2516-4f9678791688",
+      "292b35cd-d810-61db-f5f6-6494a703b011"
+    ],
+    "VGPUs": [],
+    "$VGPUs": [],
+    "xenStoreData": {
+      "vm-data": ""
+    },
+    "vga": "std",
+    "videoram": 8,
+    "coresPerSocket": 2,
+    "isDefaultTemplate": false,
+    "template_info": {
+      "disks": [],
+      "install_methods": [
+        "cdrom",
+        "nfs",
+        "http",
+        "ftp"
+      ]
+    },
+    "id": "653f9237-3612-b08e-fd43-5302cf2d537b",
+    "uuid": "653f9237-3612-b08e-fd43-5302cf2d537b",
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309"
+  },
+  {
+    "type": "VM-template",
+    "addresses": {},
+    "auto_poweron": false,
+    "bios_strings": {
+      "bios-vendor": "Xen",
+      "bios-version": "",
+      "system-manufacturer": "Xen",
+      "system-product-name": "HVM domU",
+      "system-version": "",
+      "system-serial-number": "",
+      "hp-rombios": "",
+      "oem-1": "Xen",
+      "oem-2": "MS_VM_CERT/SHA1/bdbeb6e0a816d43fa6d3fe8aaef04c2bad9d3e3d"
+    },
+    "blockedOperations": {},
+    "boot": {
+      "order": "cd",
+      "firmware": "bios"
+    },
+    "CPUs": {
+      "max": 2,
+      "number": 2
+    },
+    "current_operations": {},
+    "expNestedHvm": false,
+    "isNestedVirtEnabled": false,
+    "viridian": false,
+    "high_availability": "",
+    "isFirmwareSupported": true,
+    "memory": {
+      "dynamic": [
+        2147483648,
+        2147483648
+      ],
+      "static": [
+        2147483648,
+        2147483648
+      ],
+      "size": 2147483648
+    },
+    "installTime": null,
+    "name_description": "Debian 12 Cloud-Init Ready Hub Template",
+    "name_label": "Debian 12 Cloud-init (Hub)",
+    "needsVtpm": false,
+    "other": {
+      "xo:resource:installedTemplate:uuid": "c011d9bd-782c-b835-ef26-ae51467fd2fa",
+      "xo:resource:xva:id": "e2fb63ba-1a5d-7527-bfca-14fef610bf6f",
+      "xo:resource:namespace": "Debian12",
+      "xo:resource:xva:version": "1.0.0",
+      "import_task": "OpaqueRef:6a4f870b-5591-4efc-f31e-6a9b745af057",
+      "mac_seed": "00000000-0000-0000-0000-000000000000",
+      "vgpu_pci": "",
+      "base_template_name": "Debian Jessie 8.0",
+      "install-methods": "cdrom,nfs,http,ftp",
+      "linux_template": "true"
+    },
+    "os_version": {
+      "name": "Debian 12",
+      "uname": "6.1.0-17-amd64",
+      "distro": "Debian"
+    },
+    "power_state": "Halted",
+    "hasVendorDevice": false,
+    "snapshots": [],
+    "startDelay": 0,
+    "startTime": null,
+    "secureBoot": false,
+    "tags": [
+      "anonymized"
+    ],
+    "VIFs": [
+      "cb58eefc-394f-6122-a163-503df19066c8"
+    ],
+    "VTPMs": [],
+    "virtualizationMode": "hvm",
+    "$container": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
+    "$VBDs": [
+      "d831373f-884c-9e6a-0ea4-d1e867aa151d"
+    ],
+    "VGPUs": [],
+    "$VGPUs": [],
+    "xenStoreData": {
+      "vm-data": ""
+    },
+    "vga": "cirrus",
+    "videoram": 4,
+    "coresPerSocket": 2,
+    "isDefaultTemplate": false,
+    "template_info": {
+      "disks": [],
+      "install_methods": [
+        "cdrom",
+        "nfs",
+        "http",
+        "ftp"
+      ]
+    },
+    "id": "c011d9bd-782c-b835-ef26-ae51467fd2fa",
+    "uuid": "c011d9bd-782c-b835-ef26-ae51467fd2fa",
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48"
+  }
+]
