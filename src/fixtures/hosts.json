@@ -8,9 +8,6 @@
     },
     "power_state": "Running",
     "powerOnMode": "",
-    "tags": [
-      "anonymized"
-    ],
     "version": "8.3.0",
     "PIFs": [
       "454a125a-582a-9f6c-30f4-b92bfe7d9a81",
@@ -53,9 +50,6 @@
     },
     "power_state": "Running",
     "powerOnMode": "",
-    "tags": [
-      "anonymized"
-    ],
     "version": "8.3.0",
     "PIFs": [
       "cdc7a221-b26c-7539-7a5a-b80f10f9b8ac",
@@ -92,9 +86,6 @@
     },
     "power_state": "Running",
     "powerOnMode": "",
-    "tags": [
-      "anonymized"
-    ],
     "version": "8.3.0",
     "PIFs": [
       "add6dac4-e2da-40e3-f875-f96dc097c7f3",
@@ -131,9 +122,6 @@
     },
     "power_state": "Running",
     "powerOnMode": "",
-    "tags": [
-      "anonymized"
-    ],
     "version": "8.3.0",
     "PIFs": [
       "e7a5a216-5adb-2c56-e310-fb55d19698a6",
@@ -176,9 +164,6 @@
     },
     "power_state": "Running",
     "powerOnMode": "",
-    "tags": [
-      "anonymized"
-    ],
     "version": "8.3.0",
     "PIFs": [
       "b007e79b-62f8-9f8f-8e2f-8a417cedb2eb",

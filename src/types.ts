@@ -1,34 +1,39 @@
-export type {
-  XoVm,
-  XoHost,
-  XoPool,
-  XoVbd,
-  XoVif,
-  XoSr,
-  XoVdi,
-  XoNetwork,
-  XoPif,
-  XoPbd,
-  XoPgpu,
-  XoTask,
-  XoUser,
-  XoGroup,
-  XoMessage,
-  XoAlarm,
-  XoServer,
-  XoProxy,
-  XoVmSnapshot,
-  XoVmTemplate,
-  XoVmController,
-  XoVdiSnapshot,
-  XoSchedule,
-  XoPci,
-  XoGpuGroup,
-  XoAuthenticationToken,
-} from '@vates/types'
+import type { Xapi } from "@vates/types";
 
 export type {
-  VM_POWER_STATE,
-  HOST_POWER_STATE,
   Branded,
-} from '@vates/types'
+  HOST_POWER_STATE,
+  VM_POWER_STATE,
+  XoAlarm,
+  XoAuthenticationToken,
+  XoGpuGroup,
+  XoGroup,
+  XoHost,
+  XoMessage,
+  XoNetwork,
+  XoPbd,
+  XoPci,
+  XoPgpu,
+  XoPif,
+  XoPool,
+  XoProxy,
+  XoSchedule,
+  XoServer,
+  XoSr,
+  XoTask,
+  XoUser,
+  XoVbd,
+  XoVdi,
+  XoVdiSnapshot,
+  XoVif,
+  XoVm,
+  XoVmController,
+  XoVmSnapshot,
+  XoVmTemplate,
+} from "@vates/types";
+
+type CreateVdiParams = Parameters<Xapi["VDI_create"]>;
+export type CreateVdiBody = Omit<CreateVdiParams[0], "SR" | "other_config"> & {
+  srId: string;
+  other_config?: { [key: string]: string };
+} & CreateVdiParams[1];

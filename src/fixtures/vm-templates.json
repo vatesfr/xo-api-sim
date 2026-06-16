@@ -29,14 +29,8 @@
     "high_availability": "",
     "isFirmwareSupported": true,
     "memory": {
-      "dynamic": [
-        2147483648,
-        2147483648
-      ],
-      "static": [
-        134217728,
-        2147483648
-      ],
+      "dynamic": [2147483648, 2147483648],
+      "static": [134217728, 2147483648],
       "size": 2147483648
     },
     "installTime": null,
@@ -68,12 +62,7 @@
     "startDelay": 0,
     "startTime": null,
     "secureBoot": false,
-    "tags": [
-      "anonymized"
-    ],
-    "VIFs": [
-      "9eb2f3e5-bf4c-0efd-5ed8-c44b057cb718"
-    ],
+    "VIFs": ["9eb2f3e5-bf4c-0efd-5ed8-c44b057cb718"],
     "VTPMs": [],
     "virtualizationMode": "hvm",
     "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
@@ -92,12 +81,7 @@
     "isDefaultTemplate": false,
     "template_info": {
       "disks": [],
-      "install_methods": [
-        "cdrom",
-        "nfs",
-        "http",
-        "ftp"
-      ]
+      "install_methods": ["cdrom", "nfs", "http", "ftp"]
     },
     "id": "653f9237-3612-b08e-fd43-5302cf2d537b",
     "uuid": "653f9237-3612-b08e-fd43-5302cf2d537b",
@@ -135,14 +119,8 @@
     "high_availability": "",
     "isFirmwareSupported": true,
     "memory": {
-      "dynamic": [
-        2147483648,
-        2147483648
-      ],
-      "static": [
-        2147483648,
-        2147483648
-      ],
+      "dynamic": [2147483648, 2147483648],
+      "static": [2147483648, 2147483648],
       "size": 2147483648
     },
     "installTime": null,
@@ -172,18 +150,11 @@
     "startDelay": 0,
     "startTime": null,
     "secureBoot": false,
-    "tags": [
-      "anonymized"
-    ],
-    "VIFs": [
-      "cb58eefc-394f-6122-a163-503df19066c8"
-    ],
+    "VIFs": ["cb58eefc-394f-6122-a163-503df19066c8"],
     "VTPMs": [],
     "virtualizationMode": "hvm",
     "$container": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "$VBDs": [
-      "d831373f-884c-9e6a-0ea4-d1e867aa151d"
-    ],
+    "$VBDs": ["d831373f-884c-9e6a-0ea4-d1e867aa151d"],
     "VGPUs": [],
     "$VGPUs": [],
     "xenStoreData": {
@@ -195,12 +166,7 @@
     "isDefaultTemplate": false,
     "template_info": {
       "disks": [],
-      "install_methods": [
-        "cdrom",
-        "nfs",
-        "http",
-        "ftp"
-      ]
+      "install_methods": ["cdrom", "nfs", "http", "ftp"]
     },
     "id": "c011d9bd-782c-b835-ef26-ae51467fd2fa",
     "uuid": "c011d9bd-782c-b835-ef26-ae51467fd2fa",

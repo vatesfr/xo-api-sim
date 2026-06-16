@@ -6,9 +6,6 @@
     "HA_enabled": false,
     "haSrs": [],
     "master": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "tags": [
-      "anonymized"
-    ],
     "name_description": "Anonymized lab pool 1",
     "name_label": "pool-01",
     "migrationCompression": false,
@@ -34,9 +31,6 @@
     "HA_enabled": false,
     "haSrs": [],
     "master": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "tags": [
-      "anonymized"
-    ],
     "name_description": "Anonymized lab pool 2",
     "name_label": "pool-02",
     "migrationCompression": false,

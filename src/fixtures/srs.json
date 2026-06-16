@@ -7,7 +7,7 @@
     "physical_usage": 24916828160,
     "size": 459046486016,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "f779da6b-74e5-1e0f-4ed0-dac4e2b7712b",
@@ -17,7 +17,7 @@
     "physical_usage": 381312659456,
     "size": 459046486016,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
@@ -27,7 +27,7 @@
     "physical_usage": 1210355712,
     "size": 191278309376,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "d1902265-0954-e12f-05d5-45671d55d214",
@@ -37,7 +37,7 @@
     "physical_usage": 7430156288,
     "size": 191278309376,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "d1d3a25c-1723-30ac-7d6b-6ad424681081",
@@ -47,7 +47,7 @@
     "physical_usage": 47237394432,
     "size": 191278309376,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "3465240e-4037-f185-444e-378ddc1df235",
@@ -57,7 +57,7 @@
     "physical_usage": 535737401344,
     "size": 54420598423552,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   },
   {
     "id": "b3f6db91-a48c-a751-6979-029f3d6eca12",
@@ -67,6 +67,6 @@
     "physical_usage": 156242018304,
     "size": 268418678784,
     "type": "SR",
-    "tags": ["anonymized"]
+    "tags": []
   }
 ]
