@@ -10,6 +10,21 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   // Middleware
   app.use(express.json());
 
+  // HTTP request tracing
+  app.use((_req, _res, next) => {
+    const start = Date.now();
+    const origEnd = _res.end;
+    _res.end = ((chunk?: any, encoding?: any) => {
+      const duration = Date.now() - start;
+      const req = _req as express.Request;
+      console.log(
+        `[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> ${_res.statusCode} (${duration}ms)`,
+      );
+      return origEnd.call(_res, chunk, encoding);
+    }) as typeof _res.end;
+    next();
+  });
+
   // Swagger UI (swagger.json already has servers: [{url: '/rest/v0'}])
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec as any));
   app.get("/swagger.json", (_req, res) => res.json(swaggerSpec));
