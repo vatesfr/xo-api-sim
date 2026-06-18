@@ -1,6 +1,7 @@
 import { resolve } from "node:path";
 import { MockDataStore } from "./data-store";
 import { loadFixtures } from "./fixtures/load-fixtures";
+import { enrichFixtures } from "./fixtures/enrich-fixtures";
 import { startServer } from "./server";
 
 async function main() {
@@ -9,6 +10,7 @@ async function main() {
     process.env.FIXTURES_DIR || resolve(__dirname, "fixtures");
 
   const fixtures = await loadFixtures(fixturesDir);
+  enrichFixtures(fixtures);
   const dataStore = new MockDataStore(fixtures);
 
   await startServer(port, dataStore);
