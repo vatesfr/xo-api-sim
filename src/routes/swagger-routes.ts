@@ -1,5 +1,6 @@
 import type express from "express";
 import { v4 as uuid } from "uuid";
+import * as CM from "complex-matcher";
 import swagger from "../../swagger.json";
 import type { MockDataStore } from "../data-store";
 import { registerCustomHandlers } from "../handlers";
@@ -87,10 +88,10 @@ export function registerSwaggerRoutes(
     }
 
     // Apply filter if present
-    let filtered = items;
+    let filtered = items
     if (req.query.filter) {
-      // TODO: Implement XO filter language
-      console.log(`Filter not yet implemented: ${req.query.filter}`);
+      const predicate = CM.parse(req.query.filter as string).createPredicate()
+      filtered = items.filter(predicate)
     }
 
     // Apply limit if present

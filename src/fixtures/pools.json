@@ -6,7 +6,7 @@
     "HA_enabled": false,
     "haSrs": [],
     "master": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "name_description": "Anonymized lab pool 1",
+    "name_description": "Lab pool 1",
     "name_label": "pool-01",
     "migrationCompression": false,
     "otherConfig": {},
@@ -31,7 +31,7 @@
     "HA_enabled": false,
     "haSrs": [],
     "master": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "name_description": "Anonymized lab pool 2",
+    "name_description": "Lab pool 2",
     "name_label": "pool-02",
     "migrationCompression": false,
     "otherConfig": {},
@@ -47,6 +47,7 @@
     "uuid": "3679fe1a-d058-4055-b800-d30e1bd2af48",
     "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
     "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
-    "href": "/rest/v0/pools/3679fe1a-d058-4055-b800-d30e1bd2af48"
+    "href": "/rest/v0/pools/3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "tags": ["test-pool"]
   }
 ]
