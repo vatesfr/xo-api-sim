@@ -32,6 +32,11 @@
     "type": "host",
     "uuid": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
     "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "controlDomain": "2e35f16e-eae3-4062-92be-9aa0ab113eb9",
+    "residentVms": [],
+    "PCIs": [],
+    "PGPUs": [],
     "cpus": {
       "cores": 16,
       "sockets": 1
@@ -68,6 +73,11 @@
     "type": "host",
     "uuid": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "controlDomain": "45137ca7-8b36-41d2-9155-19cdef849c05",
+    "residentVms": [],
+    "PCIs": [],
+    "PGPUs": [],
     "cpus": {
       "cores": 40,
       "sockets": 1
@@ -104,6 +114,11 @@
     "type": "host",
     "uuid": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "controlDomain": "88c878a9-4d26-46bb-96dd-f3c904a69e36",
+    "residentVms": [],
+    "PCIs": [],
+    "PGPUs": [],
     "cpus": {
       "cores": 40,
       "sockets": 1
@@ -146,6 +161,11 @@
     "type": "host",
     "uuid": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
     "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "controlDomain": "52663df9-2079-4fa0-b0f6-296fbdbbec25",
+    "residentVms": [],
+    "PCIs": [],
+    "PGPUs": [],
     "cpus": {
       "cores": 16,
       "sockets": 1
@@ -182,6 +202,11 @@
     "type": "host",
     "uuid": "cfa26844-002e-4844-930b-97fa0fff1c34",
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "controlDomain": "52663df9-2079-4fa0-b0f6-296fbdbbec25",
+    "residentVms": [],
+    "PCIs": [],
+    "PGPUs": [],
     "cpus": {
       "cores": 40,
       "sockets": 1

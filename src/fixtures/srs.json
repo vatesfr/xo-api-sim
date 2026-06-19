@@ -5,9 +5,26 @@
     "name_label": "Local storage node-01",
     "name_description": "",
     "physical_usage": 24916828160,
+    "usage": 24916828160,
     "size": 459046486016,
     "type": "SR",
-    "tags": []
+    "SR_type": "ext",
+    "tags": [],
+    "allocationStrategy": "thick",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": false,
+    "sm_config": {},
+    "$PBDs": [
+      "658e3e95-8176-e1ec-6197-58997b888a77"
+    ],
+    "$container": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "VDIs": [],
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "_xapiRef": "OpaqueRef:d0640f48-a334-8948-5419-a958aaff3f54"
   },
   {
     "id": "f779da6b-74e5-1e0f-4ed0-dac4e2b7712b",
@@ -15,9 +32,26 @@
     "name_label": "Local storage node-04",
     "name_description": "",
     "physical_usage": 381312659456,
+    "usage": 381312659456,
     "size": 459046486016,
     "type": "SR",
-    "tags": []
+    "SR_type": "ext",
+    "tags": [],
+    "allocationStrategy": "thick",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": false,
+    "sm_config": {},
+    "$PBDs": [
+      "61186568-2db1-308c-a371-8f95c2df5d1a"
+    ],
+    "$container": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "VDIs": [],
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "_xapiRef": "OpaqueRef:f779da6b-74e5-1e0f-4ed0-dac4e2b7712b"
   },
   {
     "id": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
@@ -25,9 +59,26 @@
     "name_label": "Local storage",
     "name_description": "",
     "physical_usage": 1210355712,
+    "usage": 1210355712,
     "size": 191278309376,
     "type": "SR",
-    "tags": []
+    "SR_type": "ext",
+    "tags": [],
+    "allocationStrategy": "thick",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": false,
+    "sm_config": {},
+    "$PBDs": [
+      "43421dbb-97aa-6148-c305-7c21357951b2"
+    ],
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "VDIs": [],
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "_xapiRef": "OpaqueRef:24ba7623-4173-4b85-66b3-d8a84a81cf51"
   },
   {
     "id": "d1902265-0954-e12f-05d5-45671d55d214",
@@ -35,9 +86,26 @@
     "name_label": "Local storage",
     "name_description": "",
     "physical_usage": 7430156288,
+    "usage": 7430156288,
     "size": 191278309376,
     "type": "SR",
-    "tags": []
+    "SR_type": "ext",
+    "tags": [],
+    "allocationStrategy": "thick",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": false,
+    "sm_config": {},
+    "$PBDs": [
+      "4b379bfc-1f07-21b0-1851-93da7bd2af84"
+    ],
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "VDIs": [],
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "_xapiRef": "OpaqueRef:d1902265-0954-e12f-05d5-45671d55d214"
   },
   {
     "id": "d1d3a25c-1723-30ac-7d6b-6ad424681081",
@@ -45,9 +113,26 @@
     "name_label": "Local storage",
     "name_description": "",
     "physical_usage": 47237394432,
+    "usage": 47237394432,
     "size": 191278309376,
     "type": "SR",
-    "tags": []
+    "SR_type": "ext",
+    "tags": [],
+    "allocationStrategy": "thick",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": false,
+    "sm_config": {},
+    "$PBDs": [
+      "4ba14917-b678-6e45-7e79-9f9766063af1"
+    ],
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "VDIs": [],
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "_xapiRef": "OpaqueRef:d1d3a25c-1723-30ac-7d6b-6ad424681081"
   },
   {
     "id": "3465240e-4037-f185-444e-378ddc1df235",
@@ -55,9 +140,27 @@
     "name_label": "NFS Default",
     "name_description": "NFS lab pool 1",
     "physical_usage": 535737401344,
+    "usage": 535737401344,
     "size": 54420598423552,
     "type": "SR",
-    "tags": []
+    "SR_type": "nfs",
+    "tags": [],
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": true,
+    "sm_config": {},
+    "$PBDs": [
+      "3c8fd976-cb23-54d3-169d-ce71801a5a1d",
+      "1398e309-7de6-0b7a-ba16-6550c446f288",
+      "f0d5e287-7583-f91e-c34c-4de4652330ee"
+    ],
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "VDIs": [],
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
+    "_xapiRef": "OpaqueRef:3465240e-4037-f185-444e-378ddc1df235"
   },
   {
     "id": "b3f6db91-a48c-a751-6979-029f3d6eca12",
@@ -65,8 +168,26 @@
     "name_label": "Default storage",
     "name_description": "storage on lab pool 2",
     "physical_usage": 156242018304,
+    "usage": 156242018304,
     "size": 268418678784,
     "type": "SR",
-    "tags": []
+    "SR_type": "lvmoiscsi",
+    "tags": [],
+    "allocationStrategy": "thin",
+    "content_type": "",
+    "current_operations": {},
+    "inMaintenanceMode": false,
+    "other_config": {},
+    "shared": true,
+    "sm_config": {},
+    "$PBDs": [
+      "101860f8-31c8-5999-5cf2-f60db216b4a7",
+      "e88e7d72-62c7-75f5-afd7-c026be25c520"
+    ],
+    "$container": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "VDIs": [],
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "$poolId": "3679fe1a-d058-4055-b800-d30e1bd2af48",
+    "_xapiRef": "OpaqueRef:b3f6db91-a48c-a751-6979-029f3d6eca12"
   }
 ]

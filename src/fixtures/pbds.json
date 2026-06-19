@@ -3,92 +3,99 @@
     "id": "e7fe703f-0a3d-9448-d5bf-a4a884df0db5",
     "uuid": "e7fe703f-0a3d-9448-d5bf-a4a884df0db5",
     "host": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
-    "SR": "91f7cb45-75df-4d03-154b-72c01a4fccda",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "10.30.0.70:/mnt/slow/dev/iso"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "3d9c8b88-b13c-2bd8-fd54-44c4da97f600",
     "uuid": "3d9c8b88-b13c-2bd8-fd54-44c4da97f600",
     "host": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
-    "SR": "6546bd77-d91b-28e6-2d70-888ff1ccb92f",
+    "SR": "d0640f48-a334-8948-5419-a958aaff3f54",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/block"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "621b7c16-7c0e-918f-bb54-630accc4cc99",
     "uuid": "621b7c16-7c0e-918f-bb54-630accc4cc99",
     "host": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "SR": "a30419ba-7229-d0b7-eb51-9cba35b98d5d",
+    "SR": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/block"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "12b52b8c-ab8c-75ff-9fef-516297f8dee8",
     "uuid": "12b52b8c-ab8c-75ff-9fef-516297f8dee8",
     "host": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "SR": "c5773265-a0af-cfab-a2e0-8c44c523196a",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/cd"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "7ac34db8-57e5-f682-07e5-7f8ebe1e381a",
     "uuid": "7ac34db8-57e5-f682-07e5-7f8ebe1e381a",
     "host": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
-    "SR": "b45a7207-72f6-7081-2cfa-3aaaab6f2149",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/cd"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "ebf5c35b-ffcf-78fe-a802-e706081ebf1f",
     "uuid": "ebf5c35b-ffcf-78fe-a802-e706081ebf1f",
     "host": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
-    "SR": "cf1c31c6-7fb9-2121-60d9-1f1ec4c2da0e",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/cd"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "71c85716-57b1-71fa-4cf0-6e55131e3c4d",
     "uuid": "71c85716-57b1-71fa-4cf0-6e55131e3c4d",
     "host": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
-    "SR": "91f7cb45-75df-4d03-154b-72c01a4fccda",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "10.30.0.70:/mnt/slow/dev/iso"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "3c8fd976-cb23-54d3-169d-ce71801a5a1d",
@@ -102,13 +109,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "6a34c95f-b3e6-79ce-2251-0969691ea302",
     "uuid": "6a34c95f-b3e6-79ce-2251-0969691ea302",
     "host": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "SR": "33cc2dc2-9c03-f95c-e217-450d88711cc5",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "path": "/opt/xensource/packages/iso",
@@ -117,7 +125,8 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "4ba14917-b678-6e45-7e79-9f9766063af1",
@@ -130,20 +139,22 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "68043ff3-2fae-54ab-3154-55e67d07dc2c",
     "uuid": "68043ff3-2fae-54ab-3154-55e67d07dc2c",
     "host": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
-    "SR": "857925d8-f0ce-b1b1-7fde-4f5a2c3048f4",
+    "SR": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/block"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "4b379bfc-1f07-21b0-1851-93da7bd2af84",
@@ -156,13 +167,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "d70db0c7-d1b8-afcd-0edc-ec7f8785491d",
     "uuid": "d70db0c7-d1b8-afcd-0edc-ec7f8785491d",
     "host": "0964b29d-9beb-40af-a7ad-22f2d98cae7f",
-    "SR": "33cc2dc2-9c03-f95c-e217-450d88711cc5",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "path": "/opt/xensource/packages/iso",
@@ -171,13 +183,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "7ab19eba-6593-3099-ca8b-36912b8fdd09",
     "uuid": "7ab19eba-6593-3099-ca8b-36912b8fdd09",
     "host": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
-    "SR": "33cc2dc2-9c03-f95c-e217-450d88711cc5",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "path": "/opt/xensource/packages/iso",
@@ -186,13 +199,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:8a2a9dd1-b894-1158-d249-f4c32541cc26"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "6a5e86da-194e-b473-fec7-0e4cc7bcfe4d",
     "uuid": "6a5e86da-194e-b473-fec7-0e4cc7bcfe4d",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "1a5be03e-074f-21b4-c84a-f7002affcd9c",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "serverpath": "/mnt/shared/shares-2",
@@ -200,13 +214,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "777a158f-4565-9b20-fe9c-dd088920d4be",
     "uuid": "777a158f-4565-9b20-fe9c-dd088920d4be",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "c235667e-5a81-5350-478b-3859887e286b",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "serverpath": "/mnt/shared/shares-1",
@@ -214,26 +229,28 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "effbc152-1e54-bfc3-b26f-1be22b0863c8",
     "uuid": "effbc152-1e54-bfc3-b26f-1be22b0863c8",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "b0d5e74e-1691-c36a-6cdb-6e4e04abeccf",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/cd"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "82d07a2e-135d-adcf-b6c5-f8f9a7d43808",
     "uuid": "82d07a2e-135d-adcf-b6c5-f8f9a7d43808",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "b8028eb5-7271-4d7b-588f-c693f24801db",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": false,
     "device_config": {
       "server": "192.168.1.2",
@@ -241,7 +258,8 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "658e3e95-8176-e1ec-6197-58997b888a77",
@@ -254,20 +272,22 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "0ee57319-2156-7475-b52c-15f422c16e40",
     "uuid": "0ee57319-2156-7475-b52c-15f422c16e40",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "dafdf835-7814-1cc0-3fb5-df93db12f08e",
+    "SR": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/block"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "101860f8-31c8-5999-5cf2-f60db216b4a7",
@@ -285,7 +305,8 @@
     "otherConfig": {
       "iscsi_sessions": "1",
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "e88e7d72-62c7-75f5-afd7-c026be25c520",
@@ -303,39 +324,42 @@
     "otherConfig": {
       "iscsi_sessions": "1",
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "36c57d84-39d6-a091-0e2e-23c2d06f1775",
     "uuid": "36c57d84-39d6-a091-0e2e-23c2d06f1775",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "4cdbcac1-961d-cbb0-2d32-de04de06dc6a",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "10.1.135.50:/mnt/SR_XO_POOL/ISOs/"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "5d1091ac-a41e-ec7e-2cf0-4714d80affee",
     "uuid": "5d1091ac-a41e-ec7e-2cf0-4714d80affee",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "601eb9d7-0177-16ac-854a-0ed09a673fff",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/cd"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "8095d62a-b2c4-3961-ec07-1d874e306a2b",
     "uuid": "8095d62a-b2c4-3961-ec07-1d874e306a2b",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "8963afc4-9a6d-4619-db4f-bbd7c91315e8",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "path": "/opt/xensource/packages/iso",
@@ -344,13 +368,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "c0d3c0c7-6daa-9fc3-5105-67bf41070e75",
     "uuid": "c0d3c0c7-6daa-9fc3-5105-67bf41070e75",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "1a5be03e-074f-21b4-c84a-f7002affcd9c",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "serverpath": "/mnt/shared/shares-2",
@@ -358,26 +383,28 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "8e196fa8-a1ee-cd62-ad6f-f03dd4b1e92e",
     "uuid": "8e196fa8-a1ee-cd62-ad6f-f03dd4b1e92e",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "4cdbcac1-961d-cbb0-2d32-de04de06dc6a",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "10.1.135.50:/mnt/SR_XO_POOL/ISOs/"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "28c44878-d45e-3db0-1645-354588d786c5",
     "uuid": "28c44878-d45e-3db0-1645-354588d786c5",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "b8028eb5-7271-4d7b-588f-c693f24801db",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "server": "192.168.1.2",
@@ -385,7 +412,8 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "61186568-2db1-308c-a371-8f95c2df5d1a",
@@ -398,13 +426,14 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "4e758fcc-69a8-0869-6fa6-7578feeb9644",
     "uuid": "4e758fcc-69a8-0869-6fa6-7578feeb9644",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "c235667e-5a81-5350-478b-3859887e286b",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "serverpath": "/mnt/shared/shares-1",
@@ -412,26 +441,28 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "01393140-26fb-eddc-98b4-66bfe85daf17",
     "uuid": "01393140-26fb-eddc-98b4-66bfe85daf17",
     "host": "3d6764fe-dc88-42bf-9147-c87d54a73f21",
-    "SR": "58f0c2fc-2a21-4542-7bd8-da62abf4e687",
+    "SR": "24ba7623-4173-4b85-66b3-d8a84a81cf51",
     "attached": true,
     "device_config": {
       "location": "/dev/xapi/block"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:39d485c7-53ca-b911-18d5-a8e6953173d7"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "2e8d6592-a0bd-63a0-b8ff-8db9a4dda047",
     "uuid": "2e8d6592-a0bd-63a0-b8ff-8db9a4dda047",
     "host": "342636eb-d44a-4af3-8ede-ca2bc24d46e6",
-    "SR": "8963afc4-9a6d-4619-db4f-bbd7c91315e8",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "path": "/opt/xensource/packages/iso",
@@ -440,20 +471,22 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:1939c133-c694-850c-3c49-594c7b1cd812"
-    }
+    },
+    "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48"
   },
   {
     "id": "0be6d0b0-d68f-30bb-fd61-6081e59b0161",
     "uuid": "0be6d0b0-d68f-30bb-fd61-6081e59b0161",
     "host": "cfa26844-002e-4844-930b-97fa0fff1c34",
-    "SR": "91f7cb45-75df-4d03-154b-72c01a4fccda",
+    "SR": "3465240e-4037-f185-444e-378ddc1df235",
     "attached": true,
     "device_config": {
       "location": "10.30.0.70:/mnt/slow/dev/iso"
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "43421dbb-97aa-6148-c305-7c21357951b2",
@@ -466,7 +499,8 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "1398e309-7de6-0b7a-ba16-6550c446f288",
@@ -480,7 +514,8 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:a8fba761-0629-c1b4-77d9-172bf4aee880"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   },
   {
     "id": "f0d5e287-7583-f91e-c34c-4de4652330ee",
@@ -494,6 +529,7 @@
     },
     "otherConfig": {
       "storage_driver_domain": "OpaqueRef:11968171-349a-0d22-8ce9-a6228e18fb95"
-    }
+    },
+    "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309"
   }
 ]
