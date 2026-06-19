@@ -9,7 +9,8 @@
     "prepare": "npm run build",
     "lint": "eslint src/",
     "format": "prettier --ignore-unknown --write src/",
-    "check": "eslint src/"
+    "check": "eslint src/",
+    "docker:build": "docker build -t xo-api-mock:latest ."
   },
   "lint-staged": {
     "*": [

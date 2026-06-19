@@ -36,6 +36,21 @@ Replace `swagger.json` and restart the server — routes are auto-discovered fro
 
 Mock objects are created from `@vates/types` types for accurate field names. Add fixtures in `src/fixtures/` or edit `src/data-store.ts` to seed more data.
 
+## Docker
+
+Build and run the mock server as a Docker container:
+
+```bash
+npm run docker:build
+docker run -p 3001:3001 xo-api-mock:latest
+```
+
+Or with a custom port:
+
+```bash
+docker run -p 8080:3001 -e PORT=8080 xo-api-mock:latest
+```
+
 ## Adding Static Fixtures
 
 1. Add a new JSON file named after your resource (e.g., `src/fixtures/hosts.json`) with an array of objects
