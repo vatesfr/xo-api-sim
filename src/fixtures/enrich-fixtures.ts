@@ -1,4 +1,4 @@
-import swagger from "../../swagger.json"
+import swagger from "../../swagger.json";
 
 const COLLECTION_SCHEMA_MAP: Record<string, string> = {
   srs: "Partial_Unbrand_XoSr__",
@@ -28,92 +28,92 @@ const COLLECTION_SCHEMA_MAP: Record<string, string> = {
   "acl-roles": "Partial_Unbrand_XoAclRole__",
   pcis: "Partial_Unbrand_XoPci__",
   pgpus: "Partial_Unbrand_XoPgpu__",
-}
+};
 
 function resolveRef(ref: string): any {
-  const parts = ref.replace("#/", "").split("/")
-  let obj: any = swagger
+  const parts = ref.replace("#/", "").split("/");
+  let obj: any = swagger;
   for (const key of parts) {
-    obj = obj[key]
-    if (!obj) return undefined
+    obj = obj[key];
+    if (!obj) return undefined;
   }
-  return obj
+  return obj;
 }
 
 function getDefaultValue(propSchema: any): any {
   if (propSchema.default !== undefined) {
-    return propSchema.default
+    return propSchema.default;
   }
 
   if (propSchema.$ref) {
-    const resolved = resolveRef(propSchema.$ref)
+    const resolved = resolveRef(propSchema.$ref);
     if (resolved?.properties) {
-      return computeDefaults(resolved)
+      return computeDefaults(resolved);
     }
     if (resolved) {
-      return getDefaultValue(resolved)
+      return getDefaultValue(resolved);
     }
-    return {}
+    return {};
   }
 
   if (propSchema.properties) {
-    return computeDefaults(propSchema)
+    return computeDefaults(propSchema);
   }
 
   switch (propSchema.type) {
     case "string":
-      return ""
+      return "";
     case "number":
     case "integer":
-      return 0
+      return 0;
     case "boolean":
-      return false
+      return false;
     case "array":
-      return []
+      return [];
     case "object":
-      return {}
+      return {};
     default:
-      return undefined
+      return undefined;
   }
 }
 
 function computeDefaults(schema: any): Record<string, any> {
-  const defaults: Record<string, any> = {}
-  const props = schema.properties || {}
+  const defaults: Record<string, any> = {};
+  const props = schema.properties || {};
   for (const [key, propSchema] of Object.entries(props)) {
-    const value = getDefaultValue(propSchema as any)
+    const value = getDefaultValue(propSchema as any);
     if (value !== undefined) {
-      defaults[key] = value
+      defaults[key] = value;
     }
   }
-  return defaults
+  return defaults;
 }
 
 export function enrichFixtures(fixtures: Record<string, any[]>) {
-  applySwaggerDefaults(fixtures)
+  applySwaggerDefaults(fixtures);
 }
 
 function applySwaggerDefaults(fixtures: Record<string, any[]>) {
-  const cache = new Map<string, Record<string, any>>()
+  const cache = new Map<string, Record<string, any>>();
 
   for (const [collectionName, schemaName] of Object.entries(
     COLLECTION_SCHEMA_MAP,
   )) {
-    const items = fixtures[collectionName]
-    if (!items) continue
+    const items = fixtures[collectionName];
+    if (!items) continue;
 
-    let defaults = cache.get(schemaName)
+    let defaults = cache.get(schemaName);
     if (!defaults) {
-      const schema = (swagger as any).components.schemas[schemaName]
-      if (!schema) continue
-      defaults = computeDefaults(schema)
-      cache.set(schemaName, defaults)
+      const schema = (swagger as any).components.schemas[schemaName];
+      if (!schema) continue;
+      defaults = computeDefaults(schema);
+      cache.set(schemaName, defaults);
     }
 
     for (const item of items) {
       for (const [key, value] of Object.entries(defaults)) {
         if (item[key] === undefined) {
-          item[key] = value
+          item[key] = value;
         }
       }
     }

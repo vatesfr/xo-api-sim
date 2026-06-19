@@ -17,9 +17,7 @@
     "other_config": {},
     "shared": false,
     "sm_config": {},
-    "$PBDs": [
-      "658e3e95-8176-e1ec-6197-58997b888a77"
-    ],
+    "$PBDs": ["658e3e95-8176-e1ec-6197-58997b888a77"],
     "$container": "3679fe1a-d058-4055-b800-d30e1bd2af48",
     "VDIs": [],
     "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
@@ -44,9 +42,7 @@
     "other_config": {},
     "shared": false,
     "sm_config": {},
-    "$PBDs": [
-      "61186568-2db1-308c-a371-8f95c2df5d1a"
-    ],
+    "$PBDs": ["61186568-2db1-308c-a371-8f95c2df5d1a"],
     "$container": "3679fe1a-d058-4055-b800-d30e1bd2af48",
     "VDIs": [],
     "$pool": "3679fe1a-d058-4055-b800-d30e1bd2af48",
@@ -71,9 +67,7 @@
     "other_config": {},
     "shared": false,
     "sm_config": {},
-    "$PBDs": [
-      "43421dbb-97aa-6148-c305-7c21357951b2"
-    ],
+    "$PBDs": ["43421dbb-97aa-6148-c305-7c21357951b2"],
     "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "VDIs": [],
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
@@ -98,9 +92,7 @@
     "other_config": {},
     "shared": false,
     "sm_config": {},
-    "$PBDs": [
-      "4b379bfc-1f07-21b0-1851-93da7bd2af84"
-    ],
+    "$PBDs": ["4b379bfc-1f07-21b0-1851-93da7bd2af84"],
     "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "VDIs": [],
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
@@ -125,9 +117,7 @@
     "other_config": {},
     "shared": false,
     "sm_config": {},
-    "$PBDs": [
-      "4ba14917-b678-6e45-7e79-9f9766063af1"
-    ],
+    "$PBDs": ["4ba14917-b678-6e45-7e79-9f9766063af1"],
     "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "VDIs": [],
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",

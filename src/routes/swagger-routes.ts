@@ -84,12 +84,12 @@ export function registerSwaggerRoutes(
   // Catch sub-resource endpoints (e.g., /rest/v0/srs/{id}/tasks) that weren't
   // handled by custom handlers above. This runs before swagger CRUD routes
   // to prevent them from treating sub-routes as main resource lookups.
-  app.all('/rest/v0/:resource/:id/:subResource/:subId?', (req, res, _next) => {
+  app.all("/rest/v0/:resource/:id/:subResource/:subId?", (req, res, _next) => {
     console.log(
       `Sub-resource endpoint not yet implemented: ${req.method} ${req.originalUrl}`,
-    )
-    res.status(501).json({ error: 'Not implemented' })
-  })
+    );
+    res.status(501).json({ error: "Not implemented" });
+  });
 
   // Handle GET /{resource} - list all
   function handleList(
@@ -107,10 +107,10 @@ export function registerSwaggerRoutes(
     }
 
     // Apply filter if present
-    let filtered = items
+    let filtered = items;
     if (req.query.filter) {
-      const predicate = CM.parse(req.query.filter as string).createPredicate()
-      filtered = items.filter(predicate)
+      const predicate = CM.parse(req.query.filter as string).createPredicate();
+      filtered = items.filter(predicate);
     }
 
     // Apply limit if present

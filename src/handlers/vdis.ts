@@ -5,7 +5,7 @@ import type { MockDataStore } from "../data-store";
 import type { CreateVdiBody, XoHost, XoPbd, XoPool } from "../types";
 // @ts-expect-error - no types for vhd-lib
 import * as vhd from "vhd-lib";
-import { randomBytes }  from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 function resolvePoolId(
   srId: string,
@@ -41,7 +41,9 @@ export function registerVdiHandlers(
   app: express.Application,
   dataStore: MockDataStore,
 ) {
-  app.get("/rest/v0/vdis/:id.:format", (req, res) => exportVdi(req, res, dataStore));
+  app.get("/rest/v0/vdis/:id.:format", (req, res) =>
+    exportVdi(req, res, dataStore),
+  );
   app.post("/rest/v0/vdis", (req, res) => createEmptyVdi(req, res, dataStore));
 }
 
@@ -114,16 +116,16 @@ async function exportVdi(
   res: express.Response,
   dataStore: MockDataStore,
 ) {
-  const { id, format } = req.params
-  const vdi = dataStore.findById("vdis", id)
-  
+  const { id, format } = req.params;
+  const vdi = dataStore.findById("vdis", id);
+
   if (!vdi) {
     return res.status(404).json({
       error: `no such VDI ${id}`,
       data: { id, type: "VDI" },
     });
   }
-  
+
   // Validate format
   const diskFormat = format.toLowerCase();
   if (!["vhd", "raw"].includes(diskFormat)) {
@@ -132,7 +134,7 @@ async function exportVdi(
       data: { id, type: "VDI" },
     });
   }
-  
+
   // Get VDI size in bytes
   const vdiSize = Number(vdi.size) || 1073741824; // Default to 1GB if size missing
   if (isNaN(vdiSize) || vdiSize <= 0) {
@@ -141,17 +143,17 @@ async function exportVdi(
       data: { id, type: "VDI" },
     });
   }
-  
+
   // Set response headers
-  const filename = (vdi.name_label || 'disk') + '.' + diskFormat;
-  res.status(200).contentType('application/octet-stream');
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  const filename = (vdi.name_label || "disk") + "." + diskFormat;
+  res.status(200).contentType("application/octet-stream");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
 
   try {
-    if (diskFormat === 'raw') {
-      const rawStream = createRandomRawStream(vdiSize)
-      res.setHeader('Content-Length', String(vdiSize))
-      return rawStream.pipe(res)
+    if (diskFormat === "raw") {
+      const rawStream = createRandomRawStream(vdiSize);
+      res.setHeader("Content-Length", String(vdiSize));
+      return rawStream.pipe(res);
     }
 
     const vhdStream = await vhd.createReadableSparseStream(
@@ -159,48 +161,51 @@ async function exportVdi(
       vhd.Constants.DEFAULT_BLOCK_SIZE,
       buildFragmentAddresses(vdiSize, vhd.Constants.DEFAULT_BLOCK_SIZE),
       zeroFragments(vdiSize, vhd.Constants.DEFAULT_BLOCK_SIZE),
-    )
+    );
 
-    res.setHeader('Content-Length', String(vhdStream.length))
-    return vhdStream.pipe(res)
+    res.setHeader("Content-Length", String(vhdStream.length));
+    return vhdStream.pipe(res);
   } catch (err) {
     console.error(`Error generating disk:`, err);
     res.status(500).json({
-      error: 'disk generation failed',
-      details: err instanceof Error ? err.message : 'Unknown error',
+      error: "disk generation failed",
+      details: err instanceof Error ? err.message : "Unknown error",
       data: { id, type: "VDI" },
     });
   }
 }
 
-function buildFragmentAddresses(diskSize: number, fragmentSize: number): number[] {
-  const fragments: number[] = []
+function buildFragmentAddresses(
+  diskSize: number,
+  fragmentSize: number,
+): number[] {
+  const fragments: number[] = [];
   for (let address = 0; address < diskSize; address += fragmentSize) {
-    fragments.push(address / fragmentSize)
+    fragments.push(address / fragmentSize);
   }
-  return fragments
+  return fragments;
 }
 
 async function* zeroFragments(diskSize: number, fragmentSize: number) {
-  const fragmentCount = Math.ceil(diskSize / fragmentSize)
+  const fragmentCount = Math.ceil(diskSize / fragmentSize);
   for (let i = 0; i < fragmentCount; i++) {
-    const remaining = diskSize - i * fragmentSize
+    const remaining = diskSize - i * fragmentSize;
     yield {
       logicalAddressBytes: i * fragmentSize,
       data: Buffer.alloc(Math.min(fragmentSize, remaining)),
-    }
+    };
   }
 }
 
 function createRandomRawStream(size: number) {
   async function* iterator() {
-    let remaining = size
+    let remaining = size;
     while (remaining > 0) {
-      const chunkSize = Math.min(vhd.Constants.SECTOR_SIZE, remaining)
-      yield randomBytes(chunkSize)
-      remaining -= chunkSize
+      const chunkSize = Math.min(vhd.Constants.SECTOR_SIZE, remaining);
+      yield randomBytes(chunkSize);
+      remaining -= chunkSize;
     }
   }
 
-  return Readable.from(iterator())
+  return Readable.from(iterator());
 }
