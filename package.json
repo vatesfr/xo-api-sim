@@ -28,7 +28,8 @@
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "vhd-lib": "^4.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
