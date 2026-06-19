@@ -69,8 +69,27 @@ export function registerSwaggerRoutes(
   app: express.Application,
   dataStore: MockDataStore,
 ) {
-  // Custom handlers override generic swagger routes (registered first = higher priority)
+  // ── Registration order ──────────────────────────────────────────────────
+  // Step 1: Custom handlers (tags, vdis, etc.) are registered FIRST.
+  //   Express matches routes in registration order (first match wins),
+  //   so custom handlers always take priority over the middleware and
+  //   swagger routes registered below.
+  // Step 2: Sub-resource middleware catches unmatched sub-routes.
+  //   Only paths that weren't handled by custom handlers reach this layer.
+  // Step 3: Swagger CRUD routes handle main resource paths.
+  //   Only paths not caught by Step 1 or Step 2 reach standard CRUD.
+  // ────────────────────────────────────────────────────────────────────────
   registerCustomHandlers(app, dataStore);
+
+  // Catch sub-resource endpoints (e.g., /rest/v0/srs/{id}/tasks) that weren't
+  // handled by custom handlers above. This runs before swagger CRUD routes
+  // to prevent them from treating sub-routes as main resource lookups.
+  app.all('/rest/v0/:resource/:id/:subResource/:subId?', (req, res, _next) => {
+    console.log(
+      `Sub-resource endpoint not yet implemented: ${req.method} ${req.originalUrl}`,
+    )
+    res.status(501).json({ error: 'Not implemented' })
+  })
 
   // Handle GET /{resource} - list all
   function handleList(
