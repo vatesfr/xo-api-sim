@@ -35,3 +35,51 @@ Replace `swagger.json` and restart the server — routes are auto-discovered fro
 ## Data
 
 Mock objects are created from `@vates/types` types for accurate field names. Add fixtures in `src/fixtures/` or edit `src/data-store.ts` to seed more data.
+
+## Adding Static Fixtures
+
+1. Add a new JSON file named after your resource (e.g., `src/fixtures/hosts.json`) with an array of objects
+2. Objects must include at minimum:
+   - `id`: UUID string
+   - `type`: resource type (e.g., "host")
+   - Other required fields
+3. The server auto-loads all `.json` files in `src/fixtures/` at startup
+
+## Enriching Fixtures
+
+The `enrichFixtures()` function adds computed fields (like `$pool`, `current_operations`) and fills missing values from the Swagger schema:
+
+- Default values: Missing fields are populated from the OpenAPI spec
+
+To add enrichment logic:
+1. Edit `src/fixtures/enrich-fixtures.ts`
+2. Extend the `applySwaggerDefaults()` or add new enrichment functions
+
+## Writing Custom Route Handlers
+
+For endpoints requiring special logic (like `POST /vdis`):
+
+1. Define the request body type in `src/types.ts` (mirroring the XenOrchestra server code):
+   ```ts
+   export type CreateVdiBody = {
+     name: string;
+     size: number;
+     srId: string;
+   }
+   ```
+
+2. Create handler in `src/handlers/[resource].ts`:
+   ```ts
+   export function registerVdiHandlers(app, dataStore) {
+     app.post('/rest/v0/vdis', (req, res) => createVdi(req, res, dataStore))
+   }
+   ```
+
+3. Register in `src/handlers/index.ts`:
+   ```ts
+   export function registerCustomHandlers(app, dataStore) {
+     registerVdiHandlers(app, dataStore)
+   }
+   ```
+
+4. Implement your logic following the established validation/response patterns
