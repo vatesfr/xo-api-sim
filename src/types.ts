@@ -37,3 +37,15 @@ export type CreateVdiBody = Omit<CreateVdiParams[0], "SR" | "other_config"> & {
   srId: string;
   other_config?: { [key: string]: string };
 } & CreateVdiParams[1];
+
+// VIF types
+export interface CreateVifParams {
+  device: string;
+  network: string;
+  VM: string;
+  MAC?: string;
+  MTU?: number;
+  other_config?: Record<string, string>;
+}
+
+export type CreateVifBody = CreateVifParams;
