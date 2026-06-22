@@ -16,6 +16,7 @@ export function registerTagHandlers(
     "srs",
     "pools",
     "networks",
+    "hosts",
   ];
 
   for (const resource of taggableResources) {
