@@ -15,6 +15,7 @@ export interface CreateTaskOptions {
   name?: string;
   type?: string;
   userId?: string;
+  result?: any;
 }
 
 export function createSuccessTask(
@@ -33,6 +34,7 @@ export function createSuccessTask(
       type: options.type ?? "xo:mock:action",
       userId: options.userId,
     },
+    result: options.result,
     start: now,
     end: now,
   };

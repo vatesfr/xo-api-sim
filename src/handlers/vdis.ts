@@ -276,13 +276,15 @@ async function migrate(
 
   // For this mock implementation, we'll just update the VDI's SR reference.
   vdi.$SR = body.srId;
+  vdi.id = uuid(); // Change ID to simulate creation of a new VDI on the target SR
   dataStore.updateItem("vdis", id, vdi);
   
   const task = createSuccessTask(dataStore, {
     objectType: "VDI",
-    objectId: id,
+    objectId: id, // Keep original ID in task result to indicate which VDI was migrated
     name: `VDI migrate to SR ${body.srId}`,
     type: "xo:mock:action",
+    result: { id: vdi.id },
   });
 
   // Return 202 Accepted for success
