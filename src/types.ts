@@ -1,4 +1,4 @@
-import type { Xapi } from "@vates/types";
+import type { Xapi, XoHost, XoVmTemplate } from "@vates/types";
 
 export type {
   Branded,
@@ -49,3 +49,50 @@ export interface CreateVifParams {
 }
 
 export type CreateVifBody = CreateVifParams;
+
+// VM types (mirrored from @xen-orchestra/rest-api/src/pools/pool.type.mts)
+type CreateVmParams = Parameters<Xapi["createVm"]>[1];
+
+type CreateVmAfterCreateParams = {
+  cloud_config?: string;
+  network_config?: string;
+  boot?: boolean;
+  destroy_cloud_config_vdi?: boolean;
+  createVtpm?: boolean;
+};
+
+export type CreateVmBody = Omit<
+  CreateVmParams,
+  "nameLabel" | "existingVdis" | "vdis" | "affinityHost" | "installRepository"
+> & {
+  template: XoVmTemplate["uuid"];
+  affinity?: XoHost["id"];
+  vdis?: (
+    | {
+        name_label: string;
+        size: number;
+        sr?: string;
+        name_description?: string;
+      }
+    | {
+        userdevice: string;
+        name_label?: string;
+        size?: number;
+        sr?: string;
+        name_description?: string;
+      }
+    | {
+        destroy: true;
+        userdervice: string;
+      }
+  )[];
+  install?:
+    | {
+        method: "cdrom";
+        repository: string;
+      }
+    | {
+        method: "network";
+        repository: "";
+      };
+} & CreateVmAfterCreateParams;
