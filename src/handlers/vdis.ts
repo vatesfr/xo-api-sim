@@ -45,6 +45,7 @@ export function registerVdiHandlers(
     exportVdi(req, res, dataStore),
   );
   app.post("/rest/v0/vdis", (req, res) => createEmptyVdi(req, res, dataStore));
+  app.put("/rest/v0/vdis/:id.:format", (req, res) => importVdi(req, res, dataStore));
 }
 
 function createEmptyVdi(
@@ -208,4 +209,34 @@ function createRandomRawStream(size: number) {
   }
 
   return Readable.from(iterator());
+}
+
+async function importVdi(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const { id, format } = req.params;
+  const vdi = dataStore.findById("vdis", id);
+
+  if (!vdi) {
+    return res.status(404).json({
+      error: `no such VDI ${id}`,
+      data: { id, type: "VDI" },
+    });
+  }
+
+  // Validate format
+  const diskFormat = format.toLowerCase();
+  if (!["vhd", "raw"].includes(diskFormat)) {
+    return res.status(400).json({
+      error: `unsupported disk format '${format}' (must be vhd or raw)`,
+      data: { id, type: "VDI" },
+    });
+  }
+
+  // For this mock implementation, we won't actually process the uploaded disk data.
+
+  // Respond with a success message
+  res.status(204).send();
 }
