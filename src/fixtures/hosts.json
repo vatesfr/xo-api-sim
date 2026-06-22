@@ -2,6 +2,7 @@
   {
     "name_label": "node-01",
     "name_description": "Moonshot cartridge host",
+    "productBrand": "Moonshot",
     "memory": {
       "usage": 25206964224,
       "size": 34359738368
@@ -49,6 +50,7 @@
   {
     "name_label": "node-02",
     "name_description": "Dell R640 compute host",
+    "productBrand": "Dell",
     "memory": {
       "usage": 175904227328,
       "size": 411243118592
@@ -90,6 +92,7 @@
   {
     "name_label": "node-03",
     "name_description": "Dell R640 compute host",
+    "productBrand": "Dell",
     "memory": {
       "usage": 156398997504,
       "size": 411243118592
@@ -131,6 +134,7 @@
   {
     "name_label": "node-04",
     "name_description": "Moonshot cartridge host",
+    "productBrand": "Moonshot",
     "memory": {
       "usage": 23041757184,
       "size": 34359738368
@@ -178,6 +182,7 @@
   {
     "name_label": "node-05",
     "name_description": "Dell R640 compute host",
+    "productBrand": "Dell",
     "memory": {
       "usage": 119609790464,
       "size": 411243118592

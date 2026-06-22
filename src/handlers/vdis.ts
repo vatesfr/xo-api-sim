@@ -46,8 +46,12 @@ export function registerVdiHandlers(
     exportVdi(req, res, dataStore),
   );
   app.post("/rest/v0/vdis", (req, res) => createEmptyVdi(req, res, dataStore));
-  app.put("/rest/v0/vdis/:id.:format", (req, res) => importVdi(req, res, dataStore));
-  app.post("/rest/v0/vdis/:id/actions/migrate", (req, res) => migrate(req, res, dataStore));
+  app.put("/rest/v0/vdis/:id.:format", (req, res) =>
+    importVdi(req, res, dataStore),
+  );
+  app.post("/rest/v0/vdis/:id/actions/migrate", (req, res) =>
+    migrate(req, res, dataStore),
+  );
 }
 
 function createEmptyVdi(
@@ -278,7 +282,7 @@ async function migrate(
   vdi.$SR = body.srId;
   vdi.id = uuid(); // Change ID to simulate creation of a new VDI on the target SR
   dataStore.updateItem("vdis", id, vdi);
-  
+
   const task = createSuccessTask(dataStore, {
     objectType: "VDI",
     objectId: id, // Keep original ID in task result to indicate which VDI was migrated

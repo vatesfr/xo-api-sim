@@ -14,9 +14,9 @@ export function registerTasksHandlers(
         data: { id: req.params.id, type: req.params.resource },
       });
     }
-    const tasks = dataStore.getResource("tasks").filter(
-      (t: any) => t.properties?.objectId === req.params.id,
-    );
+    const tasks = dataStore
+      .getResource("tasks")
+      .filter((t: any) => t.properties?.objectId === req.params.id);
     const filteredTasks = applyFilter(tasks, req);
     res.json(applyLimit(filteredTasks, req));
   });

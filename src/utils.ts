@@ -5,7 +5,9 @@ export function applyLimit<T>(items: T[], req: express.Request): T[] {
   const limit = req.query.limit
     ? parseInt(req.query.limit as string, 10)
     : undefined;
-  return limit !== undefined && !isNaN(limit) ? items.slice(0, limit) : items;
+  return limit !== undefined && !isNaN(limit) && limit > 0
+    ? items.slice(0, limit)
+    : items;
 }
 
 export function applyFilter<T>(items: T[], req: express.Request): T[] {
@@ -16,7 +18,10 @@ export function applyFilter<T>(items: T[], req: express.Request): T[] {
   return items.filter(predicate);
 }
 
-export function selectFields(item: Record<string, any>, fields: string[]): Record<string, any> {
+export function selectFields(
+  item: Record<string, any>,
+  fields: string[],
+): Record<string, any> {
   const selected: Record<string, any> = {};
   for (const f of fields) {
     if (item[f] !== undefined) {
