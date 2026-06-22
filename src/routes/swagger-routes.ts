@@ -4,6 +4,7 @@ import * as CM from "complex-matcher";
 import swagger from "../../swagger.json";
 import type { MockDataStore } from "../data-store";
 import { registerCustomHandlers } from "../handlers";
+import { applyLimit } from "../utils";
 
 // Resources to exclude (special endpoints)
 const EXCLUDED_RESOURCES = [
@@ -114,9 +115,7 @@ export function registerSwaggerRoutes(
     }
 
     // Apply limit if present
-    if (req.query.limit) {
-      filtered = filtered.slice(0, parseInt(req.query.limit as string, 10));
-    }
+    filtered = applyLimit(filtered, req);
 
     // Apply fields selection if present (* means all fields)
     if (req.query.fields !== "*") {

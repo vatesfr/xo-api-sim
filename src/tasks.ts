@@ -9,14 +9,32 @@ export function generateTaskId(): Branded<"task"> {
   return `0${bytes.toString("hex").slice(0, 9)}` as Branded<"task">;
 }
 
-export function createSuccessTask(dataStore: MockDataStore): XoTask {
+export interface CreateTaskOptions {
+  objectType: XoTask["properties"]["objectType"];
+  objectId: string;
+  name?: string;
+  type?: string;
+  userId?: string;
+}
+
+export function createSuccessTask(
+  dataStore: MockDataStore,
+  options: CreateTaskOptions,
+): XoTask {
   const taskId = generateTaskId();
+  const now = Date.now();
   const task: XoTask = {
     id: taskId,
     status: "success",
-    properties: {},
-    start: new Date().getUTCMilliseconds(),
-    end: new Date().getUTCMilliseconds(),
+    properties: {
+      objectType: options.objectType,
+      objectId: options.objectId,
+      name: options.name,
+      type: options.type ?? "xo:mock:action",
+      userId: options.userId,
+    },
+    start: now,
+    end: now,
   };
 
   dataStore.addItem("tasks", task);

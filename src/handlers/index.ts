@@ -4,6 +4,7 @@ import { registerVdiHandlers } from "./vdis";
 import { registerTagHandlers } from "./tags";
 import { registerVifHandlers } from "./vifs";
 import { registerPbdHandlers } from "./pbds";
+import { registerTasksHandlers } from "./tasks";
 
 export function registerCustomHandlers(
   app: express.Application,
@@ -13,4 +14,5 @@ export function registerCustomHandlers(
   registerVdiHandlers(app, dataStore);
   registerVifHandlers(app, dataStore);
   registerPbdHandlers(app, dataStore);
+  registerTasksHandlers(app, dataStore);
 }

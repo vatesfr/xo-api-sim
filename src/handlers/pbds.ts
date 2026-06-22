@@ -45,7 +45,12 @@ function doAction(
   // Update the item in the data store
   dataStore.updateItem("pbds", id, { attached: pbd.attached });
 
-  const task = createSuccessTask(dataStore);
+  const task = createSuccessTask(dataStore, {
+    objectType: "PBD",
+    objectId: id,
+    name: `PBD ${action}`,
+    type: "xo:mock:action",
+  });
   // Return 202 Accepted for success
   return res.status(202).json({
     taskId: task.id,
