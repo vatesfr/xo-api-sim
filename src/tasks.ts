@@ -10,6 +10,7 @@ export function generateTaskId(): Branded<"task"> {
 }
 
 export interface CreateTaskOptions {
+  status?: XoTask["status"];
   objectType: XoTask["properties"]["objectType"];
   objectId: string;
   name?: string;
@@ -22,11 +23,25 @@ export function createSuccessTask(
   dataStore: MockDataStore,
   options: CreateTaskOptions,
 ): XoTask {
+  return createTask(dataStore, { ...options, status: "success" });
+}
+
+export function createFailedTask(
+  dataStore: MockDataStore,
+  options: CreateTaskOptions,
+): XoTask {
+  return createTask(dataStore, { ...options, status: "failure" });
+}
+
+function createTask(
+  dataStore: MockDataStore,
+  options: CreateTaskOptions,
+): XoTask {
   const taskId = generateTaskId();
   const now = Date.now();
   const task: XoTask = {
     id: taskId,
-    status: "success",
+    status: options.status || "pending",
     properties: {
       objectType: options.objectType,
       objectId: options.objectId,
