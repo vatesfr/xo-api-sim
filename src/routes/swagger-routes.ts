@@ -1,10 +1,9 @@
 import type express from "express";
 import { v4 as uuid } from "uuid";
-import * as CM from "complex-matcher";
 import swagger from "../../swagger.json";
 import type { MockDataStore } from "../data-store";
 import { registerCustomHandlers } from "../handlers";
-import { applyLimit } from "../utils";
+import { applyLimit, applyFilter, applyFields } from "../utils";
 
 // Resources to exclude (special endpoints)
 const EXCLUDED_RESOURCES = [
@@ -108,30 +107,12 @@ export function registerSwaggerRoutes(
     }
 
     // Apply filter if present
-    let filtered = items;
-    if (req.query.filter) {
-      const predicate = CM.parse(req.query.filter as string).createPredicate();
-      filtered = items.filter(predicate);
-    }
+    let filtered = applyFilter(items, req);
 
     // Apply limit if present
     filtered = applyLimit(filtered, req);
 
-    // Apply fields selection if present (* means all fields)
-    if (req.query.fields !== "*") {
-      const fields = (req.query.fields as string)
-        .split(",")
-        .map((f) => f.trim());
-      filtered = filtered.map((item) => {
-        const selected: any = {};
-        fields.forEach((f) => {
-          if (item[f] !== undefined) {
-            selected[f] = item[f];
-          }
-        });
-        return selected;
-      });
-    }
+    filtered = applyFields(filtered, req);
 
     res.json(filtered);
   }
@@ -152,21 +133,7 @@ export function registerSwaggerRoutes(
       });
     }
 
-    // Apply fields selection if present (* means all fields)
-    if (req.query.fields && req.query.fields !== "*") {
-      const fields = (req.query.fields as string)
-        .split(",")
-        .map((f) => f.trim());
-      const selected: any = {};
-      fields.forEach((f) => {
-        if (item[f] !== undefined) {
-          selected[f] = item[f];
-        }
-      });
-      return res.json(selected);
-    }
-
-    res.json(item);
+    res.json(applyFields([item], req)[0]);
   }
 
   // Handle POST /{resource} - create
