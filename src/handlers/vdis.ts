@@ -6,6 +6,7 @@ import type { CreateVdiBody, XoHost, XoPbd, XoPool } from "../types";
 // @ts-expect-error - no types for vhd-lib
 import * as vhd from "vhd-lib";
 import { randomBytes } from "node:crypto";
+import { createSuccessTask } from "../tasks";
 
 function resolvePoolId(
   srId: string,
@@ -46,6 +47,7 @@ export function registerVdiHandlers(
   );
   app.post("/rest/v0/vdis", (req, res) => createEmptyVdi(req, res, dataStore));
   app.put("/rest/v0/vdis/:id.:format", (req, res) => importVdi(req, res, dataStore));
+  app.post("/rest/v0/vdis/:id/actions/migrate", (req, res) => migrate(req, res, dataStore));
 }
 
 function createEmptyVdi(
@@ -239,4 +241,52 @@ async function importVdi(
 
   // Respond with a success message
   res.status(204).send();
+}
+
+async function migrate(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const { id, format } = req.params;
+  const vdi = dataStore.findById("vdis", id);
+
+  if (!vdi) {
+    return res.status(404).json({
+      error: `no such VDI ${id}`,
+      data: { id, type: "VDI" },
+    });
+  }
+
+  const body = req.body as { srId: string };
+  if (!body.srId) {
+    return res.status(400).json({
+      error: "srId is required for migration",
+      data: { id, type: "VDI" },
+    });
+  }
+
+  const targetSr = dataStore.findById("srs", body.srId);
+  if (!targetSr) {
+    return res.status(404).json({
+      error: `no such SR ${body.srId}`,
+      data: { id: body.srId, type: "SR" },
+    });
+  }
+
+  // For this mock implementation, we'll just update the VDI's SR reference.
+  vdi.$SR = body.srId;
+  dataStore.updateItem("vdis", id, vdi);
+  
+  const task = createSuccessTask(dataStore, {
+    objectType: "VDI",
+    objectId: id,
+    name: `VDI migrate to SR ${body.srId}`,
+    type: "xo:mock:action",
+  });
+
+  // Return 202 Accepted for success
+  return res.status(202).json({
+    taskId: task.id,
+  });
 }

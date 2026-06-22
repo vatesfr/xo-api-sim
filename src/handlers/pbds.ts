@@ -1,6 +1,6 @@
 import type express from "express";
 import type { MockDataStore } from "../data-store";
-import { generateTaskId, createSuccessTask } from "../tasks";
+import { createSuccessTask } from "../tasks";
 
 export function registerPbdHandlers(
   app: express.Application,
