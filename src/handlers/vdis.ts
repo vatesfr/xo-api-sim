@@ -6,7 +6,11 @@ import type { CreateVdiBody, XoHost, XoPbd, XoPool } from "../types";
 // @ts-expect-error - no types for vhd-lib
 import * as vhd from "vhd-lib";
 import { randomBytes } from "node:crypto";
-import { createSuccessTask } from "../tasks";
+import {
+  CreateSuccessTask,
+  CreateFailedTask,
+  UpdateAllTasksForObject,
+} from "../tasks";
 
 function resolvePoolId(
   srId: string,
@@ -272,9 +276,19 @@ async function migrate(
 
   const targetSr = dataStore.findById("srs", body.srId);
   if (!targetSr) {
-    return res.status(404).json({
-      error: `no such SR ${body.srId}`,
-      data: { id: body.srId, type: "SR" },
+    const task = CreateFailedTask(dataStore, {
+      objectType: "VDI",
+      objectId: id,
+      name: "REST API: migrate VDI",
+      type: "xo:mock:action",
+      result: {
+        message: `no such object ${id}`,
+        code: 1,
+        data: { id, type: "SR" },
+      },
+    });
+    return res.status(202).json({
+      taskId: task.id,
     });
   }
 
@@ -283,9 +297,14 @@ async function migrate(
   vdi.id = uuid(); // Change ID to simulate creation of a new VDI on the target SR
   dataStore.updateItem("vdis", id, vdi);
 
-  const task = createSuccessTask(dataStore, {
+  // Update existing tasks related to the old VDI to point to the new VDI ID
+  UpdateAllTasksForObject(dataStore, "VDI", id, {
+    properties: { objectId: vdi.id },
+  });
+
+  const task = CreateSuccessTask(dataStore, {
     objectType: "VDI",
-    objectId: id, // Keep original ID in task result to indicate which VDI was migrated
+    objectId: vdi.id,
     name: `VDI migrate to SR ${body.srId}`,
     type: "xo:mock:action",
     result: { id: vdi.id },

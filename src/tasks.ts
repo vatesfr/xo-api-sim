@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import type { MockDataStore } from "./data-store";
 import type { XoTask, Branded } from "./types";
 
-export function generateTaskId(): Branded<"task"> {
+function generateTaskId(): Branded<"task"> {
   // Generate 9 random bytes (each byte is 2 hex characters)
   const bytes = randomBytes(5); // 5 bytes * 2 = 10 hex characters
   // Convert to hex and take the first 9 characters, prefixed with '0'
@@ -19,14 +19,14 @@ export interface CreateTaskOptions {
   result?: any;
 }
 
-export function createSuccessTask(
+export function CreateSuccessTask(
   dataStore: MockDataStore,
   options: CreateTaskOptions,
 ): XoTask {
   return createTask(dataStore, { ...options, status: "success" });
 }
 
-export function createFailedTask(
+export function CreateFailedTask(
   dataStore: MockDataStore,
   options: CreateTaskOptions,
 ): XoTask {
@@ -56,4 +56,23 @@ function createTask(
 
   dataStore.addItem("tasks", task);
   return task;
+}
+
+export function UpdateAllTasksForObject(
+  dataStore: MockDataStore,
+  objectType: string,
+  objectId: string,
+  updates: Partial<XoTask>,
+): void {
+  const tasks = dataStore
+    .getResource("tasks")
+    .filter(
+      (task: XoTask) =>
+        task.properties.objectType === objectType &&
+        task.properties.objectId === objectId,
+    );
+
+  tasks.forEach((task: XoTask) => {
+    dataStore.updateItem("tasks", task.id, updates);
+  });
 }

@@ -1,6 +1,6 @@
 import type express from "express";
 import type { MockDataStore } from "../data-store";
-import { createSuccessTask, createFailedTask } from "../tasks";
+import { CreateSuccessTask, CreateFailedTask } from "../tasks";
 
 export function registerSRHandlers(
   app: express.Application,
@@ -21,7 +21,7 @@ function doAction(
   // Validate referenced SR exists
   const sr = dataStore.findById("srs", id);
   if (!sr) {
-    const task = createFailedTask(dataStore, {
+    const task = CreateFailedTask(dataStore, {
       objectType: "SR",
       objectId: id,
       name: `SR ${action}`,
@@ -53,7 +53,7 @@ function doAction(
       });
   }
 
-  const task = createSuccessTask(dataStore, {
+  const task = CreateSuccessTask(dataStore, {
     objectType: "SR",
     objectId: id,
     name: `SR ${action}`,

@@ -1,6 +1,6 @@
 import type express from "express";
 import type { MockDataStore } from "../data-store";
-import { createSuccessTask } from "../tasks";
+import { CreateSuccessTask } from "../tasks";
 
 export function registerPbdHandlers(
   app: express.Application,
@@ -45,7 +45,7 @@ function doAction(
   // Update the item in the data store
   dataStore.updateItem("pbds", id, { attached: pbd.attached });
 
-  const task = createSuccessTask(dataStore, {
+  const task = CreateSuccessTask(dataStore, {
     objectType: "PBD",
     objectId: id,
     name: `PBD ${action}`,
