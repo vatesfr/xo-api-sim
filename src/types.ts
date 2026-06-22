@@ -50,6 +50,20 @@ export interface CreateVifParams {
 
 export type CreateVifBody = CreateVifParams;
 
+// VBD types (mirrored from @xen-orchestra/rest-api/src/vbds/vbd.controller.mts)
+export type CreateVbdBody = {
+  VM: string;
+  VDI: string;
+  bootable?: boolean;
+  mode?: "RW" | "RO";
+  empty?: boolean;
+  type?: "System" | "User" | "CD" | "DVD" | "Other";
+  other_config?: Record<string, string>;
+  qos_algorithm_type?: string;
+  qos_algorithm_id?: string;
+  MTU?: number;
+};
+
 // VM types (mirrored from @xen-orchestra/rest-api/src/pools/pool.type.mts)
 type CreateVmParams = Parameters<Xapi["createVm"]>[1];
 

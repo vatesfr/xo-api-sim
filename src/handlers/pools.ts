@@ -2,16 +2,15 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import type { MockDataStore } from "../data-store";
 import type { CreateVmBody } from "../types";
-import {
-  CreateSuccessTask,
-} from "../tasks";
-
+import { CreateSuccessTask } from "../tasks";
 
 export function registerPoolHandlers(
   app: express.Application,
   dataStore: MockDataStore,
 ) {
-  app.post("/rest/v0/pools/:id/actions/create_vm", (req, res) => createVm(req, res, dataStore));
+  app.post("/rest/v0/pools/:id/actions/create_vm", (req, res) =>
+    createVm(req, res, dataStore),
+  );
 }
 
 function createVm(
@@ -73,12 +72,8 @@ function createVm(
     type: "VM" as const,
     power_state: boot === true ? "Running" : "Halted",
     current_operations: {},
-    mainIpAddress: `10.0.0.${Math.floor(Math.random() * 254) + 1}`
+    mainIpAddress: `10.0.0.${Math.floor(Math.random() * 254) + 1}`,
   };
-
-  // if (boot !== undefined && boot !== null && boot) {
-  //   vm.power_state = "Running";
-  // }
 
   dataStore.addItem("vms", vm);
 
