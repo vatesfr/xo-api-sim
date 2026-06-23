@@ -105,15 +105,22 @@ function createVm(
         continue;
       }
       // Create VDI
-      const { id: vdiId } = createVdiInStore(dataStore, pool.default_SR, pool.id, {
-        size: ("size" in vdiConfig && vdiConfig.size) || 1073741824,
-        name_label:
-          "name_label" in vdiConfig ? vdiConfig.name_label : "Created by fake-xo-api",
-        name_description:
-          "name_description" in vdiConfig
-            ? vdiConfig.name_description
-            : undefined,
-      });
+      const { id: vdiId } = createVdiInStore(
+        dataStore,
+        pool.default_SR,
+        pool.id,
+        {
+          size: ("size" in vdiConfig && vdiConfig.size) || 1073741824,
+          name_label:
+            "name_label" in vdiConfig
+              ? vdiConfig.name_label
+              : "Created by fake-xo-api",
+          name_description:
+            "name_description" in vdiConfig
+              ? vdiConfig.name_description
+              : undefined,
+        },
+      );
 
       // Create VBD
       const { id: vbdId } = createVbdInStore(dataStore, vm.id, vdiId, pool.id);

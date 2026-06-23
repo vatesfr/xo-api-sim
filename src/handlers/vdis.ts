@@ -8,6 +8,7 @@ import type {
   XoPbd,
   XoPool,
   XoVdi,
+  XoVbd,
   Branded,
   VDI_TYPE,
 } from "../types";
@@ -19,6 +20,7 @@ import {
   CreateFailedTask,
   UpdateAllTasksForObject,
 } from "../tasks";
+import { applyLimit, applyFilter, applyFields } from "../utils";
 
 function resolvePoolId(
   srId: Branded<"SR">,
@@ -374,11 +376,14 @@ async function getVMVDIs(
   const vbdIds = vm.$VBDs || [];
   const vdis: XoVdi[] = (
     vbdIds.map((vbdId: string) => {
-      const vbd = dataStore.findById("vbds", vbdId);
+      const vbd = dataStore.findById("vbds", vbdId) as XoVbd | undefined;
       if (!vbd) return null;
-      return dataStore.findById("vdis", vbd.VDI) as XoVdi;
+      return dataStore.findById("vdis", String(vbd.VDI)) as XoVdi | undefined;
     }) as (XoVdi | null)[]
   ).filter((vdi) => vdi !== null) as XoVdi[];
 
-  return res.status(200).json(vdis);
+  const filteredVdis = applyFilter(vdis, req);
+  const fieldsVdis = applyFields(filteredVdis, req);
+
+  return res.status(200).json(applyLimit(fieldsVdis, req));
 }
