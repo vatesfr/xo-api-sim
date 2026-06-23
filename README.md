@@ -1,8 +1,8 @@
 # Fake XO API Mock Server
 
-Mock REST API server for Xen Orchestra. Routes are auto-generated from the OpenAPI spec (`swagger.json`) at startup — all 205 paths are registered under `/rest/v0/` with generic CRUD handlers backed by an in-memory data store.
+Mock REST API server for Xen Orchestra. At startup it loads fixtures, enriches them from the Swagger schema, then registers the OpenAPI routes under `/rest/v0/` plus custom handlers for endpoints that need special logic.
 
-Swagger UI available at `/docs/` for interactive exploration.
+Swagger UI is available at `/docs/`. The raw spec is at `/swagger.json`.
 
 ## Getting Started
 
@@ -11,90 +11,63 @@ npm install
 npm start
 ```
 
-Server runs on `http://localhost:3001` (override with `PORT` env var).
+The server listens on `http://localhost:3001` by default. Override with `PORT`. Override fixture loading with `FIXTURES_DIR`.
 
 ## API Usage
 
+Generic Swagger CRUD is still used for most resources:
+
+```text
+GET    /rest/v0/{resource}          list
+GET    /rest/v0/{resource}/{id}     get by ID
+POST   /rest/v0/{resource}          create
+PUT    /rest/v0/{resource}/{id}     update
+PATCH  /rest/v0/{resource}/{id}     update
+DELETE /rest/v0/{resource}/{id}     delete
 ```
-GET    /rest/v0/{resource}          → list (URIs without ?fields, objects with ?fields)
-GET    /rest/v0/{resource}/{id}     → get by ID
-POST   /rest/v0/{resource}          → create
-PATCH  /rest/v0/{resource}/{id}     → update
-DELETE /rest/v0/{resource}/{id}     → delete
-```
 
-- No `?fields` → returns array of resource URIs: `["/rest/v0/vms/{id}", ...]`
-- `?fields=id,name_label` → returns only those fields
-- `?fields=*` → returns all fields
-- Resource IDs are UUIDs (except tasks)
 
-## Updating Routes
+Custom handlers currently exist for:
 
-Replace `swagger.json` and restart the server — routes are auto-discovered from the spec at startup.
+- `POST /rest/v0/vdis`
+- `POST /rest/v0/vifs`
+- `POST /rest/v0/vbds`
+- `POST /rest/v0/pools/:id/actions/create_vm`
+- `POST /rest/v0/vms/:id/actions/:action`
+- `POST /rest/v0/vbds/:id/actions/:action`
+- `POST /rest/v0/pbds/:id/actions/:action`
+- `POST /rest/v0/srs/:id/actions/:action`
+- tag add/remove endpoints for taggable resources
+- `GET /rest/v0/:resource/:id/tasks`
 
-## Data
+## Fixtures
 
-Mock objects are created from `@vates/types` types for accurate field names. Add fixtures in `src/fixtures/` or edit `src/data-store.ts` to seed more data.
+Fixtures are loaded from `src/fixtures/*.json` and merged by collection name. `enrichFixtures()` fills in defaults from the OpenAPI schema and computed fields used by the handlers.
+
+To add static fixtures:
+
+1. Add a JSON file in `src/fixtures/` named after the collection, for example `hosts.json`.
+2. Use an array of objects, or an object whose array values will be merged by key.
+3. Include at least `id` and `type` where required by the resource.
+
+## Custom Handlers
+
+When an endpoint needs custom behavior, follow the existing pattern in `src/handlers/`:
+
+1. Mirror the real Xen Orchestra controller types in `src/types.ts` using `Parameters<Xapi['METHOD_NAME']>`.
+2. Add the handler in `src/handlers/<resource>.ts`.
+3. Register it from `src/handlers/index.ts` so it runs before the generic Swagger router.
+4. Match the existing validation style: `400` for missing required fields, `404` for missing referenced resources, `201` for successful creates, `202` for async task actions, and consistent `{ error, data }` payloads.
 
 ## Docker
-
-Build and run the mock server as a Docker container:
 
 ```bash
 npm run docker:build
 docker run -p 3001:3001 xo-api-mock:latest
 ```
 
-Or with a custom port:
+Or:
 
 ```bash
 docker run -p 8080:3001 -e PORT=8080 xo-api-mock:latest
-```
-
-## Adding Static Fixtures
-
-1. Add a new JSON file named after your resource (e.g., `src/fixtures/hosts.json`) with an array of objects
-2. Objects must include at minimum:
-   - `id`: UUID string
-   - `type`: resource type (e.g., "host")
-   - Other required fields
-3. The server auto-loads all `.json` files in `src/fixtures/` at startup
-
-## Enriching Fixtures
-
-The `enrichFixtures()` function adds computed fields (like `$pool`, `current_operations`) and fills missing values from the Swagger schema:
-
-- Default values: Missing fields are populated from the OpenAPI spec
-
-To add enrichment logic:
-1. Edit `src/fixtures/enrich-fixtures.ts`
-2. Extend the `applySwaggerDefaults()` or add new enrichment functions
-
-## Writing Custom Route Handlers
-
-For endpoints requiring special logic (like `POST /vdis`):
-
-1. Define the request body type in `src/types.ts` (mirroring the XenOrchestra server code):
-   ```ts
-   export type CreateVdiBody = {
-     name: string;
-     size: number;
-     srId: string;
-   }
-   ```
-
-2. Create handler in `src/handlers/[resource].ts`:
-   ```ts
-   export function registerVdiHandlers(app, dataStore) {
-     app.post('/rest/v0/vdis', (req, res) => createVdi(req, res, dataStore))
-   }
-   ```
-
-3. Register in `src/handlers/index.ts`:
-   ```ts
-   export function registerCustomHandlers(app, dataStore) {
-     registerVdiHandlers(app, dataStore)
-   }
-   ```
-
-4. Implement your logic following the established validation/response patterns
+``` 
