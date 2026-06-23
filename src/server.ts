@@ -2,6 +2,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "../swagger.json";
 import type { MockDataStore } from "./data-store";
+import { registerCustomHandlers } from "./handlers";
 import { registerSwaggerRoutes } from "./routes/swagger-routes";
 
 export async function startServer(port: number, dataStore: MockDataStore) {
@@ -33,6 +34,9 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   app.get("/ping", (_req, res) => {
     res.json({ status: "ok" });
   });
+
+  // Register custom handlers before swagger routes so they win matching.
+  registerCustomHandlers(app, dataStore);
 
   // Register all swagger routes
   registerSwaggerRoutes(app, dataStore);
