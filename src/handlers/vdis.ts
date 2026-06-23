@@ -2,7 +2,15 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import { Readable } from "node:stream";
 import type { MockDataStore } from "../data-store";
-import type { CreateVdiBody, XoHost, XoPbd, XoPool } from "../types";
+import type {
+  CreateVdiBody,
+  XoHost,
+  XoPbd,
+  XoPool,
+  XoVdi,
+  Branded,
+  VDI_TYPE,
+} from "../types";
 // @ts-expect-error - no types for vhd-lib
 import * as vhd from "vhd-lib";
 import { randomBytes } from "node:crypto";
@@ -13,9 +21,9 @@ import {
 } from "../tasks";
 
 function resolvePoolId(
-  srId: string,
+  srId: Branded<"SR">,
   dataStore: MockDataStore,
-): string | undefined {
+): Branded<"pool"> | undefined {
   const pools = dataStore.getResource("pools");
   const pbds = dataStore.getResource("pbds");
   const hosts = dataStore.getResource("hosts");
@@ -56,6 +64,50 @@ export function registerVdiHandlers(
   app.post("/rest/v0/vdis/:id/actions/migrate", (req, res) =>
     migrate(req, res, dataStore),
   );
+  app.get("/rest/v0/vms/:id/vdis", (req, res) =>
+    getVMVDIs(req, res, dataStore),
+  );
+}
+
+export function createVdiInStore(
+  dataStore: MockDataStore,
+  srId: Branded<"SR">,
+  poolId: Branded<"pool">,
+  options: {
+    size: number;
+    name_label?: string;
+    name_description?: string;
+    type?: VDI_TYPE;
+    tags?: string[];
+    other_config?: Record<string, string>;
+  },
+): { id: Branded<"VDI"> } {
+  const id = uuid();
+  const vdi: XoVdi = {
+    id: id as Branded<"VDI">,
+    uuid: id,
+    $SR: srId,
+    VDI_type: options.type ?? "user",
+    size: options.size,
+    tags: options.tags ?? [],
+    other_config: options.other_config ?? {},
+    name_label: options.name_label ?? "",
+    name_description: options.name_description ?? "",
+    type: "VDI" as const,
+    usage: 0,
+    chainPhysicalUsage: 0,
+    missing: false,
+    cbt_enabled: false,
+    current_operations: {},
+    $VBDs: [],
+    $pool: poolId,
+    $poolId: poolId,
+    snapshots: [],
+    _xapiRef: "",
+  };
+
+  dataStore.addItem("vdis", vdi);
+  return { id: id as Branded<"VDI"> };
 }
 
 function createEmptyVdi(
@@ -91,34 +143,20 @@ function createEmptyVdi(
   const { srId, sm_config, ...rest } = body;
 
   const poolId = resolvePoolId(srId, dataStore);
-  const id = uuid();
+  const { id } = createVdiInStore(
+    dataStore,
+    srId,
+    poolId ?? ("" as Branded<"pool">),
+    {
+      size: rest.virtual_size,
+      name_label: rest.name_label,
+      name_description: rest.name_description,
+      type: rest.type,
+      tags: rest.tags,
+      other_config: rest.other_config,
+    },
+  );
 
-  const vdi = {
-    ...rest,
-    id,
-    uuid: id,
-    $SR: srId,
-    VDI_type: rest.type ?? "user",
-    size: rest.virtual_size,
-    tags: rest.tags ?? [],
-    other_config: rest.other_config ?? {},
-    name_label: rest.name_label ?? "",
-    name_description: rest.name_description ?? "",
-    // override VDI_TYPE value from rest with the XO object discriminator
-    type: "VDI" as const,
-    // computed mock-only fields
-    physical_usage: 0,
-    usage: 0,
-    missing: false,
-    cbt_enabled: false,
-    current_operations: {},
-    $VBDs: [],
-    $pool: poolId,
-    $poolId: poolId,
-    snapshots: [],
-  };
-
-  dataStore.addItem("vdis", vdi);
   res.status(201).json({ id });
 }
 
@@ -314,4 +352,33 @@ async function migrate(
   return res.status(202).json({
     taskId: task.id,
   });
+}
+
+async function getVMVDIs(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const { id } = req.params;
+
+  // Validate referenced VM exists
+  const vm = dataStore.findById("vms", id);
+  if (!vm) {
+    return res.status(404).json({
+      error: `no such VM ${id}`,
+      data: { id, type: "VM" },
+    });
+  }
+
+  // Get the VDI IDs associated with the VM's VBDs
+  const vbdIds = vm.$VBDs || [];
+  const vdis: XoVdi[] = (
+    vbdIds.map((vbdId: string) => {
+      const vbd = dataStore.findById("vbds", vbdId);
+      if (!vbd) return null;
+      return dataStore.findById("vdis", vbd.VDI) as XoVdi;
+    }) as (XoVdi | null)[]
+  ).filter((vdi) => vdi !== null) as XoVdi[];
+
+  return res.status(200).json(vdis);
 }

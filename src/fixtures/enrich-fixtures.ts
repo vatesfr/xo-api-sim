@@ -60,21 +60,7 @@ function getDefaultValue(propSchema: any): any {
     return computeDefaults(propSchema);
   }
 
-  switch (propSchema.type) {
-    case "string":
-      return "";
-    case "number":
-    case "integer":
-      return 0;
-    case "boolean":
-      return false;
-    case "array":
-      return [];
-    case "object":
-      return {};
-    default:
-      return undefined;
-  }
+  return undefined;
 }
 
 function computeDefaults(schema: any): Record<string, any> {

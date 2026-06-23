@@ -1,7 +1,7 @@
 import type express from "express";
 import { v4 as uuid } from "uuid";
 import type { MockDataStore } from "../data-store";
-import type { CreateVbdBody } from "../types";
+import type { Branded, CreateVbdBody, XoVbd } from "../types";
 import { CreateSuccessTask } from "../tasks";
 
 export function registerVbdHandlers(
@@ -12,6 +12,53 @@ export function registerVbdHandlers(
   app.post("/rest/v0/vbds/:id/actions/:action", (req, res) =>
     doAction(req, res, dataStore),
   );
+}
+
+export function createVbdInStore(
+  dataStore: MockDataStore,
+  vmId: Branded<"VM">,
+  vdiId: Branded<"VDI">,
+  poolId: Branded<"pool">,
+  options: {
+    bootable?: boolean;
+    read_only?: boolean;
+    type?: "System" | "User" | "CD" | "DVD" | "Other";
+  } = {},
+): { id: Branded<"VBD"> } {
+  // Determine device index
+  const existingVbds = dataStore
+    .getResource("vbds")
+    .filter((vbd: XoVbd) => vbd.VM === vmId);
+  const usedDevices = new Set(
+    existingVbds
+      .map((vbd: XoVbd) => vbd.device)
+      .filter((d: string | null) => d !== null),
+  );
+  let deviceIndex = 0;
+  while (usedDevices.has(String(deviceIndex))) {
+    deviceIndex++;
+  }
+
+  const id = uuid();
+  const vbd: XoVbd = {
+    id: id as Branded<"VBD">,
+    uuid: id,
+    VM: vmId,
+    VDI: vdiId,
+    device: String(deviceIndex),
+    position: String(deviceIndex),
+    bootable: options.bootable ?? deviceIndex === 0,
+    type: "VBD" as const,
+    attached: true,
+    $pool: poolId,
+    $poolId: poolId,
+    _xapiRef: "",
+    is_cd_drive: false,
+    read_only: options.read_only ?? false,
+  };
+
+  dataStore.addItem("vbds", vbd);
+  return { id: id as Branded<"VBD"> };
 }
 
 function createVbd(
@@ -62,36 +109,15 @@ function createVbd(
     });
   }
 
-  // Determine device index
-  const existingVbds = dataStore
-    .getResource("vbds")
-    .filter((vbd: any) => vbd.$VM === body.VM);
-  const usedDevices = existingVbds
-    .map((vbd: any) => vbd.device)
-    .filter((d: string) => d !== undefined);
-  let deviceIndex = 0;
-  while (usedDevices.includes(String(deviceIndex))) {
-    deviceIndex++;
-  }
+  const { id } = createVbdInStore(dataStore, body.VM, body.VDI, vm.$pool, {
+    bootable: body.bootable,
+    read_only: body.mode === "RO",
+    type: body.type,
+  });
 
-  // Build the stored object
-  const id = uuid();
-  const vbd = {
-    id,
-    uuid: id,
-    $VM: body.VM,
-    $VDI: body.VDI,
-    device: String(deviceIndex),
-    position: deviceIndex,
-    bootable: body.bootable ?? false,
-    mode: body.mode ?? "RW",
-    type: body.type ?? "User",
-    attached: true,
-    current_operations: {},
-    $pool: vm.$pool,
-  };
-
-  dataStore.addItem("vbds", vbd);
+  // Update the VM's $VBDs array
+  vm.$VBDs = [...(vm.$VBDs || []), id];
+  dataStore.updateItem("vms", body.VM, { $VBDs: vm.$VBDs });
 
   return res.status(201).json({
     id,
@@ -106,7 +132,7 @@ function doAction(
   const { id, action } = req.params;
 
   // Validate referenced VBD exists
-  const vbd = dataStore.findById("vbds", id);
+  const vbd = dataStore.findById("vbds", id) as XoVbd | undefined;
   if (!vbd) {
     return res.status(404).json({
       error: `no such VBD ${id}`,

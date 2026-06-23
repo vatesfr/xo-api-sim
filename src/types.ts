@@ -1,4 +1,4 @@
-import type { Xapi, XoHost, XoVmTemplate } from "@vates/types";
+import type { Xapi, XoHost, XoVmTemplate, Branded } from "@vates/types";
 
 export type {
   Branded,
@@ -30,11 +30,12 @@ export type {
   XoVmController,
   XoVmSnapshot,
   XoVmTemplate,
+  VDI_TYPE,
 } from "@vates/types";
 
 type CreateVdiParams = Parameters<Xapi["VDI_create"]>;
 export type CreateVdiBody = Omit<CreateVdiParams[0], "SR" | "other_config"> & {
-  srId: string;
+  srId: Branded<"SR">;
   other_config?: { [key: string]: string };
 } & CreateVdiParams[1];
 
@@ -52,8 +53,8 @@ export type CreateVifBody = CreateVifParams;
 
 // VBD types (mirrored from @xen-orchestra/rest-api/src/vbds/vbd.controller.mts)
 export type CreateVbdBody = {
-  VM: string;
-  VDI: string;
+  VM: Branded<"VM">;
+  VDI: Branded<"VDI">;
   bootable?: boolean;
   mode?: "RW" | "RO";
   empty?: boolean;
