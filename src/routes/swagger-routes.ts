@@ -85,23 +85,23 @@ export function registerSwaggerRoutes(
     resourceName: string,
   ) {
     const collection = getCollectionName(resourceName);
-    const items = dataStore.getResource(collection);
+    let items = dataStore.getResource(collection);
 
-    // No fields param → return array of resource URIs
+    // Apply filter if present
+    items = applyFilter(items, req);
+
+    // Apply limit if present
+    items = applyLimit(items, req);
+
+    // No fields param → return array of resource URIs (filtered + limited)
     if (!req.query.fields) {
       const uris = items.map((item) => `/rest/v0/${resourceName}/${item.id}`);
       return res.json(uris);
     }
 
-    // Apply filter if present
-    let filtered = applyFilter(items, req);
+    items = applyFields(items, req);
 
-    // Apply limit if present
-    filtered = applyLimit(filtered, req);
-
-    filtered = applyFields(filtered, req);
-
-    res.json(filtered);
+    res.json(items);
   }
 
   // Handle GET /{resource}/{id} - get by ID
@@ -130,9 +130,15 @@ export function registerSwaggerRoutes(
     resourceName: string,
   ) {
     const collection = getCollectionName(resourceName);
+    const { id: clientId, ...body } = req.body;
+    if (clientId !== undefined) {
+      console.warn(
+        `[${req.method} ${req.originalUrl}] Client-supplied id "${clientId}" will be ignored, generating a new one`,
+      );
+    }
     const newItem = {
-      ...req.body,
-      id: req.body.id || uuid(),
+      ...body,
+      id: uuid(),
     };
     const created = dataStore.addItem(collection, newItem);
     res.status(201).json(created);
