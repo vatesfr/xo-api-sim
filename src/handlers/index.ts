@@ -8,6 +8,7 @@ import { registerTasksHandlers } from "./tasks";
 import { registerSRHandlers } from "./srs";
 import { registerPoolHandlers } from "./pools";
 import { registerVbdHandlers } from "./vbds";
+import { registerVmHandlers } from "./vms";
 
 export function registerCustomHandlers(
   app: express.Application,
@@ -21,4 +22,5 @@ export function registerCustomHandlers(
   registerSRHandlers(app, dataStore);
   registerPoolHandlers(app, dataStore);
   registerVbdHandlers(app, dataStore);
+  registerVmHandlers(app, dataStore);
 }
