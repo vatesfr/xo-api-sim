@@ -24,6 +24,9 @@ COPY package*.json ./
 RUN npm ci --omit=dev --ignore-scripts && \
     chown -R appuser:nodejs /app
 
+# Add curl to the image to allow health checks to work properly
+RUN apk add --no-cache curl
+
 USER appuser
 
 EXPOSE 3001
