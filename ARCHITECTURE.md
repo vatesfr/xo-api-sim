@@ -1,4 +1,4 @@
-# Architecture
+# XO API Simulator — Architecture
 
 ```mermaid
 sequenceDiagram

@@ -1,7 +1,27 @@
 {
-  "name": "xo-api-mock",
+  "name": "xo-api-simulator",
   "version": "0.1.0",
   "description": "Mock server for Xen Orchestra API",
+  "license": "Apache-2.0",
+  "author": "Vates <pro@cyrilleg.me>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vatesfr/xo-api-sim.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vatesfr/xo-api-sim/issues"
+  },
+  "homepage": "https://github.com/vatesfr/xo-api-sim#readme",
+  "keywords": [
+    "xen-orchestra",
+    "mock",
+    "api",
+    "simulator",
+    "testing"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "main": "dist/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
@@ -10,7 +30,7 @@
     "lint": "eslint src/",
     "format": "prettier --ignore-unknown --write src/",
     "check": "eslint src/",
-    "docker:build": "docker build -t xo-api-mock:latest ."
+    "docker:build": "docker build -t xo-api-simulator:latest ."
   },
   "lint-staged": {
     "*": [
