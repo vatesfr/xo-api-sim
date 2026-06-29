@@ -111,3 +111,12 @@ export type CreateVmBody = Omit<
         repository: "";
       };
 } & CreateVmAfterCreateParams;
+
+export type CreateNetworkBody = {
+  name: string
+  description?: string
+  mtu?: number
+  nbd?: boolean
+  pif: Branded<'PIF'>
+  vlan: number
+}

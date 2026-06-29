@@ -2,10 +2,12 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import type { MockDataStore } from "../data-store";
 import type {
+  CreateNetworkBody,
   CreateVmBody,
   XoVm,
   Branded,
   XoVmTemplate,
+  XoNetwork,
   XoPool,
   XoVbd,
   XoVdi,
@@ -20,6 +22,9 @@ export function registerPoolHandlers(
 ) {
   app.post("/rest/v0/pools/:id/actions/create_vm", (req, res) =>
     createVm(req, res, dataStore),
+  );
+  app.post("/rest/v0/pools/:id/actions/create_network", (req, res) =>
+    createNetwork(req, res, dataStore),
   );
 }
 
@@ -196,6 +201,97 @@ function createVm(
   });
 
   // Return 201 Created for success
+  return res.status(201).json({
+    taskId: task.id,
+  });
+}
+
+function createNetwork(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const body = req.body as CreateNetworkBody;
+
+  const pool = dataStore.findById("pools", req.params.id) as XoPool | undefined;
+  if (!pool) {
+    return res.status(404).json({
+      error: `no such pool ${req.params.id}`,
+      data: { id: req.params.id, type: "POOL" },
+    });
+  }
+
+  if (!body.name) {
+    return res.status(400).json({
+      error: "name is required",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  if (!body.pif) {
+    return res.status(400).json({
+      error: "pif is required",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  const pif = dataStore.findById("pifs", body.pif);
+  if (!pif) {
+    return res.status(404).json({
+      error: `no such PIF ${body.pif}`,
+      data: { id: body.pif, type: "PIF" },
+    });
+  }
+
+  if (body.vlan === undefined || body.vlan === null) {
+    return res.status(400).json({
+      error: "vlan is required",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  if (body.vlan < 0 || body.vlan > 4094) {
+    return res.status(400).json({
+      error: "vlan must be between 0 and 4094",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  const { pif: _pif, ...rest } = body;
+
+  const id = uuid();
+  const network = {
+    id,
+    uuid: id,
+    $pool: pool.id,
+    $poolId: pool.id,
+    pool: pool.id,
+    _xapiRef: `network-${id}`,
+    MTU: rest.mtu ?? 1500,
+    PIFs: [_pif],
+    VIFs: [],
+    automatic: false,
+    bridge: `xenbr-${id.slice(0, 8)}`,
+    current_operations: {},
+    defaultIsLocked: false,
+    isBonded: false,
+    name_description: rest.description ?? "",
+    name_label: rest.name,
+    other_config: {},
+    tags: [],
+    type: "network" as const,
+  } as unknown as XoNetwork;
+
+  dataStore.addItem("networks", network);
+
+  const task = CreateSuccessTask(dataStore, {
+    objectType: "network",
+    objectId: network.id,
+    name: `create network in pool ${pool.id}`,
+    type: "xo:mock:action",
+    result: { id: network.id },
+  });
+
   return res.status(201).json({
     taskId: task.id,
   });
