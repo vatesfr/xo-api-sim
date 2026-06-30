@@ -113,10 +113,10 @@ export type CreateVmBody = Omit<
 } & CreateVmAfterCreateParams;
 
 export type CreateNetworkBody = {
-  name: string
-  description?: string
-  mtu?: number
-  nbd?: boolean
-  pif: Branded<'PIF'>
-  vlan: number
-}
+  name: string;
+  description?: string;
+  mtu?: number;
+  nbd?: boolean;
+  pif: Branded<"PIF">;
+  vlan: number;
+};
