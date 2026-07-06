@@ -120,3 +120,10 @@ export type CreateNetworkBody = {
   pif: Branded<"PIF">;
   vlan: number;
 };
+
+export type CreateInternalNetworkBody = {
+  name: string;
+  description?: string;
+  mtu?: number;
+  nbd?: boolean;
+};
