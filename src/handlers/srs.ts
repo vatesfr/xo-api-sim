@@ -21,19 +21,9 @@ function doAction(
   // Validate referenced SR exists
   const sr = dataStore.findById("srs", id);
   if (!sr) {
-    const task = CreateFailedTask(dataStore, {
-      objectType: "SR",
-      objectId: id,
-      name: `SR ${action}`,
-      type: "xo:mock:action",
-      result: {
-        message: `no such SR ${id}`,
-        code: 1,
-        data: { id, type: "SR" },
-      },
-    });
-    return res.status(202).json({
-      taskId: task.id,
+    return res.status(404).json({
+      error: `no such SR ${id}`,
+      data: { id, type: "SR" },
     });
   }
 
