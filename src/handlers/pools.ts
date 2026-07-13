@@ -2,6 +2,7 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import type { MockDataStore } from "../data-store";
 import type {
+  CreateBondedNetworkBody,
   CreateInternalNetworkBody,
   CreateNetworkBody,
   CreateVmBody,
@@ -29,6 +30,9 @@ export function registerPoolHandlers(
   );
   app.post("/rest/v0/pools/:id/actions/create_internal_network", (req, res) =>
     createInternalNetwork(req, res, dataStore),
+  );
+  app.post("/rest/v0/pools/:id/actions/create_bonded_network", (req, res) =>
+    createBondedNetwork(req, res, dataStore),
   );
 }
 
@@ -355,6 +359,94 @@ function createInternalNetwork(
     objectType: "network",
     objectId: network.id,
     name: `create internal network in pool ${pool.id}`,
+    type: "xo:mock:action",
+    result: { id: network.id },
+  });
+
+  return res.status(201).json({
+    taskId: task.id,
+  });
+}
+
+function createBondedNetwork(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const body = req.body as CreateBondedNetworkBody;
+
+  const pool = dataStore.findById("pools", req.params.id) as XoPool | undefined;
+  if (!pool) {
+    return res.status(404).json({
+      error: `no such pool ${req.params.id}`,
+      data: { id: req.params.id, type: "POOL" },
+    });
+  }
+
+  if (!body.name) {
+    return res.status(400).json({
+      error: "name is required",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  if (!body.pifIds || body.pifIds.length === 0) {
+    return res.status(400).json({
+      error: "pifIds is required and must not be empty",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  if (!body.bondMode) {
+    return res.status(400).json({
+      error: "bondMode is required",
+      data: { id: null, type: "NETWORK" },
+    });
+  }
+
+  for (const pifId of body.pifIds) {
+    const pif = dataStore.findById("pifs", pifId);
+    if (!pif) {
+      return res.status(404).json({
+        error: `no such PIF ${pifId}`,
+        data: { id: pifId, type: "PIF" },
+      });
+    }
+  }
+
+  const { pifIds, bondMode, description, mtu, nbd, ...rest } = body;
+
+  const id = uuid();
+  const network = {
+    ...rest,
+    id,
+    uuid: id,
+    $pool: pool.id,
+    $poolId: pool.id,
+    pool: pool.id,
+    _xapiRef: `network-${id}`,
+    MTU: mtu ?? 1500,
+    PIFs: pifIds,
+    VIFs: [],
+    automatic: false,
+    bridge: `xenbr-${id.slice(0, 8)}`,
+    current_operations: {},
+    defaultIsLocked: false,
+    isBonded: true,
+    bondMode,
+    name_description: description ?? "",
+    name_label: body.name,
+    other_config: {},
+    tags: [],
+    type: "network" as const,
+  } as unknown as XoNetwork;
+
+  dataStore.addItem("networks", network);
+
+  const task = CreateSuccessTask(dataStore, {
+    objectType: "network",
+    objectId: network.id,
+    name: `create bonded network in pool ${pool.id}`,
     type: "xo:mock:action",
     result: { id: network.id },
   });

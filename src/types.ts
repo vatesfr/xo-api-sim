@@ -127,3 +127,12 @@ export type CreateInternalNetworkBody = {
   mtu?: number;
   nbd?: boolean;
 };
+
+export type CreateBondedNetworkBody = {
+  name: string;
+  description?: string;
+  mtu?: number;
+  nbd?: boolean;
+  pifIds: Branded<"PIF">[];
+  bondMode: "lacp" | "active-backup" | "balance-xor" | "broadcast" | "round-robin";
+};
