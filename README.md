@@ -13,6 +13,144 @@ npm start
 
 The server listens on `http://localhost:3001` by default. Override with `PORT`. Override fixture loading with `FIXTURES_DIR`.
 
+## Using the mock with the XO 6 web frontend
+
+The new Vue.js frontend lives at `@xen-orchestra/web` in the
+[`xen-orchestra`](https://github.com/vatesfr/xen-orchestra) monorepo. It talks to
+the backend entirely over the REST API (`/rest/v0/*`): collections are streamed
+as **NDJSON**, and live updates come over a **Server-Sent Events** channel at
+`/rest/v0/events`. The simulator implements all of this, so you can develop the
+UI without a real XO instance.
+
+### 1. Start the simulator
+
+```bash
+# in xo-api-sim
+npm install
+npm start           # http://localhost:3001
+```
+
+### 2. Point the frontend at it
+
+The frontend's Vite dev server proxies `/rest` (and the `/api` console
+websocket) to `VITE_XO_REST_HOST`.
+
+```bash
+# in xen-orchestra/@xen-orchestra/web
+yarn
+cp .env.dist .env
+```
+
+Set the host in `.env` to wherever the simulator is listening:
+
+```dotenv
+VITE_XO_REST_HOST=localhost:3001
+```
+
+Then start it:
+
+```bash
+yarn dev            # http://localhost:5173
+```
+
+### 3. Register a token
+
+The frontend gates authenticated requests on a `token` cookie. Open
+[http://localhost:5173/#/dev/token](http://localhost:5173/#/dev/token) and paste
+**any** non-empty value — in the simulator's default *accept-any* auth mode the
+token is not validated, and `/rest/v0/users/me` resolves to the default `admin`
+fixture user. The page stores the cookie and reloads; the UI then lists the
+fixture VMs, hosts, pools, SRs, networks, and so on.
+
+> Keep `MOCK_AUTH_ENFORCE` **unset** (the default) when working with the web UI.
+> Enforcement would reject the opaque dev token, and because the SSE handshake
+> must succeed *before* a watched collection loads, nothing would appear.
+
+### How the frontend talks to the mock
+
+| Concern | Endpoint(s) | Notes |
+| --- | --- | --- |
+| Collections | `GET /rest/v0/{resource}?fields=…&ndjson=true` | One JSON object per line (`application/x-ndjson`). |
+| Live updates | `GET /rest/v0/events` (SSE) | Emits `init` (carries the SSE id), then periodic `ping`. |
+| Subscriptions | `POST /rest/v0/events/:sseId/subscriptions` → `{ id }`, `DELETE …/:subscriptionId` | The UI subscribes per collection; the handshake must complete before the initial NDJSON fetch runs. |
+| Current user | `GET /rest/v0/users/me` | Returns the default admin in accept-any mode. |
+| Dashboards | `GET /rest/v0/dashboard`, `…/pools/:id/dashboard`, `…/vms/:id/dashboard` | Return an empty object (the simulator has no aggregation layer); the UI renders an empty dashboard. |
+
+Because fixtures are static, the simulator never pushes `add`/`update`/`remove`
+events — the SSE channel exists to unblock the subscription handshake and report
+liveness. Sub-collections without fixture-backed relationships (e.g. a VM's
+alarms) return an empty NDJSON list rather than an error, so detail pages render
+cleanly.
+
+## Using the mock with the XO 6 web frontend
+
+The new Vue.js frontend lives at `@xen-orchestra/web` in the
+[`xen-orchestra`](https://github.com/vatesfr/xen-orchestra) monorepo. It talks to
+the backend entirely over the REST API (`/rest/v0/*`): collections are streamed
+as **NDJSON**, and live updates come over a **Server-Sent Events** channel at
+`/rest/v0/events`. The simulator implements all of this, so you can develop the
+UI without a real XO instance.
+
+### 1. Start the simulator
+
+```bash
+# in xo-api-sim
+npm install
+npm start           # http://localhost:3001
+```
+
+### 2. Point the frontend at it
+
+The frontend's Vite dev server proxies `/rest` (and the `/api` console
+websocket) to `VITE_XO_REST_HOST`.
+
+```bash
+# in xen-orchestra/@xen-orchestra/web
+yarn
+cp .env.dist .env
+```
+
+Set the host in `.env` to wherever the simulator is listening:
+
+```dotenv
+VITE_XO_REST_HOST=localhost:3001
+```
+
+Then start it:
+
+```bash
+yarn dev            # http://localhost:5173
+```
+
+### 3. Register a token
+
+The frontend gates authenticated requests on a `token` cookie. Open
+[http://localhost:5173/#/dev/token](http://localhost:5173/#/dev/token) and paste
+**any** non-empty value — in the simulator's default *accept-any* auth mode the
+token is not validated, and `/rest/v0/users/me` resolves to the default `admin`
+fixture user. The page stores the cookie and reloads; the UI then lists the
+fixture VMs, hosts, pools, SRs, networks, and so on.
+
+> Keep `MOCK_AUTH_ENFORCE` **unset** (the default) when working with the web UI.
+> Enforcement would reject the opaque dev token, and because the SSE handshake
+> must succeed *before* a watched collection loads, nothing would appear.
+
+### How the frontend talks to the mock
+
+| Concern | Endpoint(s) | Notes |
+| --- | --- | --- |
+| Collections | `GET /rest/v0/{resource}?fields=…&ndjson=true` | One JSON object per line (`application/x-ndjson`). |
+| Live updates | `GET /rest/v0/events` (SSE) | Emits `init` (carries the SSE id), then periodic `ping`. |
+| Subscriptions | `POST /rest/v0/events/:sseId/subscriptions` → `{ id }`, `DELETE …/:subscriptionId` | The UI subscribes per collection; the handshake must complete before the initial NDJSON fetch runs. |
+| Current user | `GET /rest/v0/users/me` | Returns the default admin in accept-any mode. |
+| Dashboards | `GET /rest/v0/dashboard`, `…/pools/:id/dashboard`, `…/vms/:id/dashboard` | Return an empty object (the simulator has no aggregation layer); the UI renders an empty dashboard. |
+
+Because fixtures are static, the simulator never pushes `add`/`update`/`remove`
+events — the SSE channel exists to unblock the subscription handshake and report
+liveness. Sub-collections without fixture-backed relationships (e.g. a VM's
+alarms) return an empty NDJSON list rather than an error, so detail pages render
+cleanly.
+
 ## 🔌 API Usage
 
 Generic Swagger CRUD is still used for most resources:
@@ -28,8 +166,18 @@ PATCH  /rest/v0/{resource}/{id}     update
 DELETE /rest/v0/{resource}/{id}     delete
 ```
 
+List endpoints accept `?fields=a,b,c` to project fields, `?filter=` (complex-matcher
+syntax) to filter, and `?limit=` to cap results. With no `fields`, a list returns
+an array of resource URIs. Add `?ndjson=true` to stream the records as
+newline-delimited JSON (`application/x-ndjson`) — this is the form the XO 6 web UI
+uses.
+
+
 Custom handlers currently exist for:
 
+- `GET /rest/v0/events` plus `POST`/`DELETE /rest/v0/events/:sseId/subscriptions/…` (SSE channel used by the XO 6 web UI)
+- `GET /rest/v0/dashboard`, `GET /rest/v0/pools/:id/dashboard`, `GET /rest/v0/vms/:id/dashboard`
+- `POST /rest/v0/users/me/authentication_tokens` (login) and related token endpoints
 - `POST /rest/v0/vdis`
 - `POST /rest/v0/vifs`
 - `POST /rest/v0/vbds`
@@ -40,6 +188,66 @@ Custom handlers currently exist for:
 - `POST /rest/v0/srs/:id/actions/:action`
 - tag add/remove endpoints for taggable resources
 - `GET /rest/v0/:resource/:id/tasks`
+
+## Authentication
+
+The simulator implements XO's token auth so clients (e.g. the XO mobile app)
+can run their real login flow against it.
+
+```text
+POST   /rest/v0/users/me/authentication_tokens   HTTP Basic login -> { token: { id, ... } }
+GET    /rest/v0/users/me                          current user for the presented token
+GET    /rest/v0/users/me/authentication_tokens    tokens owned by the current user
+DELETE /rest/v0/users/me/authentication_tokens/:id revoke a token (logout)
+```
+
+Log in with an `Authorization: Basic base64(user:pass)` header; the returned
+`token.id` is then sent back either as an `authenticationToken` cookie or an
+`Authorization: Bearer <token>` header.
+
+By default **any** username/password is accepted (dev-friendly) and requests are
+**not** required to be authenticated. Configure via env vars:
+
+| Variable | Default | Effect |
+| --- | --- | --- |
+| `MOCK_AUTH_CREDENTIALS` | — | Comma-separated `user:pass` pairs to accept, e.g. `admin:admin,operator:secret`. Setting it turns off accept-any. |
+| `MOCK_AUTH_ANY` | `true` unless credentials set | Force accept-any on/off. |
+| `MOCK_AUTH_ENFORCE` | `false` | Require a valid token on every `/rest/v0/*` request (login stays open). |
+| `MOCK_AUTH_TOKEN_TTL` | `604800` | Token lifetime in seconds. |
+
+Users come from `src/fixtures/users.json` (a default `admin` and `operator`);
+issued tokens bind to the matching user, or to the first admin in accept-any
+mode.
+
+## Authentication
+
+The simulator implements XO's token auth so clients (e.g. the XO mobile app)
+can run their real login flow against it.
+
+```text
+POST   /rest/v0/users/me/authentication_tokens   HTTP Basic login -> { token: { id, ... } }
+GET    /rest/v0/users/me                          current user for the presented token
+GET    /rest/v0/users/me/authentication_tokens    tokens owned by the current user
+DELETE /rest/v0/users/me/authentication_tokens/:id revoke a token (logout)
+```
+
+Log in with an `Authorization: Basic base64(user:pass)` header; the returned
+`token.id` is then sent back either as an `authenticationToken` cookie or an
+`Authorization: Bearer <token>` header.
+
+By default **any** username/password is accepted (dev-friendly) and requests are
+**not** required to be authenticated. Configure via env vars:
+
+| Variable | Default | Effect |
+| --- | --- | --- |
+| `MOCK_AUTH_CREDENTIALS` | — | Comma-separated `user:pass` pairs to accept, e.g. `admin:admin,operator:secret`. Setting it turns off accept-any. |
+| `MOCK_AUTH_ANY` | `true` unless credentials set | Force accept-any on/off. |
+| `MOCK_AUTH_ENFORCE` | `false` | Require a valid token on every `/rest/v0/*` request (login stays open). |
+| `MOCK_AUTH_TOKEN_TTL` | `604800` | Token lifetime in seconds. |
+
+Users come from `src/fixtures/users.json` (a default `admin` and `operator`);
+issued tokens bind to the matching user, or to the first admin in accept-any
+mode.
 
 ## 🧪 Fixtures
 

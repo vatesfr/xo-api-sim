@@ -1,6 +1,6 @@
 import type express from "express";
 import type { MockDataStore } from "../data-store";
-import { applyLimit, applyFilter } from "../utils";
+import { applyLimit, applyFilter, sendCollection } from "../utils";
 
 export function registerTasksHandlers(
   app: express.Application,
@@ -18,6 +18,6 @@ export function registerTasksHandlers(
       .getResource("tasks")
       .filter((t: any) => t.properties?.objectId === req.params.id);
     const filteredTasks = applyFilter(tasks, req);
-    res.json(applyLimit(filteredTasks, req));
+    sendCollection(res, req, applyLimit(filteredTasks, req));
   });
 }

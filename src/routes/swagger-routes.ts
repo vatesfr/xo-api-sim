@@ -2,7 +2,14 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import swagger from "../../swagger.json";
 import type { MockDataStore } from "../data-store";
-import { applyLimit, applyFilter, applyFields } from "../utils";
+import {
+  applyLimit,
+  applyFilter,
+  applyFields,
+  sendCollection,
+  sendObject,
+  wantsNdjson,
+} from "../utils";
 
 // Resources to exclude (special endpoints)
 const EXCLUDED_RESOURCES = [
@@ -72,6 +79,15 @@ export function registerSwaggerRoutes(
   // handled by earlier route layers. This runs before swagger CRUD routes
   // to prevent them from treating sub-routes as main resource lookups.
   app.all("/rest/v0/:resource/:id/:subResource/:subId?", (req, res, _next) => {
+    // GET sub-collections that lack a dedicated handler degrade gracefully to an
+    // empty result so the web UI's detail pages render "no data" instead of
+    // erroring. Non-GET verbs remain unimplemented.
+    if (req.method === "GET") {
+      console.log(
+        `Sub-resource endpoint not backed by fixtures, returning empty: ${req.method} ${req.originalUrl}`,
+      );
+      return sendCollection(res, req, []);
+    }
     console.log(
       `Sub-resource endpoint not yet implemented: ${req.method} ${req.originalUrl}`,
     );
@@ -93,15 +109,19 @@ export function registerSwaggerRoutes(
     // Apply limit if present
     items = applyLimit(items, req);
 
+    // The XO 6 web UI streams collections as NDJSON (`?ndjson=true`), always
+    // with an explicit `fields` list. Emit the selected records one per line.
+    if (wantsNdjson(req)) {
+      return sendCollection(res, req, applyFields(items, req));
+    }
+
     // No fields param → return array of resource URIs (filtered + limited)
     if (!req.query.fields) {
       const uris = items.map((item) => `/rest/v0/${resourceName}/${item.id}`);
       return res.json(uris);
     }
 
-    items = applyFields(items, req);
-
-    res.json(items);
+    res.json(applyFields(items, req));
   }
 
   // Handle GET /{resource}/{id} - get by ID
@@ -120,7 +140,7 @@ export function registerSwaggerRoutes(
       });
     }
 
-    res.json(applyFields([item], req)[0]);
+    sendObject(res, req, applyFields([item], req)[0]);
   }
 
   // Handle POST /{resource} - create

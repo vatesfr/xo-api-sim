@@ -1,6 +1,54 @@
 import type express from "express";
 import * as CM from "complex-matcher";
 
+/**
+ * The XO 6 web UI requests collections as newline-delimited JSON
+ * (`?ndjson=true`) and parses the response body as a stream of objects, one per
+ * line. Returns true unless the caller explicitly opted out with `ndjson=false`.
+ */
+export function wantsNdjson(req: express.Request): boolean {
+  const v = req.query.ndjson;
+  return v !== undefined && v !== "false";
+}
+
+/**
+ * Sends a list of records either as a JSON array (default REST behavior) or as
+ * an NDJSON stream when the client asked for `ndjson=true`.
+ */
+export function sendCollection(
+  res: express.Response,
+  req: express.Request,
+  items: any[],
+): void {
+  if (wantsNdjson(req)) {
+    res.setHeader("Content-Type", "application/x-ndjson");
+    for (const item of items) {
+      res.write(JSON.stringify(item) + "\n");
+    }
+    res.end();
+    return;
+  }
+  res.json(items);
+}
+
+/**
+ * Sends a single record, honoring `ndjson=true` (the web UI uses it for
+ * dashboard endpoints, which stream a single object).
+ */
+export function sendObject(
+  res: express.Response,
+  req: express.Request,
+  obj: any,
+): void {
+  if (wantsNdjson(req)) {
+    res.setHeader("Content-Type", "application/x-ndjson");
+    res.write(JSON.stringify(obj) + "\n");
+    res.end();
+    return;
+  }
+  res.json(obj);
+}
+
 export function applyLimit<T>(items: T[], req: express.Request): T[] {
   const limit = req.query.limit
     ? parseInt(req.query.limit as string, 10)

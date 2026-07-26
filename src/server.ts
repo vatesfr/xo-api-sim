@@ -2,28 +2,25 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "../swagger.json";
 import type { MockDataStore } from "./data-store";
+import type { MockAuthConfig } from "./auth";
+import { loadAuthConfig } from "./auth";
+import { authMiddleware } from "./middleware/auth-middleware";
 import { registerCustomHandlers } from "./handlers";
 import { registerSwaggerRoutes } from "./routes/swagger-routes";
 
-export async function startServer(port: number, dataStore: MockDataStore) {
+export async function startServer(
+  port: number,
+  dataStore: MockDataStore,
+  authConfig: MockAuthConfig = loadAuthConfig(),
+) {
   const app = express();
 
   // Middleware
   app.use(express.json());
 
-  // Authentication middleware (protect only API routes)
-  const authToken = process.env.AUTH_TOKEN || "test-token";
-  app.use("/rest/v0", (req, res, next) => {
-    const auth = req.headers.authorization;
-    if (!auth) {
-      return res.status(401).json({ error: "Missing Authorization header" });
-    }
-    const [type, token] = auth.split(" ");
-    if (type !== "Bearer" || token !== authToken) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-    next();
-  });
+  // Optional token enforcement (no-op unless MOCK_AUTH_ENFORCE=true).
+  app.use(authMiddleware(dataStore, authConfig));
+
   // HTTP request tracing
   app.use((_req, _res, next) => {
     const start = Date.now();
@@ -49,7 +46,7 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   });
 
   // Register custom handlers before swagger routes so they win matching.
-  registerCustomHandlers(app, dataStore);
+  registerCustomHandlers(app, dataStore, authConfig);
 
   // Register all swagger routes
   registerSwaggerRoutes(app, dataStore);
@@ -68,6 +65,11 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   );
 
   console.log("Server configured with swagger routes");
+  console.log(
+    `Auth: issuing tokens at POST /rest/v0/users/me/authentication_tokens ` +
+      `(credentials: ${authConfig.allowAny ? "any accepted" : [...authConfig.credentials.keys()].join(", ") || "none"}, ` +
+      `enforce: ${authConfig.enforce})`,
+  );
 
   // Start the server
   return new Promise<void>((resolve, reject) => {

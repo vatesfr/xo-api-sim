@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { MockDataStore } from "./data-store";
+import { loadAuthConfig } from "./auth";
 import { loadFixtures } from "./fixtures/load-fixtures";
 import { enrichFixtures } from "./fixtures/enrich-fixtures";
 import { startServer } from "./server";
@@ -12,8 +13,9 @@ async function main() {
   const fixtures = await loadFixtures(fixturesDir);
   enrichFixtures(fixtures);
   const dataStore = new MockDataStore(fixtures);
+  const authConfig = loadAuthConfig();
 
-  await startServer(port, dataStore);
+  await startServer(port, dataStore, authConfig);
   console.log(`Mock XO API server running on port ${port}`);
 }
 

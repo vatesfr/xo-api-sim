@@ -20,7 +20,7 @@ import {
   CreateFailedTask,
   UpdateAllTasksForObject,
 } from "../tasks";
-import { applyLimit, applyFilter, applyFields } from "../utils";
+import { applyLimit, applyFilter, applyFields, sendCollection } from "../utils";
 
 function resolvePoolId(
   srId: Branded<"SR">,
@@ -385,5 +385,5 @@ async function getVMVDIs(
   const filteredVdis = applyFilter(vdis, req);
   const fieldsVdis = applyFields(filteredVdis, req);
 
-  return res.status(200).json(applyLimit(fieldsVdis, req));
+  return sendCollection(res, req, applyLimit(fieldsVdis, req));
 }
