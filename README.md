@@ -17,6 +17,8 @@ The server listens on `http://localhost:3001` by default. Override with `PORT`. 
 
 Generic Swagger CRUD is still used for most resources:
 
+All endpoints require an `Authorization: Bearer <token>` header. The mock server accepts a token defined by the `AUTH_TOKEN` environment variable, defaulting to `test-token`.
+
 ```text
 GET    /rest/v0/{resource}          list
 GET    /rest/v0/{resource}/{id}     get by ID

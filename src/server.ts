@@ -11,6 +11,19 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   // Middleware
   app.use(express.json());
 
+  // Authentication middleware (protect only API routes)
+  const authToken = process.env.AUTH_TOKEN || "test-token";
+  app.use("/rest/v0", (req, res, next) => {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      return res.status(401).json({ error: "Missing Authorization header" });
+    }
+    const [type, token] = auth.split(" ");
+    if (type !== "Bearer" || token !== authToken) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+    next();
+  });
   // HTTP request tracing
   app.use((_req, _res, next) => {
     const start = Date.now();
