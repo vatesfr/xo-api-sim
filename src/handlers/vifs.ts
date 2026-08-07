@@ -1,13 +1,41 @@
 import type express from "express";
 import { v4 as uuid } from "uuid";
 import type { MockDataStore } from "../data-store";
-import type { CreateVifBody } from "../types";
+import type { CreateVifBody, UpdateVifBody } from "../types";
 
 export function registerVifHandlers(
   app: express.Application,
   dataStore: MockDataStore,
 ) {
   app.post("/rest/v0/vifs", (req, res) => createVif(req, res, dataStore));
+  app.patch("/rest/v0/vifs/:id", (req, res) => updateVif(req, res, dataStore));
+}
+
+function updateVif(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const vif = dataStore.findById("vifs", req.params.id);
+  if (!vif)
+    return res.status(404).json({
+      error: `no such VIF ${req.params.id}`,
+      data: { id: req.params.id, type: "VIF" },
+    });
+  const body = req.body as UpdateVifBody;
+  dataStore.updateItem("vifs", req.params.id, {
+    ...body,
+    ...(body.allowedIpv4Addresses === undefined
+      ? {}
+      : { ipv4_allowed: body.allowedIpv4Addresses }),
+    ...(body.allowedIpv6Addresses === undefined
+      ? {}
+      : { ipv6_allowed: body.allowedIpv6Addresses }),
+    ...(body.lockingMode === undefined
+      ? {}
+      : { locking_mode: body.lockingMode }),
+  });
+  return res.status(204).send();
 }
 
 function createVif(

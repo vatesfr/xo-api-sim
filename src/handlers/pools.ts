@@ -34,6 +34,34 @@ export function registerPoolHandlers(
   app.post("/rest/v0/pools/:id/actions/create_bonded_network", (req, res) =>
     createBondedNetwork(req, res, dataStore),
   );
+  app.post("/rest/v0/pools/:id/actions/add_host", (req, res) => {
+    const pool = dataStore.findById("pools", req.params.id);
+    if (!pool)
+      return res.status(404).json({
+        error: `no such pool ${req.params.id}`,
+        data: { id: req.params.id, type: "POOL" },
+      });
+    if (!req.body.host)
+      return res
+        .status(400)
+        .json({ error: "host is required", data: { id: null, type: "HOST" } });
+    const host = dataStore.findById("hosts", req.body.host);
+    if (!host)
+      return res.status(404).json({
+        error: `no such HOST ${req.body.host}`,
+        data: { id: req.body.host, type: "HOST" },
+      });
+    dataStore.updateItem("hosts", host.id, {
+      $pool: pool.id,
+      $poolId: pool.id,
+    });
+    const task = CreateSuccessTask(dataStore, {
+      objectType: "host",
+      objectId: host.id,
+      name: `Add host to pool ${pool.id}`,
+    });
+    return res.status(202).json({ taskId: task.id });
+  });
 }
 
 function createVm(

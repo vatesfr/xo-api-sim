@@ -134,5 +134,42 @@ export type CreateBondedNetworkBody = {
   mtu?: number;
   nbd?: boolean;
   pifIds: Branded<"PIF">[];
-  bondMode: "lacp" | "active-backup" | "balance-xor" | "broadcast" | "round-robin";
+  bondMode:
+    | "lacp"
+    | "active-backup"
+    | "balance-xor"
+    | "broadcast"
+    | "round-robin";
+};
+
+export type CreateSrBody = {
+  hostId: Branded<"host">;
+  SR_type: string;
+  name_label?: string;
+  name_description?: string;
+  device_config?: Record<string, string>;
+  sm_config?: Record<string, string>;
+  size?: number;
+  content_type?: string;
+};
+
+export type UpdateVdiBody = {
+  name_label?: string;
+  name_description?: string;
+  size?: number;
+};
+
+export type UpdateVifBody = {
+  lockingMode?: string;
+  allowedIpv4Addresses?: string[];
+  allowedIpv6Addresses?: string[];
+  rateLimit?: number;
+  txChecksumming?: boolean;
+};
+
+export type CreateBackupRepositoryBody = {
+  name: string;
+  url: string;
+  options?: string;
+  proxy?: string;
 };

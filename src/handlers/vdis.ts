@@ -11,6 +11,7 @@ import type {
   XoVbd,
   Branded,
   VDI_TYPE,
+  UpdateVdiBody,
 } from "../types";
 // @ts-expect-error - no types for vhd-lib
 import * as vhd from "vhd-lib";
@@ -60,6 +61,7 @@ export function registerVdiHandlers(
     exportVdi(req, res, dataStore),
   );
   app.post("/rest/v0/vdis", (req, res) => createEmptyVdi(req, res, dataStore));
+  app.patch("/rest/v0/vdis/:id", (req, res) => updateVdi(req, res, dataStore));
   app.put("/rest/v0/vdis/:id.:format", (req, res) =>
     importVdi(req, res, dataStore),
   );
@@ -69,6 +71,32 @@ export function registerVdiHandlers(
   app.get("/rest/v0/vms/:id/vdis", (req, res) =>
     getVMVDIs(req, res, dataStore),
   );
+}
+
+function updateVdi(
+  req: express.Request,
+  res: express.Response,
+  dataStore: MockDataStore,
+) {
+  const vdi = dataStore.findById("vdis", req.params.id);
+  if (!vdi)
+    return res.status(404).json({
+      error: `no such VDI ${req.params.id}`,
+      data: { id: req.params.id, type: "VDI" },
+    });
+  const body = req.body as UpdateVdiBody;
+  if (body.size !== undefined && body.size < Number(vdi.size ?? 0)) {
+    return res.status(422).json({
+      error: "a VDI cannot be shrunk",
+      data: { id: req.params.id, type: "VDI" },
+    });
+  }
+  const updates = {
+    ...body,
+    ...(body.size === undefined ? {} : { size: body.size }),
+  };
+  dataStore.updateItem("vdis", req.params.id, updates);
+  return res.status(204).send();
 }
 
 export function createVdiInStore(
