@@ -9,6 +9,10 @@ import { registerSRHandlers } from "./srs";
 import { registerPoolHandlers } from "./pools";
 import { registerVbdHandlers } from "./vbds";
 import { registerVmHandlers } from "./vms";
+import { registerHostHandlers } from "./hosts";
+import { registerBackupRepositoryHandlers } from "./backup-repositories";
+import { registerRelationHandlers } from "./relations";
+import { registerSdnHandlers } from "./sdn";
 
 export function registerCustomHandlers(
   app: express.Application,
@@ -23,4 +27,8 @@ export function registerCustomHandlers(
   registerPoolHandlers(app, dataStore);
   registerVbdHandlers(app, dataStore);
   registerVmHandlers(app, dataStore);
+  registerHostHandlers(app, dataStore);
+  registerBackupRepositoryHandlers(app, dataStore);
+  registerRelationHandlers(app, dataStore);
+  registerSdnHandlers(app, dataStore);
 }
