@@ -109,7 +109,7 @@
     "name_label": "ci-runner-01",
     "name_description": "GitLab CI runner (ephemeral)",
     "power_state": "Halted",
-    "$container": "b625e9a1-9bb9-40e8-95c1-fd4b85cae263",
+    "$container": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "$pool": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "$poolId": "6e0c5f16-923f-2971-a07d-ad1486f67309",
     "CPUs": { "number": 2, "max": 2 },
