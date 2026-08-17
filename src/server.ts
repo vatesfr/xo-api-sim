@@ -37,7 +37,12 @@ export async function startServer(
   });
 
   // Swagger UI (swagger.json already has servers: [{url: '/rest/v0'}])
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec as any));
+  // @types/swagger-ui-express bundles express 5 types; cast to this app's express 4 handlers.
+  const swaggerServe = swaggerUi.serve as unknown as express.RequestHandler[];
+  const swaggerSetup = swaggerUi.setup(
+    swaggerSpec as any,
+  ) as unknown as express.RequestHandler;
+  app.use("/docs", ...swaggerServe, swaggerSetup);
   app.get("/swagger.json", (_req, res) => res.json(swaggerSpec));
 
   // Basic route for testing
