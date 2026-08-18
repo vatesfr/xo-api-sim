@@ -134,5 +134,10 @@ export type CreateBondedNetworkBody = {
   mtu?: number;
   nbd?: boolean;
   pifIds: Branded<"PIF">[];
-  bondMode: "lacp" | "active-backup" | "balance-xor" | "broadcast" | "round-robin";
+  bondMode:
+    | "lacp"
+    | "active-backup"
+    | "balance-xor"
+    | "broadcast"
+    | "round-robin";
 };
