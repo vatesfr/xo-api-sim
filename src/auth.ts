@@ -14,6 +14,8 @@ export interface MockAuthConfig {
   credentials: Map<string, string>;
   /** Token lifetime in milliseconds. */
   tokenTtlMs: number;
+  /** Static token always accepted, bound to the default admin. */
+  staticToken: string;
 }
 
 /**
@@ -24,6 +26,7 @@ export interface MockAuthConfig {
  * - `MOCK_AUTH_ANY=true|false` — force accept-any on/off.
  * - `MOCK_AUTH_ENFORCE=true` — require a valid token on `/rest/v0/*`.
  * - `MOCK_AUTH_TOKEN_TTL=<seconds>` — token lifetime (default 7 days).
+ * - `AUTH_TOKEN=<token>` — static token always accepted (default `test-token`).
  */
 export function loadAuthConfig(
   env: NodeJS.ProcessEnv = process.env,
@@ -55,45 +58,88 @@ export function loadAuthConfig(
     allowAny,
     credentials,
     tokenTtlMs: (Number.isFinite(ttlSeconds) ? ttlSeconds : 604800) * 1000,
+    staticToken: env.AUTH_TOKEN || "test-token",
   };
 }
 
-/** Decodes an `Authorization: Basic base64(user:pass)` header. */
+/**
+ * Decodes an `Authorization: base64(user:pass)` header. Like XO, the scheme is
+ * not checked: whatever follows the first space is decoded as basic
+ * credentials, so `Bearer <token>` fails as invalid credentials.
+ */
 export function parseBasicAuth(
   header: string | undefined,
 ): { username: string; password: string } | null {
-  if (!header || !header.startsWith("Basic ")) return null;
-  let decoded: string;
-  try {
-    decoded = Buffer.from(header.slice(6).trim(), "base64").toString("utf-8");
-  } catch {
-    return null;
-  }
+  const encoded = header?.split(" ")[1];
+  if (!encoded) return null;
+  const decoded = Buffer.from(encoded, "base64").toString("utf-8");
   const idx = decoded.indexOf(":");
   if (idx === -1) return null;
   return { username: decoded.slice(0, idx), password: decoded.slice(idx + 1) };
 }
 
+function readCookie(req: express.Request, name: string): string | null {
+  const match = req.headers.cookie?.match(
+    new RegExp(`(?:^|;\\s*)${name}=([^;]+)`),
+  );
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 /**
- * Extracts the bearer token from a request. XO accepts either an
- * `authenticationToken` cookie or an `Authorization` header (`Bearer <t>` or
- * `token <t>`); the Flutter client sends the `authenticationToken` cookie and
- * the XO 6 web UI (its `/dev/token` page) sends a `token` cookie.
+ * Extracts the token from a request. Like XO, only cookies carry tokens:
+ * `authenticationToken` (sent by the Flutter client), then `token` (set by the
+ * XO 6 web UI's `/dev/token` page). An `Authorization` header is always basic.
  */
 export function extractToken(req: express.Request): string | null {
-  const cookie = req.headers.cookie;
-  if (cookie) {
-    const match = cookie.match(
-      /(?:^|;\s*)(?:authenticationToken|token)=([^;]+)/,
-    );
-    if (match) return decodeURIComponent(match[1]);
+  return readCookie(req, "authenticationToken") ?? readCookie(req, "token");
+}
+
+export type AuthResult =
+  | { user: XoUser | null }
+  | { status: 400 | 401; error: string };
+
+/**
+ * Authenticates a request the way XO's REST API does: a token cookie or HTTP
+ * basic credentials (on any request, not only at login), never both. Returns
+ * `{ user: null }` when no credentials are presented.
+ */
+export function authenticateRequest(
+  req: express.Request,
+  dataStore: MockDataStore,
+  config: MockAuthConfig,
+): AuthResult {
+  const token = extractToken(req);
+  const authorization = req.headers.authorization;
+
+  if (token && authorization) {
+    return {
+      status: 400,
+      error:
+        "Having multiple authentication methods is not supported, please choose one",
+    };
   }
-  const auth = req.headers.authorization;
-  if (auth) {
-    const m = auth.match(/^(?:Bearer|token)\s+(.+)$/i);
-    if (m) return m[1].trim();
+
+  if (token) {
+    const user =
+      token === config.staticToken
+        ? resolveLoginUser(dataStore, "")
+        : authenticateToken(dataStore, token, Date.now());
+    return user ? { user } : { status: 401, error: "invalid credentials" };
   }
-  return null;
+
+  if (authorization) {
+    if (authorization.split(" ")[1] === undefined) {
+      return { status: 400, error: "Malformed Authorization header" };
+    }
+    const creds = parseBasicAuth(authorization);
+    if (!creds || !verifyCredentials(config, creds.username, creds.password)) {
+      return { status: 401, error: "invalid credentials" };
+    }
+    const user = resolveLoginUser(dataStore, creds.username);
+    return user ? { user } : { status: 401, error: "invalid credentials" };
+  }
+
+  return { user: null };
 }
 
 /** Validates credentials against the configured policy. */

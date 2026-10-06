@@ -3,8 +3,7 @@ import type { MockDataStore } from "../data-store";
 import type { MockAuthConfig } from "../auth";
 import {
   TOKENS_COLLECTION,
-  authenticateToken,
-  extractToken,
+  authenticateRequest,
   issueToken,
   parseBasicAuth,
   resolveLoginUser,
@@ -77,27 +76,21 @@ export function registerAuthHandlers(
   // matching how `issueToken` resolves logins — this keeps the web UI's account
   // panel populated without a real login round-trip.
   app.get("/rest/v0/users/me", (req, res) => {
-    let user = currentUser(req, dataStore);
+    let user = currentUser(req, dataStore, config);
     if (!user && config.allowAny) {
       user = resolveLoginUser(dataStore, "") ?? null;
     }
     if (!user) {
-      return res.status(401).json({
-        error: "authentication required",
-        data: { id: null, type: "user" },
-      });
+      return res.status(401).json({ error: "invalid credentials" });
     }
     res.json(user);
   });
 
   // Tokens owned by the current user.
   app.get("/rest/v0/users/me/authentication_tokens", (req, res) => {
-    const user = currentUser(req, dataStore);
+    const user = currentUser(req, dataStore, config);
     if (!user) {
-      return res.status(401).json({
-        error: "authentication required",
-        data: { id: null, type: "user" },
-      });
+      return res.status(401).json({ error: "invalid credentials" });
     }
     const tokens = dataStore
       .getResource(TOKENS_COLLECTION)
@@ -107,12 +100,9 @@ export function registerAuthHandlers(
 
   // Revoke a token (logout).
   app.delete("/rest/v0/users/me/authentication_tokens/:id", (req, res) => {
-    const user = currentUser(req, dataStore);
+    const user = currentUser(req, dataStore, config);
     if (!user) {
-      return res.status(401).json({
-        error: "authentication required",
-        data: { id: null, type: "user" },
-      });
+      return res.status(401).json({ error: "invalid credentials" });
     }
     const deleted = dataStore.deleteItem(TOKENS_COLLECTION, req.params.id);
     if (!deleted) {
@@ -125,8 +115,11 @@ export function registerAuthHandlers(
   });
 }
 
-function currentUser(req: express.Request, dataStore: MockDataStore) {
-  const token = extractToken(req);
-  if (!token) return null;
-  return authenticateToken(dataStore, token, Date.now());
+function currentUser(
+  req: express.Request,
+  dataStore: MockDataStore,
+  config: MockAuthConfig,
+) {
+  const result = authenticateRequest(req, dataStore, config);
+  return "user" in result ? result.user : null;
 }
