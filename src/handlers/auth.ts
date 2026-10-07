@@ -12,7 +12,7 @@ import {
 import type { XoAuthenticationToken } from "../types";
 
 /**
- * Auth endpoints used by the Flutter client's login flow:
+ * Auth endpoints for XO's token login flow:
  *
  * - `POST /users/me/authentication_tokens` — HTTP Basic login, returns
  *   `{ token: { id, ... } }`. Also mounted under `/users/authentication_tokens`

@@ -87,7 +87,7 @@ function readCookie(req: express.Request, name: string): string | null {
 
 /**
  * Extracts the token from a request. Like XO, only cookies carry tokens:
- * `authenticationToken` (sent by the Flutter client), then `token` (set by the
+ * `authenticationToken`, then `token` (set by the
  * XO 6 web UI's `/dev/token` page). An `Authorization` header is always basic.
  */
 export function extractToken(req: express.Request): string | null {

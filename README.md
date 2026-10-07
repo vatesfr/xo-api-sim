@@ -119,7 +119,7 @@ Custom handlers currently exist for:
 
 ## Authentication
 
-The simulator implements XO's token auth so clients (e.g. the XO mobile app)
+The simulator implements XO's token auth so clients
 can run their real login flow against it.
 
 ```text
