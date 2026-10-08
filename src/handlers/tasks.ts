@@ -1,6 +1,6 @@
 import type express from "express";
 import type { MockDataStore } from "../data-store";
-import { applyLimit, applyFilter, sendCollection } from "../utils";
+import { applyFilter, applyLimit, sendObjects } from "../utils";
 
 export function registerTasksHandlers(
   app: express.Application,
@@ -16,8 +16,12 @@ export function registerTasksHandlers(
     }
     const tasks = dataStore
       .getResource("tasks")
-      .filter((t: any) => t.properties?.objectId === req.params.id);
+      .filter(
+        (t: any) =>
+          t.properties?.objectId === req.params.id ||
+          t.properties?.params?.id === req.params.id,
+      );
     const filteredTasks = applyFilter(tasks, req);
-    sendCollection(res, req, applyLimit(filteredTasks, req));
+    sendObjects(res, req, applyLimit(filteredTasks, req), "/rest/v0/tasks");
   });
 }

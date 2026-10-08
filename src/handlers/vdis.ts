@@ -20,7 +20,7 @@ import {
   CreateFailedTask,
   UpdateAllTasksForObject,
 } from "../tasks";
-import { applyLimit, applyFilter, applyFields, sendCollection } from "../utils";
+import { applyLimit, applyFilter, sendObjects } from "../utils";
 
 function resolvePoolId(
   srId: Branded<"SR">,
@@ -66,10 +66,21 @@ export function registerVdiHandlers(
   app.post("/rest/v0/vdis/:id/actions/migrate", (req, res) =>
     migrate(req, res, dataStore),
   );
-  app.get("/rest/v0/vms/:id/vdis", (req, res) =>
-    getVMVDIs(req, res, dataStore),
-  );
+  for (const [resource, type] of Object.entries(VM_LIKE_TYPES)) {
+    app.get(`/rest/v0/${resource}/:id/vdis`, (req, res) =>
+      getVMVDIs(req, res, dataStore, resource, type),
+    );
+  }
 }
+
+// VM-like collections exposing `GET /{resource}/{id}/vdis`, with the XAPI type
+// used in their error messages.
+const VM_LIKE_TYPES: Record<string, string> = {
+  vms: "VM",
+  "vm-templates": "VM-template",
+  "vm-snapshots": "VM-snapshot",
+  "vm-controllers": "VM-controller",
+};
 
 export function createVdiInStore(
   dataStore: MockDataStore,
@@ -360,30 +371,40 @@ async function getVMVDIs(
   req: express.Request,
   res: express.Response,
   dataStore: MockDataStore,
+  collection: string,
+  type: string,
 ) {
   const { id } = req.params;
 
   // Validate referenced VM exists
-  const vm = dataStore.findById("vms", id);
+  const vm = dataStore.findById(collection, id);
   if (!vm) {
     return res.status(404).json({
-      error: `no such VM ${id}`,
-      data: { id, type: "VM" },
+      error: `no such ${type} ${id}`,
+      data: { id, type },
     });
   }
 
-  // Get the VDI IDs associated with the VM's VBDs
-  const vbdIds = vm.$VBDs || [];
-  const vdis: XoVdi[] = (
-    vbdIds.map((vbdId: string) => {
-      const vbd = dataStore.findById("vbds", vbdId) as XoVbd | undefined;
-      if (!vbd) return null;
-      return dataStore.findById("vdis", String(vbd.VDI)) as XoVdi | undefined;
-    }) as (XoVdi | null)[]
-  ).filter((vdi) => vdi !== null) as XoVdi[];
+  // Like XO's `getVmVdis`: look the VBDs' VDIs up among both VDIs and VDI
+  // snapshots, and keep those matching the VM type (VDI snapshots for VM
+  // snapshots, plain VDIs otherwise).
+  const vdiType = type === "VM-snapshot" ? "VDI-snapshot" : "VDI";
+  const vdis: XoVdi[] = [];
+  for (const vbdId of (vm.$VBDs ?? []) as string[]) {
+    const vbd = dataStore.findById("vbds", vbdId) as XoVbd | undefined;
+    if (vbd?.VDI === undefined) continue;
+    const vdiId = String(vbd.VDI);
+    const vdi = (dataStore.findById("vdis", vdiId) ??
+      dataStore.findById("vdi-snapshots", vdiId)) as XoVdi | undefined;
+    if (vdi?.type === vdiType) vdis.push(vdi);
+  }
 
   const filteredVdis = applyFilter(vdis, req);
-  const fieldsVdis = applyFields(filteredVdis, req);
 
-  return sendCollection(res, req, applyLimit(fieldsVdis, req));
+  return sendObjects(
+    res,
+    req,
+    applyLimit(filteredVdis, req),
+    (vdi) => `/rest/v0/${vdi.type.toLowerCase()}s`,
+  );
 }

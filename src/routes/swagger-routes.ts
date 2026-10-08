@@ -8,7 +8,7 @@ import {
   applyFields,
   sendCollection,
   sendObject,
-  wantsNdjson,
+  sendObjects,
 } from "../utils";
 
 // Resources to exclude (special endpoints)
@@ -79,12 +79,13 @@ export function registerSwaggerRoutes(
   // handled by earlier route layers. This runs before swagger CRUD routes
   // to prevent them from treating sub-routes as main resource lookups.
   app.all("/rest/v0/:resource/:id/:subResource/:subId?", (req, res, _next) => {
-    // GET sub-collections that lack a dedicated handler degrade gracefully to an
-    // empty result so the web UI's detail pages render "no data" instead of
-    // erroring. Non-GET verbs remain unimplemented.
+    // GET sub-collections that lack a dedicated handler (alarms, messages, ...:
+    // no fixture data exists for them) degrade gracefully to an empty result so
+    // the web UI's detail pages render "no data" instead of erroring. Non-GET
+    // verbs remain unimplemented.
     if (req.method === "GET") {
       console.log(
-        `Sub-resource endpoint not backed by fixtures, returning empty: ${req.method} ${req.originalUrl}`,
+        `Sub-resource endpoint has no dedicated handler, returning empty: ${req.method} ${req.originalUrl}`,
       );
       return sendCollection(res, req, []);
     }
@@ -109,19 +110,9 @@ export function registerSwaggerRoutes(
     // Apply limit if present
     items = applyLimit(items, req);
 
-    // The XO 6 web UI streams collections as NDJSON (`?ndjson=true`), always
-    // with an explicit `fields` list. Emit the selected records one per line.
-    if (wantsNdjson(req)) {
-      return sendCollection(res, req, applyFields(items, req));
-    }
-
-    // No fields param → return array of resource URIs (filtered + limited)
-    if (!req.query.fields) {
-      const uris = items.map((item) => `/rest/v0/${resourceName}/${item.id}`);
-      return res.json(uris);
-    }
-
-    res.json(applyFields(items, req));
+    // Like XO: hrefs without `fields`, projected records with `href` otherwise,
+    // in both JSON and NDJSON modes.
+    sendObjects(res, req, items, `/rest/v0/${resourceName}`);
   }
 
   // Handle GET /{resource}/{id} - get by ID

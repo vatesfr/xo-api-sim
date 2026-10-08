@@ -75,6 +75,13 @@ export async function startServer(
       `(credentials: ${authConfig.allowAny ? "any accepted" : [...authConfig.credentials.keys()].join(", ") || "none"}, ` +
       `enforce: ${authConfig.enforce})`,
   );
+  if (authConfig.enforce && authConfig.staticTokenIsDefault) {
+    console.warn(
+      `WARNING: auth is enforced but AUTH_TOKEN is unset, so the well-known ` +
+        `static token "${authConfig.staticToken}" grants admin access. ` +
+        `Set AUTH_TOKEN to a secret value before exposing this server.`,
+    );
+  }
 
   // Start the server
   return new Promise<void>((resolve, reject) => {

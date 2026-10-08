@@ -43,14 +43,25 @@ export function registerEventHandlers(app: express.Application) {
     res.write(`event: init\ndata: ${JSON.stringify({ id })}\n\n`);
 
     const ping = setInterval(() => {
+      if (res.writableEnded || res.destroyed) return;
       res.write(
         `event: ping\ndata: ${JSON.stringify({ ping: Date.now() })}\n\n`,
       );
     }, PING_INTERVAL_MS);
 
-    req.on("close", () => {
+    let closed = false;
+    const cleanup = () => {
+      if (closed) return;
+      closed = true;
       clearInterval(ping);
-      res.end();
+      if (!res.writableEnded) res.end();
+    };
+    req.on("close", cleanup);
+    // Without a listener, a socket error on the stream would be thrown as an
+    // uncaught exception and crash the server.
+    res.on("error", (err) => {
+      console.error("SSE stream error:", err);
+      cleanup();
     });
   });
 

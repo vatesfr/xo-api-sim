@@ -4,50 +4,52 @@ import type { MockAuthConfig } from "../auth";
 import {
   TOKENS_COLLECTION,
   authenticateRequest,
+  extractToken,
   issueToken,
-  parseBasicAuth,
   resolveLoginUser,
-  verifyCredentials,
 } from "../auth";
-import type { XoAuthenticationToken } from "../types";
+import type { XoAuthenticationToken, XoUser } from "../types";
+import { applyFilter, applyLimit } from "../utils";
 
 /**
  * Auth endpoints for XO's token login flow:
  *
- * - `POST /users/me/authentication_tokens` — HTTP Basic login, returns
- *   `{ token: { id, ... } }`. Also mounted under `/users/authentication_tokens`
- *   (deprecated form) and `/users/:id/authentication_tokens`.
+ * - `POST /users/:id/authentication_tokens` — HTTP Basic login, returns 201
+ *   `{ token: { id, ... } }`. `:id` must be `me` or the user's own id. Also
+ *   mounted under `/users/authentication_tokens` (deprecated form).
  * - `GET  /users/me` — the current user for the presented token.
- * - `GET  /users/me/authentication_tokens` — tokens owned by the current user.
+ * - `GET  /users/:id/authentication_tokens` — the user's own tokens (`me` or
+ *   their id).
  * - `DELETE /users/me/authentication_tokens/:id` — revoke a token (logout).
+ *   Simulator extension: not part of the XO OpenAPI contract.
  */
 export function registerAuthHandlers(
   app: express.Application,
   dataStore: MockDataStore,
   config: MockAuthConfig,
 ) {
+  // Like XO, the token is created for the authenticated user, whichever
+  // method (basic credentials or a token cookie) authenticated the request.
   const createToken = (req: express.Request, res: express.Response) => {
-    const creds = parseBasicAuth(req.headers.authorization);
-    if (!creds) {
-      return res.status(401).json({
-        error: "authentication credentials are missing",
-        data: { id: null, type: "user" },
-      });
+    const result = authenticateRequest(req, dataStore, config);
+    if ("status" in result) {
+      return res.status(result.status).json({ error: result.error });
     }
-
-    if (!verifyCredentials(config, creds.username, creds.password)) {
-      return res.status(401).json({
-        error: "invalid credentials",
-        data: { id: null, type: "user" },
-      });
-    }
-
-    const user = resolveLoginUser(dataStore, creds.username);
+    const { user } = result;
     if (!user) {
-      return res.status(401).json({
-        error: `no such user ${creds.username}`,
-        data: { id: null, type: "user" },
-      });
+      return res.status(401).json({ error: "invalid credentials" });
+    }
+
+    const pathId = req.params.id;
+    if (pathId !== undefined && pathId !== "me" && pathId !== user.id) {
+      return res
+        .status(403)
+        .json(
+          forbiddenOperation(
+            "create authentication token",
+            "you can only create token for yourself",
+          ),
+        );
     }
 
     const body = (req.body ?? {}) as {
@@ -61,65 +63,116 @@ export function registerAuthHandlers(
       now: Date.now(),
     });
 
-    return res.status(200).json({ token });
+    return res.status(201).json({ token });
   };
 
-  app.post("/rest/v0/users/me/authentication_tokens", createToken);
   app.post("/rest/v0/users/authentication_tokens", createToken);
   app.post("/rest/v0/users/:id/authentication_tokens", createToken);
 
   // Current user for the presented token.
-  //
-  // The XO 6 web UI stores an opaque XO 5 token (pasted into its `/dev/token`
-  // page) that the simulator never issued, so it won't resolve to a stored
-  // token. In accept-any mode we bind such requests to the default admin user,
-  // matching how `issueToken` resolves logins — this keeps the web UI's account
-  // panel populated without a real login round-trip.
   app.get("/rest/v0/users/me", (req, res) => {
-    let user = currentUser(req, dataStore, config);
-    if (!user && config.allowAny) {
-      user = resolveLoginUser(dataStore, "") ?? null;
+    const result = resolveRequestUser(req, dataStore, config);
+    if ("status" in result) {
+      return res.status(result.status).json({ error: result.error });
     }
-    if (!user) {
-      return res.status(401).json({ error: "invalid credentials" });
-    }
-    res.json(user);
+    res.json(result.user);
   });
 
-  // Tokens owned by the current user.
-  app.get("/rest/v0/users/me/authentication_tokens", (req, res) => {
-    const user = currentUser(req, dataStore, config);
-    if (!user) {
-      return res.status(401).json({ error: "invalid credentials" });
+  // "You can only see your own authentication tokens."
+  app.get("/rest/v0/users/:id/authentication_tokens", (req, res) => {
+    const result = resolveRequestUser(req, dataStore, config);
+    if ("status" in result) {
+      return res.status(result.status).json({ error: result.error });
     }
+    const { user } = result;
+    const userId = req.params.id === "me" ? user.id : req.params.id;
+    if (!dataStore.findById("users", userId)) {
+      return res.status(404).json({
+        error: `no such user ${userId}`,
+        data: { id: userId, type: "user" },
+      });
+    }
+    if (userId !== user.id) {
+      return res
+        .status(403)
+        .json(
+          forbiddenOperation(
+            "get authentication tokens",
+            "can only see own authentication tokens",
+          ),
+        );
+    }
+    // Like XO, expired tokens are not listed.
+    const now = Date.now();
     const tokens = dataStore
       .getResource(TOKENS_COLLECTION)
-      .filter((t: XoAuthenticationToken) => t.user_id === user.id);
-    res.json(tokens);
+      .filter(
+        (t: XoAuthenticationToken) =>
+          t.user_id === user.id && !(t.expiration < now),
+      );
+    res.json(applyLimit(applyFilter(tokens, req), req));
   });
 
   // Revoke a token (logout).
   app.delete("/rest/v0/users/me/authentication_tokens/:id", (req, res) => {
-    const user = currentUser(req, dataStore, config);
-    if (!user) {
-      return res.status(401).json({ error: "invalid credentials" });
+    const result = resolveRequestUser(req, dataStore, config);
+    if ("status" in result) {
+      return res.status(result.status).json({ error: result.error });
     }
-    const deleted = dataStore.deleteItem(TOKENS_COLLECTION, req.params.id);
-    if (!deleted) {
+    const { user } = result;
+    const token = dataStore.findById(TOKENS_COLLECTION, req.params.id) as
+      | XoAuthenticationToken
+      | undefined;
+    // Only the token owner (or an admin) may revoke; 404 otherwise to avoid
+    // leaking token existence.
+    if (!token || (token.user_id !== user.id && user.permission !== "admin")) {
       return res.status(404).json({
         error: `no such authentication token ${req.params.id}`,
         data: { id: req.params.id, type: "authentication-token" },
       });
     }
+    dataStore.deleteItem(TOKENS_COLLECTION, req.params.id);
     res.json({ success: true });
   });
 }
 
-function currentUser(
+/**
+ * Resolves the user for the `/users/me` endpoints.
+ *
+ * Explicit failures from `authenticateRequest` (e.g. 400 for a cookie plus an
+ * `Authorization` header) are returned as-is, with one accept-any exception:
+ * the XO 6 web UI stores an opaque XO 5 token (pasted into its `/dev/token`
+ * page) that the simulator never issued, so it won't resolve to a stored token.
+ * Such requests, and requests without credentials, are bound to the default
+ * admin, matching how logins resolve, so the web UI's account panel works
+ * without a real login round-trip.
+ */
+function resolveRequestUser(
   req: express.Request,
   dataStore: MockDataStore,
   config: MockAuthConfig,
-) {
+): { user: XoUser } | { status: 400 | 401; error: string } {
   const result = authenticateRequest(req, dataStore, config);
-  return "user" in result ? result.user : null;
+  if ("user" in result && result.user) {
+    return { user: result.user };
+  }
+
+  const unknownToken =
+    "status" in result && result.status === 401 && extractToken(req) !== null;
+  if (config.allowAny && ("user" in result || unknownToken)) {
+    const user = resolveLoginUser(dataStore, "");
+    if (user) return { user };
+  }
+
+  return "status" in result
+    ? result
+    : { status: 401, error: "invalid credentials" };
+}
+
+/** XO's `forbiddenOperation` API error body (`xo-common/api-errors`). */
+function forbiddenOperation(operation: string, reason: string) {
+  return {
+    error: `forbidden operation: ${operation}`,
+    data: { operation, reason },
+  };
 }

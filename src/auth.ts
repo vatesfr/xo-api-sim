@@ -16,6 +16,8 @@ export interface MockAuthConfig {
   tokenTtlMs: number;
   /** Static token always accepted, bound to the default admin. */
   staticToken: string;
+  /** True when `staticToken` is the well-known `test-token` default. */
+  staticTokenIsDefault: boolean;
 }
 
 /**
@@ -57,8 +59,11 @@ export function loadAuthConfig(
     enforce: env.MOCK_AUTH_ENFORCE === "true",
     allowAny,
     credentials,
-    tokenTtlMs: (Number.isFinite(ttlSeconds) ? ttlSeconds : 604800) * 1000,
+    tokenTtlMs:
+      (Number.isFinite(ttlSeconds) && ttlSeconds > 0 ? ttlSeconds : 604800) *
+      1000,
     staticToken: env.AUTH_TOKEN || "test-token",
+    staticTokenIsDefault: !env.AUTH_TOKEN,
   };
 }
 
@@ -82,7 +87,14 @@ function readCookie(req: express.Request, name: string): string | null {
   const match = req.headers.cookie?.match(
     new RegExp(`(?:^|;\\s*)${name}=([^;]+)`),
   );
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Like `cookie-parser` (used by XO): keep a malformed value undecoded, so it
+    // fails as an invalid token instead of throwing.
+    return match[1];
+  }
 }
 
 /**

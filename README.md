@@ -123,10 +123,10 @@ The simulator implements XO's token auth so clients
 can run their real login flow against it.
 
 ```text
-POST   /rest/v0/users/me/authentication_tokens   HTTP Basic login -> { token: { id, ... } }
+POST   /rest/v0/users/me/authentication_tokens   HTTP Basic login -> 201 { token: { id, ... } }
 GET    /rest/v0/users/me                          current user for the presented token
 GET    /rest/v0/users/me/authentication_tokens    tokens owned by the current user
-DELETE /rest/v0/users/me/authentication_tokens/:id revoke a token (logout)
+DELETE /rest/v0/users/me/authentication_tokens/:id revoke a token (logout; simulator extension)
 ```
 
 Log in with an `Authorization: Basic base64(user:pass)` header; the returned
@@ -148,8 +148,8 @@ By default **any** username/password is accepted (dev-friendly) and requests are
 | `MOCK_AUTH_CREDENTIALS` | —                             | Comma-separated `user:pass` pairs to accept, e.g. `admin:admin,operator:secret`. Setting it turns off accept-any. |
 | `MOCK_AUTH_ANY`         | `true` unless credentials set | Force accept-any on/off.                                                                                          |
 | `MOCK_AUTH_ENFORCE`     | `false`                       | Require a valid token cookie or basic credentials on every `/rest/v0/*` request (login stays open).               |
-| `MOCK_AUTH_TOKEN_TTL`   | `604800`                      | Token lifetime in seconds.                                                                                        |
-| `AUTH_TOKEN`            | `test-token`                  | Static token always accepted as a cookie, bound to the default admin.                                             |
+| `MOCK_AUTH_TOKEN_TTL`   | `604800`                      | Token lifetime in seconds; non-positive or invalid values fall back to the default.                               |
+| `AUTH_TOKEN`            | `test-token`                  | Static token always accepted as a cookie, bound to the default admin. Set it to a secret when enforcing auth.     |
 
 Users come from `src/fixtures/users.json` (a default `admin` and `operator`);
 issued tokens bind to the matching user, or to the first admin in accept-any

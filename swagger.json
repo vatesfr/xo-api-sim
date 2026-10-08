@@ -807,7 +807,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -1221,7 +1226,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -2527,6 +2537,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -2540,7 +2551,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "unknown"
                 ]
@@ -2926,8 +2936,8 @@
             "type": "string",
             "enum": [
               "",
-              "native",
-              "zstd"
+              "zstd",
+              "native"
             ]
           },
           "proxy": {
@@ -3174,6 +3184,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -3187,7 +3198,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "backup",
                   "backup-archive",
@@ -3325,6 +3335,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -3338,7 +3349,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "user",
                   "proxy",
@@ -3859,7 +3869,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -4292,7 +4307,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -4728,7 +4748,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -5116,7 +5141,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -5638,7 +5668,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -6016,7 +6051,12 @@
             "type": "boolean"
           },
           "high_availability": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
+            ]
           },
           "installTime": {
             "type": "number",
@@ -6458,6 +6498,51 @@
       "UnbrandedXoVif": {
         "$ref": "#/components/schemas/Unbrand_XoVif_"
       },
+      "Pick_EditVifProps.Exclude_keyofEditVifProps.ipv4Allowed-or-ipv6Allowed__": {
+        "properties": {
+          "lockingMode": {
+            "$ref": "#/components/schemas/VIF_LOCKING_MODE"
+          },
+          "rateLimit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "txChecksumming": {
+            "type": "boolean"
+          }
+        },
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "Omit_EditVifProps.ipv4Allowed-or-ipv6Allowed_": {
+        "$ref": "#/components/schemas/Pick_EditVifProps.Exclude_keyofEditVifProps.ipv4Allowed-or-ipv6Allowed__",
+        "description": "Construct a type with the properties of T except for those in type K."
+      },
+      "UpdateVifRequestBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Omit_EditVifProps.ipv4Allowed-or-ipv6Allowed_"
+          },
+          {
+            "properties": {
+              "allowedIpv6Addresses": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "allowedIpv4Addresses": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ]
+      },
       "Pick_CreateVifParams_91_0_93_.Exclude_keyofCreateVifParams_91_0_93_.network-or-VM-or-other_config-or-qos_algorithm_params__": {
         "properties": {
           "device": {
@@ -6538,6 +6623,14 @@
             ],
             "type": "object"
           }
+        ]
+      },
+      "SUPPORTED_VDI_FORMAT": {
+        "type": "string",
+        "enum": [
+          "raw",
+          "vhd",
+          "qcow2"
         ]
       },
       "Exclude_SUPPORTED_VDI_FORMAT.qcow2_": {
@@ -6656,6 +6749,22 @@
           "type"
         ],
         "type": "object"
+      },
+      "UpdateVdiRequestBody": {
+        "properties": {
+          "name_label": {
+            "type": "string"
+          },
+          "name_description": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
       },
       "Pick_CreateVdiParams_91_0_93_.Exclude_keyofCreateVdiParams_91_0_93_.SR-or-other_config__": {
         "properties": {
@@ -7090,6 +7199,9 @@
           "email": {
             "type": "string"
           },
+          "firstname": {
+            "type": "string"
+          },
           "groups": {
             "items": {
               "type": "string"
@@ -7099,8 +7211,12 @@
           "id": {
             "type": "string"
           },
-          "name": {
+          "lastname": {
             "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "deprecated": true
           },
           "permission": {
             "type": "string",
@@ -7114,6 +7230,9 @@
           },
           "preferences": {
             "$ref": "#/components/schemas/Record_string.string_"
+          },
+          "username": {
+            "type": "string"
           }
         },
         "type": "object",
@@ -7167,6 +7286,9 @@
           "email": {
             "type": "string"
           },
+          "firstname": {
+            "type": "string"
+          },
           "groups": {
             "items": {
               "type": "string"
@@ -7176,8 +7298,12 @@
           "id": {
             "type": "string"
           },
-          "name": {
+          "lastname": {
             "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "deprecated": true
           },
           "permission": {
             "type": "string",
@@ -7191,6 +7317,9 @@
           },
           "preferences": {
             "$ref": "#/components/schemas/Record_string.string_"
+          },
+          "username": {
+            "type": "string"
           }
         },
         "required": [
@@ -7204,6 +7333,12 @@
       },
       "UpdateUserRequestBody": {
         "properties": {
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
@@ -7219,6 +7354,9 @@
           },
           "preferences": {
             "$ref": "#/components/schemas/Record_string.string_"
+          },
+          "username": {
+            "type": "string"
           }
         },
         "type": "object",
@@ -7239,6 +7377,12 @@
             "type": "string"
           },
           "users": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "aclRoleIds": {
             "items": {
               "type": "string"
             },
@@ -7569,8 +7713,18 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "forget",
+                  "update",
                   "*",
-                  "read"
+                  "create",
+                  "read",
+                  "update:name",
+                  "benchmark",
+                  "update:enabled",
+                  "update:options",
+                  "update:proxy",
+                  "update:url",
+                  "reclaim-space"
                 ]
               },
               "selector": {
@@ -7677,14 +7831,27 @@
                 "type": "string",
                 "enum": [
                   "export",
+                  "shutdown",
+                  "start",
+                  "forget",
                   "update",
                   "*",
                   "read",
                   "allow-vm",
+                  "detach",
                   "disable",
                   "enable",
                   "evacuate",
                   "export:logs",
+                  "join-pool",
+                  "migrate-receive",
+                  "reboot",
+                  "reboot:clean",
+                  "reboot:smart",
+                  "restart-toolstack",
+                  "scan-pifs",
+                  "shutdown:clean",
+                  "shutdown:emergency",
                   "update:tags"
                 ]
               },
@@ -7757,7 +7924,8 @@
                   "create",
                   "delete",
                   "read",
-                  "update:tags"
+                  "update:tags",
+                  "update:other_config"
                 ]
               },
               "selector": {
@@ -7791,7 +7959,9 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "read",
+                  "plug",
+                  "unplug"
                 ]
               },
               "selector": {
@@ -7933,6 +8103,7 @@
                   "create",
                   "read",
                   "update:tags",
+                  "add-host",
                   "create:network",
                   "create:vm",
                   "emergency-shutdown",
@@ -8146,13 +8317,18 @@
                 "type": "string",
                 "enum": [
                   "import",
+                  "forget",
                   "update",
                   "*",
+                  "create",
                   "delete",
                   "read",
+                  "reclaim-space",
+                  "migrate-receive",
                   "update:tags",
                   "import:vdi",
-                  "import:vm"
+                  "import:vm",
+                  "scan"
                 ]
               },
               "selector": {
@@ -8227,9 +8403,12 @@
                   "delete",
                   "read",
                   "update:name",
+                  "update:firstname",
+                  "update:lastname",
                   "update:password",
                   "update:permission",
-                  "update:preferences"
+                  "update:preferences",
+                  "update:username"
                 ]
               },
               "selector": {
@@ -8263,7 +8442,11 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "create",
+                  "delete",
+                  "read",
+                  "connect",
+                  "disconnect"
                 ]
               },
               "selector": {
@@ -8296,8 +8479,12 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "export",
+                  "update",
                   "*",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:tags"
                 ]
               },
               "selector": {
@@ -8372,7 +8559,11 @@
                   "read",
                   "update:tags",
                   "export-content",
-                  "import-content"
+                  "import-content",
+                  "migrate-send",
+                  "update:name_description",
+                  "update:name_label",
+                  "update:size"
                 ]
               },
               "selector": {
@@ -8473,9 +8664,19 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "update",
                   "*",
                   "create",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:other_config",
+                  "connect",
+                  "disconnect",
+                  "update:allowedIpv4Addresses",
+                  "update:allowedIpv6Addresses",
+                  "update:lockingMode",
+                  "update:rateLimit",
+                  "update:txChecksumming"
                 ]
               },
               "selector": {
@@ -8621,6 +8822,7 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "clone",
                   "export",
                   "pause",
                   "resume",
@@ -8633,12 +8835,13 @@
                   "*",
                   "delete",
                   "read",
-                  "update:tags",
                   "reboot",
                   "reboot:clean",
+                  "shutdown:clean",
+                  "update:tags",
+                  "migrate-send",
                   "reboot:hard",
                   "revert-snapshot",
-                  "shutdown:clean",
                   "shutdown:hard",
                   "update:affinityHost",
                   "update:autoPoweron",
@@ -8834,6 +9037,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -8847,7 +9051,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "user",
                   "proxy",
@@ -8973,7 +9176,12 @@
             ]
           },
           "content_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "user",
+              "iso",
+              "disk"
+            ]
           },
           "current_operations": {
             "$ref": "#/components/schemas/Record_string.STORAGE_OPERATIONS_"
@@ -9008,7 +9216,29 @@
             "$ref": "#/components/schemas/Record_string.string_"
           },
           "SR_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "iso",
+              "cephfs",
+              "dummy",
+              "ext",
+              "file",
+              "glusterfs",
+              "hba",
+              "largeblock",
+              "linstor",
+              "lvm",
+              "lvmofcoe",
+              "lvmohba",
+              "lvmoiscsi",
+              "moosefs",
+              "nfs",
+              "shm",
+              "smb",
+              "udev",
+              "xfs",
+              "zfs"
+            ]
           },
           "tags": {
             "items": {
@@ -9109,7 +9339,12 @@
             ]
           },
           "content_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "user",
+              "iso",
+              "disk"
+            ]
           },
           "current_operations": {
             "$ref": "#/components/schemas/Record_string.STORAGE_OPERATIONS_"
@@ -9144,7 +9379,29 @@
             "$ref": "#/components/schemas/Record_string.string_"
           },
           "SR_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "iso",
+              "cephfs",
+              "dummy",
+              "ext",
+              "file",
+              "glusterfs",
+              "hba",
+              "largeblock",
+              "linstor",
+              "lvm",
+              "lvmofcoe",
+              "lvmohba",
+              "lvmoiscsi",
+              "moosefs",
+              "nfs",
+              "shm",
+              "smb",
+              "udev",
+              "xfs",
+              "zfs"
+            ]
           },
           "tags": {
             "items": {
@@ -9189,6 +9446,147 @@
           "usage"
         ],
         "type": "object"
+      },
+      "Pick_Parameters_Xapi_91_SR_create_93___91_0_93_.Exclude_keyofParameters_Xapi_91_SR_create_93___91_0_93_.host-or-type-or-physical_size-or-shared__": {
+        "properties": {
+          "name_description": {
+            "type": "string"
+          },
+          "name_label": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "user",
+              "iso",
+              "disk"
+            ]
+          },
+          "sm_config": {
+            "properties": {},
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "device_config": {
+            "allOf": [
+              {
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "targetIQN": {
+                    "type": "string"
+                  },
+                  "target": {
+                    "type": "string"
+                  },
+                  "serverpath": {
+                    "type": "string"
+                  },
+                  "server": {
+                    "type": "string"
+                  },
+                  "SCSIid": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "type": "string"
+                  },
+                  "nfsversion": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "legacy_mode": {
+                    "type": "string"
+                  },
+                  "device": {
+                    "type": "string"
+                  },
+                  "chappassword": {
+                    "type": "string"
+                  },
+                  "chapuser": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "properties": {},
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name_label",
+          "device_config"
+        ],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "Omit_Parameters_Xapi_91_SR_create_93___91_0_93_.host-or-type-or-physical_size-or-shared_": {
+        "$ref": "#/components/schemas/Pick_Parameters_Xapi_91_SR_create_93___91_0_93_.Exclude_keyofParameters_Xapi_91_SR_create_93___91_0_93_.host-or-type-or-physical_size-or-shared__",
+        "description": "Construct a type with the properties of T except for those in type K."
+      },
+      "CreateSrBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Omit_Parameters_Xapi_91_SR_create_93___91_0_93_.host-or-type-or-physical_size-or-shared_"
+          },
+          {
+            "properties": {
+              "size": {
+                "type": "number",
+                "format": "double"
+              },
+              "SR_type": {
+                "type": "string",
+                "enum": [
+                  "cephfs",
+                  "dummy",
+                  "ext",
+                  "file",
+                  "glusterfs",
+                  "hba",
+                  "iso",
+                  "largeblock",
+                  "linstor",
+                  "lvm",
+                  "lvmofcoe",
+                  "lvmohba",
+                  "lvmoiscsi",
+                  "moosefs",
+                  "nfs",
+                  "shm",
+                  "smb",
+                  "udev",
+                  "xfs",
+                  "zfs"
+                ]
+              },
+              "hostId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "SR_type",
+              "hostId"
+            ],
+            "type": "object"
+          }
+        ]
       },
       "Record_string.number_": {
         "properties": {},
@@ -9416,6 +9814,7 @@
             "type": "string",
             "enum": [
               "connected",
+              "disconnecting",
               "disconnected",
               "connecting"
             ]
@@ -9509,6 +9908,7 @@
             "type": "string",
             "enum": [
               "connected",
+              "disconnecting",
               "disconnected",
               "connecting"
             ]
@@ -9533,13 +9933,13 @@
           "host": {
             "type": "string"
           },
+          "username": {
+            "type": "string"
+          },
           "httpProxy": {
             "type": "string"
           },
           "label": {
-            "type": "string"
-          },
-          "username": {
             "type": "string"
           },
           "allowUnauthorized": {
@@ -9965,6 +10365,9 @@
           "HA_enabled": {
             "type": "boolean"
           },
+          "haRebootVmOnInternalShutdown": {
+            "type": "boolean"
+          },
           "haSrs": {
             "items": {
               "type": "string"
@@ -10100,6 +10503,9 @@
           "HA_enabled": {
             "type": "boolean"
           },
+          "haRebootVmOnInternalShutdown": {
+            "type": "boolean"
+          },
           "haSrs": {
             "items": {
               "type": "string"
@@ -10159,6 +10565,7 @@
           "cpus",
           "current_operations",
           "HA_enabled",
+          "haRebootVmOnInternalShutdown",
           "haSrs",
           "id",
           "master",
@@ -10298,6 +10705,34 @@
       "CreateInternalNetworkBody": {
         "$ref": "#/components/schemas/BaseCreateNetworkBody"
       },
+      "RollingPoolActionBody": {
+        "properties": {
+          "shutdownPinnedVms": {
+            "type": "boolean"
+          },
+          "bypassBackupCheck": {
+            "type": "boolean",
+            "description": "Skip the backup safety check before rebooting the hosts. Defaults to false."
+          }
+        },
+        "type": "object"
+      },
+      "RollingPoolUpdateBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RollingPoolActionBody"
+          },
+          {
+            "properties": {
+              "acceptCurrentStateAsBaseline": {
+                "type": "boolean",
+                "description": "Start the update even though the master is already up to date while another host is not, ie from a pool left\npartially updated. Without it, such a pool is refused with an `incorrect state` error listing the outdated hosts.\nIgnored on older XenServer and Citrix Hypervisor pools, which are never refused. Defaults to false."
+              }
+            },
+            "type": "object"
+          }
+        ]
+      },
       "CreateActionReturnType__id-Unbrand_XoVm__91_id_93___": {
         "anyOf": [
           {
@@ -10422,6 +10857,14 @@
             "enum": [
               "uefi",
               "bios"
+            ]
+          },
+          "high_availability": {
+            "type": "string",
+            "enum": [
+              "",
+              "best-effort",
+              "restart"
             ]
           },
           "template": {
@@ -11150,6 +11593,245 @@
           "vms",
           "hosts"
         ],
+        "type": "object"
+      },
+      "PoolRollingUpdateRecoveryStep": {
+        "properties": {
+          "finishedAt": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "observed-succeeded",
+              "failed",
+              "not-needed"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
+      "Record_RPU_RECOVERY_STEP_NAME.PoolRollingUpdateRecoveryStep_": {
+        "properties": {
+          "update": {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryStep"
+          },
+          "enable": {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryStep"
+          },
+          "evacuate": {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryStep"
+          },
+          "reboot": {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryStep"
+          },
+          "restoreVms": {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryStep"
+          }
+        },
+        "required": [
+          "update",
+          "enable",
+          "evacuate",
+          "reboot",
+          "restoreVms"
+        ],
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "PoolRollingUpdateRecoveryError": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "format": "double"
+              }
+            ]
+          },
+          "stack": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {},
+        "type": "object",
+        "description": "error serialized by the recovery recorder: secret-looking keys are redacted"
+      },
+      "PoolRollingUpdateRecoveryHost": {
+        "properties": {
+          "lastError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PoolRollingUpdateRecoveryError"
+              }
+            ],
+            "nullable": true
+          },
+          "steps": {
+            "$ref": "#/components/schemas/Record_RPU_RECOVERY_STEP_NAME.PoolRollingUpdateRecoveryStep_"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "succeeded",
+              "failed",
+              "not-needed"
+            ]
+          }
+        },
+        "required": [
+          "lastError",
+          "steps",
+          "status"
+        ],
+        "type": "object"
+      },
+      "Record_string.PoolRollingUpdateRecoveryHost_": {
+        "properties": {},
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PoolRollingUpdateRecoveryHost"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "PoolRollingUpdateRecoveryRun": {
+        "properties": {
+          "haltedPinnedVms": {
+            "$ref": "#/components/schemas/Record_string.string_",
+            "description": "VM UUID -> UUID of the host it must be started on"
+          },
+          "lastError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PoolRollingUpdateRecoveryError"
+              }
+            ],
+            "nullable": true
+          },
+          "hosts": {
+            "$ref": "#/components/schemas/Record_string.PoolRollingUpdateRecoveryHost_"
+          },
+          "hostOrder": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "xcp",
+              "xs-cdn"
+            ]
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "interruptedAt": {
+            "type": "string"
+          },
+          "finishedAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "preparing",
+              "running",
+              "interrupted",
+              "resuming",
+              "failed",
+              "cleaning",
+              "succeeded"
+            ]
+          },
+          "poolId": {
+            "type": "string"
+          },
+          "runId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "haltedPinnedVms",
+          "lastError",
+          "hosts",
+          "updatedAt",
+          "startedAt",
+          "status",
+          "poolId",
+          "runId"
+        ],
+        "type": "object"
+      },
+      "PoolRollingUpdateRecoveryBlocked": {
+        "properties": {
+          "blockedReason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "blocked"
+            ],
+            "nullable": false
+          },
+          "runId": {
+            "type": "string"
+          },
+          "poolId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "blockedReason",
+          "status"
+        ],
+        "type": "object",
+        "description": "record unreadable or of an unknown schema version: recovery needs a human"
+      },
+      "PoolRollingUpdateRecovery": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryRun"
+          },
+          {
+            "$ref": "#/components/schemas/PoolRollingUpdateRecoveryBlocked"
+          }
+        ]
+      },
+      "FinalizeRollingUpdateBody": {
+        "properties": {
+          "force": {
+            "type": "boolean",
+            "description": "Close the record even though the update left items unrestored, or its record cannot be read: they are abandoned\nand listed in the task, nothing is restored nor changed in the pool. Defaults to false."
+          }
+        },
         "type": "object"
       },
       "Branded_PIF_": {
@@ -13327,12 +14009,19 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "aclRoleIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
           "id",
           "name",
-          "users"
+          "users",
+          "aclRoleIds"
         ],
         "type": "object"
       },
@@ -13345,7 +14034,80 @@
         "type": "object",
         "additionalProperties": false
       },
-      "XoListenerType": {
+      "Partial_Unbrand_Exclude_XoAclRole._isTemplate-true____": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "privilegeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "groupIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "userIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object",
+        "description": "Make all properties in T optional"
+      },
+      "WithHref_Partial_Unbrand_Exclude_XoAclRole._isTemplate-true_____": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Partial_Unbrand_Exclude_XoAclRole._isTemplate-true____"
+          },
+          {
+            "properties": {
+              "href": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "href"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "SendObjects_Partial_Unbrand_Exclude_XoAclRole._isTemplate-true_____": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "items": {
+              "$ref": "#/components/schemas/WithHref_Partial_Unbrand_Exclude_XoAclRole._isTemplate-true_____"
+            },
+            "type": "array"
+          },
+          {
+            "$ref": "#/components/schemas/NdjsonStream"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "XapiListenerType": {
         "type": "string",
         "enum": [
           "pool",
@@ -13356,6 +14118,7 @@
           "VM-snapshot",
           "SR",
           "VM",
+          "VM-template",
           "message",
           "vgpu",
           "gpuGroup",
@@ -13369,36 +14132,62 @@
           "VDI-unmanaged",
           "vgpuType",
           "VM-controller",
-          "VM-template",
-          "SM",
-          "alarm",
-          "task"
+          "SM"
         ]
+      },
+      "NonXapiListenerType": {
+        "type": "string",
+        "enum": [
+          "alarm",
+          "task",
+          "user",
+          "group",
+          "acl-privilege",
+          "acl-role",
+          "proxy",
+          "server",
+          "backup-repository",
+          "backup-job",
+          "schedule"
+        ]
+      },
+      "XoListenerType": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/XapiListenerType"
+          },
+          {
+            "$ref": "#/components/schemas/NonXapiListenerType"
+          }
+        ]
+      },
+      "XoBackupRepositoryBenchmark": {
+        "properties": {
+          "writeRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "timestamp": {
+            "type": "number",
+            "format": "double"
+          },
+          "readRate": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "writeRate",
+          "timestamp",
+          "readRate"
+        ],
+        "type": "object"
       },
       "Partial_Unbrand_XoBackupRepository__": {
         "properties": {
           "benchmarks": {
             "items": {
-              "properties": {
-                "writeRate": {
-                  "type": "number",
-                  "format": "double"
-                },
-                "timestamp": {
-                  "type": "number",
-                  "format": "double"
-                },
-                "readRate": {
-                  "type": "number",
-                  "format": "double"
-                }
-              },
-              "required": [
-                "writeRate",
-                "timestamp",
-                "readRate"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/XoBackupRepositoryBenchmark"
             },
             "type": "array"
           },
@@ -13467,30 +14256,32 @@
           }
         ]
       },
+      "Unbrand_Parameters_XoApp-at-createRemote__91_0_93__": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "type": "string"
+          },
+          "proxy": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "url"
+        ],
+        "type": "object"
+      },
       "Unbrand_XoBackupRepository_": {
         "properties": {
           "benchmarks": {
             "items": {
-              "properties": {
-                "writeRate": {
-                  "type": "number",
-                  "format": "double"
-                },
-                "timestamp": {
-                  "type": "number",
-                  "format": "double"
-                },
-                "readRate": {
-                  "type": "number",
-                  "format": "double"
-                }
-              },
-              "required": [
-                "writeRate",
-                "timestamp",
-                "readRate"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/XoBackupRepositoryBenchmark"
             },
             "type": "array"
           },
@@ -13523,6 +14314,170 @@
           "url"
         ],
         "type": "object"
+      },
+      "Unbrand_Parameters_XoApp-at-updateRemote__91_1_93__": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxy": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReturnType_XoApp-at-pingRemote_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ],
+            "nullable": false
+          }
+        },
+        "required": [
+          "success"
+        ],
+        "type": "object",
+        "description": "Obtain the return type of a function type"
+      },
+      "Awaited_ReturnType_XoApp-at-testRemote__": {
+        "anyOf": [
+          {
+            "properties": {
+              "writeRate": {
+                "type": "number",
+                "format": "double"
+              },
+              "readRate": {
+                "type": "number",
+                "format": "double"
+              },
+              "success": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "writeRate",
+              "readRate",
+              "success"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "error": {},
+              "file": {
+                "type": "string"
+              },
+              "step": {
+                "type": "string"
+              },
+              "success": {
+                "type": "boolean",
+                "enum": [
+                  false
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "error",
+              "file",
+              "step",
+              "success"
+            ],
+            "type": "object"
+          }
+        ],
+        "description": "Recursively unwraps the \"awaited type\" of a type. Non-promise \"thenables\" should resolve to `never`. This emulates the behavior of `await`."
+      },
+      "BenchmarkRepositoryResult": {
+        "$ref": "#/components/schemas/Awaited_ReturnType_XoApp-at-testRemote__"
+      },
+      "CreateActionReturnType_BenchmarkRepositoryResult_": {
+        "anyOf": [
+          {
+            "properties": {
+              "taskId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taskId"
+            ],
+            "type": "object"
+          },
+          {
+            "$ref": "#/components/schemas/BenchmarkRepositoryResult"
+          }
+        ]
+      },
+      "Awaited_ReturnType_XoApp-at-reclaimSpace__": {
+        "items": {
+          "properties": {
+            "error": {
+              "type": "string"
+            },
+            "size": {
+              "type": "number",
+              "format": "double"
+            },
+            "merge": {
+              "type": "boolean"
+            },
+            "success": {
+              "type": "boolean"
+            },
+            "vmUuid": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "success",
+            "vmUuid"
+          ],
+          "type": "object"
+        },
+        "type": "array",
+        "description": "Recursively unwraps the \"awaited type\" of a type. Non-promise \"thenables\" should resolve to `never`. This emulates the behavior of `await`."
+      },
+      "ReclaimSpaceResult": {
+        "$ref": "#/components/schemas/Awaited_ReturnType_XoApp-at-reclaimSpace__"
+      },
+      "CreateActionReturnType_ReclaimSpaceResult_": {
+        "anyOf": [
+          {
+            "properties": {
+              "taskId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taskId"
+            ],
+            "type": "object"
+          },
+          {
+            "$ref": "#/components/schemas/ReclaimSpaceResult"
+          }
+        ]
       },
       "Partial_Unbrand_XoBackupLog__": {
         "properties": {
@@ -13774,8 +14729,8 @@
                 "type": "string",
                 "enum": [
                   "",
-                  "native",
-                  "zstd"
+                  "zstd",
+                  "native"
                 ]
               },
               "proxy": {
@@ -13954,8 +14909,8 @@
             "type": "string",
             "enum": [
               "",
-              "native",
-              "zstd"
+              "zstd",
+              "native"
             ]
           },
           "proxy": {
@@ -14539,6 +15494,81 @@
         ],
         "type": "object"
       },
+      "BackupArchiveDiskMount": {
+        "properties": {
+          "port": {
+            "type": "number",
+            "format": "double",
+            "description": "Port of the portal (ephemeral, one target per mount)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the portal, as advertised to the host"
+          },
+          "iqn": {
+            "type": "string",
+            "description": "IQN of the target serving the disk"
+          },
+          "vdiUuid": {
+            "type": "string",
+            "description": "UUID of the read-only VDI exposing the backup disk"
+          },
+          "srUuid": {
+            "type": "string",
+            "description": "UUID of the SR introduced on the host"
+          },
+          "id": {
+            "type": "string",
+            "description": "Handle to pass to `unmountBackupArchiveDisk`"
+          }
+        },
+        "required": [
+          "port",
+          "address",
+          "iqn",
+          "vdiUuid",
+          "srUuid",
+          "id"
+        ],
+        "type": "object",
+        "description": "A disk of a backup archive currently served as a read-only iSCSI LUN"
+      },
+      "CreateActionReturnType_BackupArchiveDiskMount_": {
+        "anyOf": [
+          {
+            "properties": {
+              "taskId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taskId"
+            ],
+            "type": "object"
+          },
+          {
+            "$ref": "#/components/schemas/BackupArchiveDiskMount"
+          }
+        ]
+      },
+      "MountLiveDiskBody": {
+        "properties": {
+          "diskId": {
+            "type": "string",
+            "description": "One of the archive's `disks[].id`."
+          },
+          "hostId": {
+            "type": "string",
+            "description": "Host to which the disk will be attached."
+          }
+        },
+        "required": [
+          "diskId",
+          "hostId"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
       "Partial_UnbrandedXoAlarm_": {
         "properties": {
           "$pool": {
@@ -14603,6 +15633,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -14616,7 +15647,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "unknown"
                 ]
@@ -14737,6 +15767,7 @@
                   "VM-snapshot",
                   "SR",
                   "VM",
+                  "VM-template",
                   "message",
                   "vgpu",
                   "gpuGroup",
@@ -14750,7 +15781,6 @@
                   "VDI-unmanaged",
                   "vgpuType",
                   "VM-controller",
-                  "VM-template",
                   "SM",
                   "unknown"
                 ]
@@ -14792,6 +15822,24 @@
               },
               "description": {
                 "type": "string"
+              },
+              "privilegeIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "groupIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "userIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
             "type": "object"
@@ -14806,6 +15854,12 @@
               },
               "description": {
                 "type": "string"
+              },
+              "privilegeIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
               },
               "isTemplate": {
                 "type": "boolean",
@@ -14875,11 +15929,32 @@
               },
               "description": {
                 "type": "string"
+              },
+              "privilegeIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "groupIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "userIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
             "required": [
               "id",
-              "name"
+              "name",
+              "privilegeIds",
+              "groupIds",
+              "userIds"
             ],
             "type": "object"
           },
@@ -14893,6 +15968,12 @@
               },
               "description": {
                 "type": "string"
+              },
+              "privilegeIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
               },
               "isTemplate": {
                 "type": "boolean",
@@ -14909,6 +15990,7 @@
             "required": [
               "id",
               "name",
+              "privilegeIds",
               "isTemplate",
               "roleTemplateId"
             ],
@@ -15198,8 +16280,18 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "forget",
+                  "update",
                   "*",
-                  "read"
+                  "create",
+                  "read",
+                  "update:name",
+                  "benchmark",
+                  "update:enabled",
+                  "update:options",
+                  "update:proxy",
+                  "update:url",
+                  "reclaim-space"
                 ]
               },
               "selector": {
@@ -15318,14 +16410,27 @@
                 "type": "string",
                 "enum": [
                   "export",
+                  "shutdown",
+                  "start",
+                  "forget",
                   "update",
                   "*",
                   "read",
                   "allow-vm",
+                  "detach",
                   "disable",
                   "enable",
                   "evacuate",
                   "export:logs",
+                  "join-pool",
+                  "migrate-receive",
+                  "reboot",
+                  "reboot:clean",
+                  "reboot:smart",
+                  "restart-toolstack",
+                  "scan-pifs",
+                  "shutdown:clean",
+                  "shutdown:emergency",
                   "update:tags"
                 ]
               },
@@ -15406,7 +16511,8 @@
                   "create",
                   "delete",
                   "read",
-                  "update:tags"
+                  "update:tags",
+                  "update:other_config"
                 ]
               },
               "selector": {
@@ -15444,7 +16550,9 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "read",
+                  "plug",
+                  "unplug"
                 ]
               },
               "selector": {
@@ -15602,6 +16710,7 @@
                   "create",
                   "read",
                   "update:tags",
+                  "add-host",
                   "create:network",
                   "create:vm",
                   "emergency-shutdown",
@@ -15839,13 +16948,18 @@
                 "type": "string",
                 "enum": [
                   "import",
+                  "forget",
                   "update",
                   "*",
+                  "create",
                   "delete",
                   "read",
+                  "reclaim-space",
+                  "migrate-receive",
                   "update:tags",
                   "import:vdi",
-                  "import:vm"
+                  "import:vm",
+                  "scan"
                 ]
               },
               "selector": {
@@ -15928,9 +17042,12 @@
                   "delete",
                   "read",
                   "update:name",
+                  "update:firstname",
+                  "update:lastname",
                   "update:password",
                   "update:permission",
-                  "update:preferences"
+                  "update:preferences",
+                  "update:username"
                 ]
               },
               "selector": {
@@ -15968,7 +17085,11 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "create",
+                  "delete",
+                  "read",
+                  "connect",
+                  "disconnect"
                 ]
               },
               "selector": {
@@ -16005,8 +17126,12 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "export",
+                  "update",
                   "*",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:tags"
                 ]
               },
               "selector": {
@@ -16089,7 +17214,11 @@
                   "read",
                   "update:tags",
                   "export-content",
-                  "import-content"
+                  "import-content",
+                  "migrate-send",
+                  "update:name_description",
+                  "update:name_label",
+                  "update:size"
                 ]
               },
               "selector": {
@@ -16202,9 +17331,19 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "update",
                   "*",
                   "create",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:other_config",
+                  "connect",
+                  "disconnect",
+                  "update:allowedIpv4Addresses",
+                  "update:allowedIpv6Addresses",
+                  "update:lockingMode",
+                  "update:rateLimit",
+                  "update:txChecksumming"
                 ]
               },
               "selector": {
@@ -16366,6 +17505,7 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "clone",
                   "export",
                   "pause",
                   "resume",
@@ -16378,12 +17518,13 @@
                   "*",
                   "delete",
                   "read",
-                  "update:tags",
                   "reboot",
                   "reboot:clean",
+                  "shutdown:clean",
+                  "update:tags",
+                  "migrate-send",
                   "reboot:hard",
                   "revert-snapshot",
-                  "shutdown:clean",
                   "shutdown:hard",
                   "update:affinityHost",
                   "update:autoPoweron",
@@ -16768,8 +17909,18 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "forget",
+                  "update",
                   "*",
-                  "read"
+                  "create",
+                  "read",
+                  "update:name",
+                  "benchmark",
+                  "update:enabled",
+                  "update:options",
+                  "update:proxy",
+                  "update:url",
+                  "reclaim-space"
                 ]
               },
               "selector": {
@@ -16900,14 +18051,27 @@
                 "type": "string",
                 "enum": [
                   "export",
+                  "shutdown",
+                  "start",
+                  "forget",
                   "update",
                   "*",
                   "read",
                   "allow-vm",
+                  "detach",
                   "disable",
                   "enable",
                   "evacuate",
                   "export:logs",
+                  "join-pool",
+                  "migrate-receive",
+                  "reboot",
+                  "reboot:clean",
+                  "reboot:smart",
+                  "restart-toolstack",
+                  "scan-pifs",
+                  "shutdown:clean",
+                  "shutdown:emergency",
                   "update:tags"
                 ]
               },
@@ -16996,7 +18160,8 @@
                   "create",
                   "delete",
                   "read",
-                  "update:tags"
+                  "update:tags",
+                  "update:other_config"
                 ]
               },
               "selector": {
@@ -17038,7 +18203,9 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "read",
+                  "plug",
+                  "unplug"
                 ]
               },
               "selector": {
@@ -17212,6 +18379,7 @@
                   "create",
                   "read",
                   "update:tags",
+                  "add-host",
                   "create:network",
                   "create:vm",
                   "emergency-shutdown",
@@ -17473,13 +18641,18 @@
                 "type": "string",
                 "enum": [
                   "import",
+                  "forget",
                   "update",
                   "*",
+                  "create",
                   "delete",
                   "read",
+                  "reclaim-space",
+                  "migrate-receive",
                   "update:tags",
                   "import:vdi",
-                  "import:vm"
+                  "import:vm",
+                  "scan"
                 ]
               },
               "selector": {
@@ -17570,9 +18743,12 @@
                   "delete",
                   "read",
                   "update:name",
+                  "update:firstname",
+                  "update:lastname",
                   "update:password",
                   "update:permission",
-                  "update:preferences"
+                  "update:preferences",
+                  "update:username"
                 ]
               },
               "selector": {
@@ -17614,7 +18790,11 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "create",
+                  "delete",
+                  "read",
+                  "connect",
+                  "disconnect"
                 ]
               },
               "selector": {
@@ -17655,8 +18835,12 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "export",
+                  "update",
                   "*",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:tags"
                 ]
               },
               "selector": {
@@ -17747,7 +18931,11 @@
                   "read",
                   "update:tags",
                   "export-content",
-                  "import-content"
+                  "import-content",
+                  "migrate-send",
+                  "update:name_description",
+                  "update:name_label",
+                  "update:size"
                 ]
               },
               "selector": {
@@ -17872,9 +19060,19 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "update",
                   "*",
                   "create",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:other_config",
+                  "connect",
+                  "disconnect",
+                  "update:allowedIpv4Addresses",
+                  "update:allowedIpv6Addresses",
+                  "update:lockingMode",
+                  "update:rateLimit",
+                  "update:txChecksumming"
                 ]
               },
               "selector": {
@@ -18052,6 +19250,7 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "clone",
                   "export",
                   "pause",
                   "resume",
@@ -18064,12 +19263,13 @@
                   "*",
                   "delete",
                   "read",
-                  "update:tags",
                   "reboot",
                   "reboot:clean",
+                  "shutdown:clean",
+                  "update:tags",
+                  "migrate-send",
                   "reboot:hard",
                   "revert-snapshot",
-                  "shutdown:clean",
                   "shutdown:hard",
                   "update:affinityHost",
                   "update:autoPoweron",
@@ -18371,8 +19571,18 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "forget",
+                  "update",
                   "*",
-                  "read"
+                  "create",
+                  "read",
+                  "update:name",
+                  "benchmark",
+                  "update:enabled",
+                  "update:options",
+                  "update:proxy",
+                  "update:url",
+                  "reclaim-space"
                 ]
               },
               "selector": {
@@ -18461,14 +19671,27 @@
                 "type": "string",
                 "enum": [
                   "export",
+                  "shutdown",
+                  "start",
+                  "forget",
                   "update",
                   "*",
                   "read",
                   "allow-vm",
+                  "detach",
                   "disable",
                   "enable",
                   "evacuate",
                   "export:logs",
+                  "join-pool",
+                  "migrate-receive",
+                  "reboot",
+                  "reboot:clean",
+                  "reboot:smart",
+                  "restart-toolstack",
+                  "scan-pifs",
+                  "shutdown:clean",
+                  "shutdown:emergency",
                   "update:tags"
                 ]
               },
@@ -18529,7 +19752,8 @@
                   "create",
                   "delete",
                   "read",
-                  "update:tags"
+                  "update:tags",
+                  "update:other_config"
                 ]
               },
               "selector": {
@@ -18557,7 +19781,9 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "read",
+                  "plug",
+                  "unplug"
                 ]
               },
               "selector": {
@@ -18675,6 +19901,7 @@
                   "create",
                   "read",
                   "update:tags",
+                  "add-host",
                   "create:network",
                   "create:vm",
                   "emergency-shutdown",
@@ -18852,13 +20079,18 @@
                 "type": "string",
                 "enum": [
                   "import",
+                  "forget",
                   "update",
                   "*",
+                  "create",
                   "delete",
                   "read",
+                  "reclaim-space",
+                  "migrate-receive",
                   "update:tags",
                   "import:vdi",
-                  "import:vm"
+                  "import:vm",
+                  "scan"
                 ]
               },
               "selector": {
@@ -18921,9 +20153,12 @@
                   "delete",
                   "read",
                   "update:name",
+                  "update:firstname",
+                  "update:lastname",
                   "update:password",
                   "update:permission",
-                  "update:preferences"
+                  "update:preferences",
+                  "update:username"
                 ]
               },
               "selector": {
@@ -18951,7 +20186,11 @@
                 "type": "string",
                 "enum": [
                   "*",
-                  "read"
+                  "create",
+                  "delete",
+                  "read",
+                  "connect",
+                  "disconnect"
                 ]
               },
               "selector": {
@@ -18978,8 +20217,12 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "export",
+                  "update",
                   "*",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:tags"
                 ]
               },
               "selector": {
@@ -19042,7 +20285,11 @@
                   "read",
                   "update:tags",
                   "export-content",
-                  "import-content"
+                  "import-content",
+                  "migrate-send",
+                  "update:name_description",
+                  "update:name_label",
+                  "update:size"
                 ]
               },
               "selector": {
@@ -19125,9 +20372,19 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "update",
                   "*",
                   "create",
-                  "read"
+                  "delete",
+                  "read",
+                  "update:other_config",
+                  "connect",
+                  "disconnect",
+                  "update:allowedIpv4Addresses",
+                  "update:allowedIpv6Addresses",
+                  "update:lockingMode",
+                  "update:rateLimit",
+                  "update:txChecksumming"
                 ]
               },
               "selector": {
@@ -19249,6 +20506,7 @@
               "action": {
                 "type": "string",
                 "enum": [
+                  "clone",
                   "export",
                   "pause",
                   "resume",
@@ -19261,12 +20519,13 @@
                   "*",
                   "delete",
                   "read",
-                  "update:tags",
                   "reboot",
                   "reboot:clean",
+                  "shutdown:clean",
+                  "update:tags",
+                  "migrate-send",
                   "reboot:hard",
                   "revert-snapshot",
-                  "shutdown:clean",
                   "shutdown:hard",
                   "update:affinityHost",
                   "update:autoPoweron",
@@ -19364,7 +20623,7 @@
   },
   "info": {
     "title": "@xen-orchestra/rest-api",
-    "version": "0.33.0",
+    "version": "0.40.2",
     "description": "REST API to manage your XOA",
     "license": {
       "name": "AGPL-3.0-or-later"
@@ -19709,8 +20968,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "xva",
-                "ova"
+                "ova",
+                "xva"
               ]
             }
           },
@@ -19718,9 +20977,7 @@
             "in": "query",
             "name": "compress",
             "required": false,
-            "schema": {
-              "type": "boolean"
-            }
+            "schema": {}
           }
         ],
         "x-mcp-exposure": "deny"
@@ -19898,7 +21155,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Partial update of a VM. Only the fields present in the body are modified;\neverything else is left untouched.\n\nOperations are applied sequentially: if one fails, previously applied\nchanges are not rolled back.\n\nRequired privilege per field provided in the body:\n- resource: vm, action: update:&lt;field&gt; (e.g. update:nameLabel, update:cpus, ...)\n\nSpecial fields:\n- `xenStoreData` keys are automatically prefixed with `vm-data/` when missing",
+        "description": "Partial update of a VM. Only the fields present in the body are modified;\neverything else is left untouched.\n\nOperations are applied sequentially: if one fails, previously applied\nchanges are not rolled back.\n\nRequired privilege per field provided in the body:\n- resource: vm, action: update:&lt;field&gt; (e.g. update:nameLabel, update:cpus, ...)\n\nSpecial fields:\n- `xenStoreData` keys are automatically prefixed with `vm-data/` when missing\n- `cpus` automatically set `cpusStaticMax` to the `cpus` value if `cpus` is higher than `vm.CPUs.max`\n- If `cpusStaticMax` is updated to a value that is incompatible with the VM topology, `vm.platform['cores-per-socket']` will be set to 1, unless `coresPerSocket` is explicitly specified",
         "tags": [
           "vms"
         ],
@@ -22260,6 +23517,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -22270,7 +23530,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "\n- For fast clone on the same SR, omit `srId` and set `fast` to `true`.\n- For full copy on the same SR, omit `srId` and set `fast` to `false`.\n- To copy the VM to a different SR (always a full copy), provide `srId`. Supports cross-pool copy. Optionally use `compress: \"gzip\"` or `compress: \"zstd\"` to compress the export stream during cross-pool copy.",
+        "description": "Required privilege:\n- resource: vm, action: clone\n\n- For fast clone on the same SR, omit `srId` and set `fast` to `true`.\n- For full copy on the same SR, omit `srId` and set `fast` to `false`.\n- To copy the VM to a different SR (always a full copy), provide `srId`. Supports cross-pool copy. Optionally use `compress: \"gzip\"` or `compress: \"zstd\"` to compress the export stream during cross-pool copy.",
         "tags": [
           "vms"
         ],
@@ -23202,6 +24462,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -23212,7 +24475,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "VIF mapping is not allowed for intra-pool migration\n\nNetworks and SRs must belong to the same pool as the destination host",
+        "description": "Required privileges:\n- resource: vm, action: migrate-send\n- resource: host, action: migrate-receive (on the destination host)\n\nVIF mapping is not allowed for intra-pool migration\n\nNetworks and SRs must belong to the same pool as the destination host",
         "tags": [
           "vms"
         ],
@@ -23473,9 +24736,7 @@
             "in": "query",
             "name": "compress",
             "required": false,
-            "schema": {
-              "type": "boolean"
-            }
+            "schema": {}
           }
         ],
         "x-mcp-exposure": "deny"
@@ -24408,9 +25669,7 @@
             "in": "query",
             "name": "compress",
             "required": false,
-            "schema": {
-              "type": "boolean"
-            }
+            "schema": {}
           }
         ],
         "x-mcp-exposure": "deny"
@@ -26202,6 +27461,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -26212,6 +27474,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: vif, action: create",
         "tags": [
           "vifs"
         ],
@@ -26317,6 +27580,70 @@
         ],
         "x-mcp-exposure": "allow"
       },
+      "patch": {
+        "operationId": "UpdateVif",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Partial update of a VIF: only the fields present in the body are modified.\nSetting the allowed IPs to a non-empty list switches the locking mode to `locked`.\n`rateLimit` is expressed in kB/s (kilobytes per second).\n\nRequired privilege per field provided in the body:\n- resource: vif, action: update:&lt;field&gt;",
+        "tags": [
+          "vifs"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "f028c5d4-578a-332c-394e-087aaca32dd3"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVifRequestBody"
+              },
+              "example": {
+                "lockingMode": "locked",
+                "allowedIpv4Addresses": [
+                  "192.168.0.42"
+                ],
+                "rateLimit": 1000
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
+      },
       "delete": {
         "operationId": "DestroyVif",
         "responses": {
@@ -26329,6 +27656,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -26336,6 +27666,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: vif, action: delete",
         "tags": [
           "vifs"
         ],
@@ -26748,6 +28079,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -26755,7 +28089,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Hotplug the VIF, dynamically attaching it to the running VM\nRequires PV drivers to be installed on the VM",
+        "description": "Hotplug the VIF, dynamically attaching it to the running VM\nRequires PV drivers to be installed on the VM\n\nRequired privilege:\n- resource: vif, action: connect",
         "tags": [
           "vifs"
         ],
@@ -26816,6 +28150,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -26823,7 +28160,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Hot-unplug the VIF, dynamically detaching it from the running VM\nRequires PV drivers to be installed on the VM",
+        "description": "Hot-unplug the VIF, dynamically detaching it from the running VM\nRequires PV drivers to be installed on the VM\n\nRequired privilege:\n- resource: vif, action: disconnect",
         "tags": [
           "vifs"
         ],
@@ -27041,6 +28378,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -27048,7 +28388,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Create an empty VDI.",
+        "description": "Create an empty VDI.\n\nRequired privileges:\n- resource: sr, action: import:vdi (on the target SR)\n- resource: vdi, action: create",
         "tags": [
           "vdis"
         ],
@@ -27151,6 +28491,68 @@
           }
         ],
         "x-mcp-exposure": "allow"
+      },
+      "patch": {
+        "operationId": "UpdateVdi",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Partial update of a VDI. Only the fields present in the body are modified;\neverything else is left untouched.\n\nOperations are applied sequentially: if one fails, previously applied\nchanges are not rolled back.\n\n`size` is expressed in bytes and can only be increased: a VDI cannot be shrunk.\n\nRequired privilege per field provided in the body:\n- resource: vdi, action: update:&lt;field&gt;",
+        "tags": [
+          "vdis"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c77f9955-c1d2-4b39-aa1c-73cdb2dacb7e"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVdiRequestBody"
+              },
+              "example": {
+                "name_label": "my disk",
+                "name_description": "system disk",
+                "size": 10737418240
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
       },
       "delete": {
         "operationId": "DeleteVdi",
@@ -27589,6 +28991,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -27596,7 +29001,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Migrate a VDI to another SR.\n\nNote: After migration, the VDI will have a new ID. The new ID is returned in the response.",
+        "description": "Migrate a VDI to another SR.\n\nRequired privileges:\n- resource: vdi, action: migrate-send\n- resource: sr, action: migrate-receive (on the target SR)\n\nNote: After migration, the VDI will have a new ID. The new ID is returned in the response.",
         "tags": [
           "vdis"
         ],
@@ -27875,6 +29280,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -27882,7 +29290,7 @@
             "description": "Invalid format"
           }
         },
-        "description": "\nExport VDI-snapshot content",
+        "description": "Required privilege:\n- resource: vdi-snapshot, action: export\n\nExport VDI-snapshot content",
         "tags": [
           "vdis"
         ],
@@ -27906,7 +29314,7 @@
             "name": "format",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/Exclude_SUPPORTED_VDI_FORMAT.qcow2_"
+              "$ref": "#/components/schemas/SUPPORTED_VDI_FORMAT"
             }
           }
         ],
@@ -27964,10 +29372,14 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           }
         },
+        "description": "Required privilege:\n- resource: vdi-snapshot, action: read",
         "tags": [
           "vdis"
         ],
@@ -28001,10 +29413,14 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           }
         },
+        "description": "Required privilege:\n- resource: vdi-snapshot, action: delete",
         "tags": [
           "vdis"
         ],
@@ -28400,10 +29816,14 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           }
         },
+        "description": "Required privilege:\n- resource: vdi-snapshot, action: update:tags",
         "tags": [
           "vdis"
         ],
@@ -28446,10 +29866,14 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           }
         },
+        "description": "Required privilege:\n- resource: vdi-snapshot, action: update:tags",
         "tags": [
           "vdis"
         ],
@@ -28619,6 +30043,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -28626,7 +30053,7 @@
             "description": "Invalid parameters"
           }
         },
-        "description": "Create a VBD to attach a VDI to a VM",
+        "description": "Required privilege:\n- resource: vbd, action: create\n\nCreate a VBD to attach a VDI to a VM",
         "tags": [
           "vbds"
         ],
@@ -28755,11 +30182,14 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           }
         },
-        "description": "Delete a VBD\n\nRemoves the virtual block device, detaching the VDI from the VM.\nThe VDI itself is NOT deleted.",
+        "description": "Required privilege:\n- resource: vbd, action: delete\n\nDelete a VBD\n\nRemoves the virtual block device, detaching the VDI from the VM.\nThe VDI itself is NOT deleted.",
         "tags": [
           "vbds"
         ],
@@ -29172,6 +30602,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -29179,7 +30612,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Hotplug the VBD, dynamically attaching it to the running VM",
+        "description": "Required privilege:\n- resource: vbd, action: connect\n\nHotplug the VBD, dynamically attaching it to the running VM",
         "tags": [
           "vbds"
         ],
@@ -29240,6 +30673,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -29247,7 +30683,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Hot-unplug the VBD, dynamically detaching it from the running VM",
+        "description": "Required privilege:\n- resource: vbd, action: disconnect\n\nHot-unplug the VBD, dynamically detaching it from the running VM",
         "tags": [
           "vbds"
         ],
@@ -29438,6 +30874,9 @@
             "application/json": {
               "schema": {
                 "properties": {
+                  "username": {
+                    "type": "string"
+                  },
                   "permission": {
                     "type": "string",
                     "enum": [
@@ -29450,6 +30889,12 @@
                   },
                   "name": {
                     "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "firstname": {
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -29459,9 +30904,12 @@
                 "type": "object"
               },
               "example": {
+                "firstname": "Ada",
+                "lastname": "Lovelace",
                 "name": "new user",
                 "password": "password",
-                "permission": "none"
+                "permission": "none",
+                "username": "ada.lovelace"
               }
             }
           }
@@ -29491,8 +30939,11 @@
                         "7981ba62-c395-4546-bfa4-d1261653a77f"
                       ],
                       "name": "admin@admin.net",
+                      "firstname": "Ada",
+                      "lastname": "Lovelace",
                       "preferences": {},
-                      "id": "722d17b9-699b-49d2-8193-be1ac573d3de"
+                      "id": "722d17b9-699b-49d2-8193-be1ac573d3de",
+                      "username": "ada.lovelace"
                     }
                   }
                 }
@@ -29556,7 +31007,7 @@
             "description": "Resource already exists"
           }
         },
-        "description": "You cannot change your own `permission` (even with the right privilege)\n\nRequired privileges:\n- resource: user, action: update (grants all fields)\n- resource: user, action: update:name (if name is passed)\n- resource: user, action: update:password (if password is passed)\n- resource: user, action: update:permission (if permission is passed)\n- resource: user, action: update:preferences (if preferences is passed)",
+        "description": "You cannot change your own `permission` (even with the right privilege)\n\nRequired privileges:\n- resource: user, action: update (grants all fields)\n- resource: user, action: update:firstname (if firstname is passed)\n- resource: user, action: update:lastname (if lastname is passed)\n- resource: user, action: update:name (if name is passed)\n- resource: user, action: update:password (if password is passed)\n- resource: user, action: update:permission (if permission is passed)\n- resource: user, action: update:preferences (if preferences is passed)\n- resource: user, action: update:username (if username is passed)",
         "tags": [
           "users"
         ],
@@ -30783,6 +32234,87 @@
           }
         ],
         "x-mcp-exposure": "allow"
+      },
+      "post": {
+        "operationId": "CreateSr",
+        "responses": {
+          "201": {
+            "description": "Resource created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "id": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          },
+          "501": {
+            "description": "Not implemented"
+          }
+        },
+        "description": "Create a storage repository (SR) on the given host.\n\n`device_config` is passed as-is to XAPI and its keys depend on `SR_type`\n(e.g. nfs: `{ server, serverpath }`, smb: `{ server, username, password }`,\nlvmoiscsi: `{ target, targetIQN, SCSIid }`).\n\n`shared` is computed from `SR_type`: network/SAN backed SRs are shared, local ones are not.\n\nXOSTOR (`SR_type: \"linstor\"`) creation is not supported yet: such requests fail with `501 Not Implemented`.\n\nRequired privilege:\n- resource: sr, action: create",
+        "tags": [
+          "srs"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSrBody"
+              },
+              "example": {
+                "hostId": "f8b8d2a5-7d40-a104-efc6-fb797b58f258",
+                "name_label": "NFS store",
+                "SR_type": "nfs",
+                "device_config": {
+                  "server": "10.0.0.1",
+                  "serverpath": "/data"
+                }
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
       }
     },
     "/srs/{id}": {
@@ -31425,6 +32957,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -31435,6 +32970,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: sr, action: reclaim-space",
         "tags": [
           "srs"
         ],
@@ -31495,6 +33031,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -31505,6 +33044,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: sr, action: scan",
         "tags": [
           "srs"
         ],
@@ -31565,6 +33105,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -31575,6 +33118,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: sr, action: forget",
         "tags": [
           "srs"
         ],
@@ -32122,6 +33666,9 @@
           },
           "409": {
             "description": "The server is already connected"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
         "description": "Required privilege:\n- resource: server, action: connect",
@@ -33491,6 +35038,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -33501,6 +35051,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privileges:\n- resource: pool, action: create:network\n- resource: network, action: create",
         "tags": [
           "networks",
           "pools"
@@ -33586,6 +35137,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -33596,6 +35150,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privileges:\n- resource: pool, action: create:network\n- resource: network, action: create",
         "tags": [
           "networks",
           "pools"
@@ -33744,9 +35299,12 @@
           },
           "404": {
             "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
           }
         },
-        "description": "Required privilege:\n- resource: pool, action: rolling-reboot",
+        "description": "Required privilege:\n- resource: pool, action: rolling-reboot\n\nSet `shutdownPinnedVms` to `true` to shut down VMs that cannot be migrated (PCI passthrough, vGPU, SR-IOV VIF)\nbefore their host reboots and start them again on it afterwards. Without it, such VMs make the action fail\nwith an `incorrect state` error listing their UUIDs.",
         "tags": [
           "pools"
         ],
@@ -33774,6 +35332,20 @@
             }
           }
         ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollingPoolActionBody"
+              },
+              "example": {
+                "bypassBackupCheck": false,
+                "shutdownPinnedVms": true
+              }
+            }
+          }
+        },
         "x-mcp-exposure": "confirm"
       }
     },
@@ -33812,9 +35384,12 @@
           },
           "404": {
             "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
           }
         },
-        "description": "Required privilege:\n- resource: pool, action: rolling-update",
+        "description": "Required privilege:\n- resource: pool, action: rolling-update\n\nSet `shutdownPinnedVms` to `true` to shut down VMs that cannot be migrated (PCI passthrough, vGPU, SR-IOV VIF)\nbefore their host reboots and start them again on it afterwards. Without it, such VMs make the action fail\nwith an `incorrect state` error listing their UUIDs.\n\nA pool whose previous rolling pool update is still running is refused with an `incorrect state` error.\n\nOn a pool whose master runs XCP-ng or XenServer 8.4+, a master already up to date while another host is not\nmeans the pool was left partially updated, for example by an interrupted rolling pool update: set\n`acceptCurrentStateAsBaseline` to `true` to start from that state, otherwise the action fails with an\n`incorrect state` error listing the outdated hosts. Such a pool whose previous rolling pool update was left\nincomplete is refused with an `incorrect state` error as well. Older XenServer and Citrix Hypervisor pools are\nrefused in neither case.",
         "tags": [
           "pools"
         ],
@@ -33842,6 +35417,20 @@
             }
           }
         ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollingPoolUpdateBody"
+              },
+              "example": {
+                "bypassBackupCheck": false,
+                "shutdownPinnedVms": true
+              }
+            }
+          }
+        },
         "x-mcp-exposure": "confirm"
       }
     },
@@ -36449,6 +38038,214 @@
         "x-mcp-exposure": "allow"
       }
     },
+    "/pools/{id}/rolling_update_recovery": {
+      "get": {
+        "operationId": "GetRollingUpdateRecovery",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolRollingUpdateRecovery"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "runId": "5cea4373-05a7-47ff-9bd8-fea54a37dd63",
+                      "poolId": "355ee47d-ff4c-4924-3db2-fd86ae629676",
+                      "status": "interrupted",
+                      "startedAt": "2026-08-31T14:02:11.000Z",
+                      "updatedAt": "2026-08-31T14:20:03.000Z",
+                      "interruptedAt": "2026-08-31T14:18:47.000Z",
+                      "taskId": "0mf2gtitq",
+                      "variant": "xcp",
+                      "hostOrder": [
+                        "b61a5c92-700e-4966-a13b-00633f03eea8",
+                        "46522969-d891-4c48-a839-316b767b7b7b"
+                      ],
+                      "hosts": {
+                        "b61a5c92-700e-4966-a13b-00633f03eea8": {
+                          "status": "running",
+                          "steps": {
+                            "evacuate": {
+                              "status": "observed-succeeded",
+                              "startedAt": "2026-08-31T14:02:20.000Z",
+                              "finishedAt": "2026-08-31T14:04:01.000Z"
+                            },
+                            "update": {
+                              "status": "observed-succeeded",
+                              "startedAt": "2026-08-31T14:04:01.000Z",
+                              "finishedAt": "2026-08-31T14:07:12.000Z"
+                            },
+                            "reboot": {
+                              "status": "observed-succeeded",
+                              "startedAt": "2026-08-31T14:07:12.000Z",
+                              "finishedAt": "2026-08-31T14:12:44.000Z"
+                            },
+                            "enable": {
+                              "status": "observed-succeeded",
+                              "finishedAt": "2026-08-31T14:12:44.000Z"
+                            },
+                            "restoreVms": {
+                              "status": "pending"
+                            }
+                          },
+                          "lastError": null
+                        },
+                        "46522969-d891-4c48-a839-316b767b7b7b": {
+                          "status": "running",
+                          "steps": {
+                            "evacuate": {
+                              "status": "running",
+                              "startedAt": "2026-08-31T14:12:50.000Z"
+                            },
+                            "update": {
+                              "status": "pending"
+                            },
+                            "reboot": {
+                              "status": "pending"
+                            },
+                            "enable": {
+                              "status": "pending"
+                            },
+                            "restoreVms": {
+                              "status": "pending"
+                            }
+                          },
+                          "lastError": null
+                        }
+                      },
+                      "lastError": null,
+                      "haltedPinnedVms": {
+                        "883b6265-6d54-c48b-6a24-4b0e6d88801f": "b61a5c92-700e-4966-a13b-00633f03eea8"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Recovery status of an incomplete rolling pool update: run and per-host\nstep statuses, last error, pinned VMs still halted. 404 when the last\nrolling pool update completed successfully (no recovery needed), or when\nthe pool's master does not run XCP-ng or XenServer 8.4+ (no recovery\nrecord is kept for those pools).\n\nRequired privilege:\n- resource: pool, action: rolling-update",
+        "tags": [
+          "pools"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "355ee47d-ff4c-4924-3db2-fd86ae629676"
+          }
+        ],
+        "x-mcp-exposure": "allow"
+      }
+    },
+    "/pools/{id}/actions/finalize_rolling_update": {
+      "post": {
+        "operationId": "FinalizeRollingUpdate",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
+          }
+        },
+        "description": "Close the record of an incomplete rolling pool update, once the pool has been reviewed.\n\nRefused with an `incorrect state` error listing what the update changed and did not restore (HA, auto power-on,\nWLB, load balancer, backup schedules, disabled hosts, displaced or halted VMs) while any item remains, or when\nthe record cannot be read. Displaced VMs alone do not refuse it, they are only listed in the task. Set `force` to `true` to close it anyway: the items are abandoned and listed in the\ntask, nothing is restored nor changed in the pool. 404 when the pool has no record.\n\nRequired privilege:\n- resource: pool, action: rolling-update",
+        "tags": [
+          "pools"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "355ee47d-ff4c-4924-3db2-fd86ae629676"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinalizeRollingUpdateBody"
+              },
+              "example": {
+                "force": false
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
+      }
+    },
     "/pools/{id}/messages": {
       "get": {
         "operationId": "GetPoolMessages",
@@ -36830,6 +38627,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -36840,7 +38640,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Reconfigure the management interface for all hosts in the pool to use the given network.\n\nEach host in the pool will switch their management interface to a PIF on the specified network.\nThe PIFs on the target network must already have IP addresses configured.",
+        "description": "Required privilege:\n- resource: pif, action: update:management\n\nReconfigure the management interface for all hosts in the pool to use the given network.\n\nEach host in the pool will switch their management interface to a PIF on the specified network.\nThe PIFs on the target network must already have IP addresses configured.",
         "tags": [
           "pools"
         ],
@@ -36890,6 +38690,104 @@
           }
         },
         "x-mcp-exposure": "confirm"
+      }
+    },
+    "/pools/{id}/actions/add_host": {
+      "post": {
+        "operationId": "AddHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privileges:\n- resource: pool, action: add-host\n- resource: host, action: join-pool\n\nAdd a host to the pool.",
+        "tags": [
+          "pools"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "355ee47d-ff4c-4924-3db2-fd86ae629676"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "force": {
+                    "type": "boolean"
+                  },
+                  "host": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "host"
+                ],
+                "type": "object"
+              },
+              "example": {
+                "host": "c787b75c-3e0d-70fa-d0c3-cbfd382d7e33",
+                "force": "false"
+              }
+            }
+          }
+        }
       }
     },
     "/pifs": {
@@ -38004,6 +39902,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -38014,6 +39915,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: pbd, action: plug",
         "tags": [
           "pbds"
         ],
@@ -38074,6 +39976,9 @@
           "401": {
             "description": "Authentication required"
           },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Resource not found"
           },
@@ -38084,6 +39989,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
+        "description": "Required privilege:\n- resource: pbd, action: unplug",
         "tags": [
           "pbds"
         ],
@@ -46480,7 +48386,7 @@
             "description": "Internal server error, XenServer/XCP-ng error"
           }
         },
-        "description": "Required privileges:\n- resource: host, action: disable\n- resource: host, action: evacuate (if `evacuate: true`)\n\nDisable a host.\n\nSet `evacuate` to `true` to also evacuate all running VMs to other hosts in the pool.\n\nUse `vmIdsToForceMigrate` to unblock VMs whose migration is currently blocked (e.g. by `pool_migrate` or `migrate_send` blocked operations).\n\nUse `force` to ignore evacuation errors.",
+        "description": "Required privileges:\n- resource: host, action: disable\n- resource: host, action: evacuate (if `evacuate: true`)\n\nDisable a host.\n\nSet `autoEnable` to `true` to re-enable after a toolstack restart automatically\n\nSet `evacuate` to `true` to also evacuate all running VMs to other hosts in the pool.\n\nUse `vmIdsToForceMigrate` to unblock VMs whose migration is currently blocked (e.g. by `pool_migrate` or `migrate_send` blocked operations).\n\nUse `force` to ignore evacuation errors.",
         "tags": [
           "hosts"
         ],
@@ -46513,42 +48419,54 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "allOf": [
                   {
                     "properties": {
-                      "evacuate": {
-                        "type": "boolean",
-                        "enum": [
-                          false
-                        ],
-                        "nullable": false
+                      "autoEnable": {
+                        "type": "boolean"
                       }
                     },
                     "type": "object"
                   },
                   {
-                    "properties": {
-                      "vmIdsToForceMigrate": {
-                        "items": {
-                          "type": "string"
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "evacuate": {
+                            "type": "boolean",
+                            "enum": [
+                              false
+                            ],
+                            "nullable": false
+                          }
                         },
-                        "type": "array"
+                        "type": "object"
                       },
-                      "force": {
-                        "type": "boolean"
-                      },
-                      "evacuate": {
-                        "type": "boolean",
-                        "enum": [
-                          true
+                      {
+                        "properties": {
+                          "vmIdsToForceMigrate": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "force": {
+                            "type": "boolean"
+                          },
+                          "evacuate": {
+                            "type": "boolean",
+                            "enum": [
+                              true
+                            ],
+                            "nullable": false
+                          }
+                        },
+                        "required": [
+                          "evacuate"
                         ],
-                        "nullable": false
+                        "type": "object"
                       }
-                    },
-                    "required": [
-                      "evacuate"
-                    ],
-                    "type": "object"
+                    ]
                   }
                 ]
               },
@@ -46606,6 +48524,755 @@
         },
         "description": "Required privilege:\n- resource: host, action: enable\n\nEnable a host, taking it out of disabled state.",
         "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/hosts/{id}/actions/start": {
+      "post": {
+        "operationId": "StartHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: start\n\nStart a host.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/hosts/{id}/actions/clean_shutdown": {
+      "post": {
+        "operationId": "CleanShutdownHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: shutdown:clean\n\nShutdown a host.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "bypassEvacuate": {
+                    "type": "boolean",
+                    "description": "Shut down without evacuating running VMs first. Defaults to false."
+                  },
+                  "bypassBackupCheck": {
+                    "type": "boolean",
+                    "description": "Skip the backup safety check before shutting down. Defaults to false."
+                  }
+                },
+                "type": "object"
+              },
+              "example": {
+                "bypassBackupCheck": false,
+                "bypassEvacuate": false
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/clean_reboot": {
+      "post": {
+        "operationId": "CleanRebootHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: reboot:clean\n\nReboot a host by evacuating its VMs to other hosts first.\n\nChecks for active backup jobs and version compatibility before rebooting.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "bypassVersionCheck": {
+                    "type": "boolean",
+                    "description": "Skip the version/upgrade compatibility check before rebooting. Defaults to false."
+                  },
+                  "bypassBackupCheck": {
+                    "type": "boolean",
+                    "description": "Skip the backup safety check before rebooting. Defaults to false."
+                  },
+                  "force": {
+                    "type": "boolean",
+                    "description": "Force the reboot, ignoring evacuation errors. Defaults to false."
+                  }
+                },
+                "type": "object"
+              },
+              "example": {
+                "force": false,
+                "bypassBackupCheck": false,
+                "bypassVersionCheck": false
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/smart_reboot": {
+      "post": {
+        "operationId": "SmartRebootHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Feature unauthorized"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: reboot:smart\n\nReboot a host by suspending its VMs in place.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "bypassCurrentVmCheck": {
+                    "type": "boolean",
+                    "description": "Skip the check that blocks smart reboot when XOA is running on this host. Defaults to false."
+                  },
+                  "bypassBlockedSuspend": {
+                    "type": "boolean",
+                    "description": "Allow suspending VMs even if suspend is blocked. Defaults to false."
+                  },
+                  "bypassVersionCheck": {
+                    "type": "boolean",
+                    "description": "Skip the version/upgrade compatibility check before rebooting. Defaults to false."
+                  },
+                  "bypassBackupCheck": {
+                    "type": "boolean",
+                    "description": "Skip the backup safety check before rebooting. Defaults to false."
+                  }
+                },
+                "type": "object"
+              },
+              "example": {
+                "bypassBackupCheck": false,
+                "bypassVersionCheck": false,
+                "bypassBlockedSuspend": false,
+                "bypassCurrentVmCheck": false
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/restart_toolstack": {
+      "post": {
+        "operationId": "RestartHostToolstack",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: restart-toolstack\n\nRestart a host's toolstack. (requires the pool's HA to be disabled)",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "bypassBackupCheck": {
+                    "type": "boolean",
+                    "description": "Skip the backup safety check before restarting the toolstack. Defaults to false."
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/hosts/{id}/actions/emergency_shutdown": {
+      "post": {
+        "operationId": "EmergencyShutdownHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: shutdown:emergency\n\nShut down a host by disabling it, suspending its VMs in place, and powering off without migrating them.\n\nUnlike `clean_shutdown`, VMs are not evacuated to other hosts, they are suspended\non the same host (errors are ignored) before the host shuts down.\nNo backup check is performed.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/detach": {
+      "post": {
+        "operationId": "DetachHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: detach\n\nDetaches a host from its pool.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/forget": {
+      "post": {
+        "operationId": "ForgetHost",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: forget\n\nForgets a host, host must not be running.",
+        "tags": [
+          "hosts"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b61a5c92-700e-4966-a13b-00633f03eea8"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "deny"
+      }
+    },
+    "/hosts/{id}/actions/scan_pifs": {
+      "post": {
+        "operationId": "HostScanPifs",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "409": {
+            "description": "Incorrect state"
+          }
+        },
+        "description": "Required privilege:\n- resource: host, action: scan-pifs\n\nScan for physical interfaces on a host and create PIF objects to represent them. Host must be running.",
+        "tags": [
+          "pifs",
           "hosts"
         ],
         "security": [
@@ -46836,6 +49503,7 @@
                 "examples": {
                   "Example 1": {
                     "value": {
+                      "aclRoleIds": [],
                       "name": "group 1",
                       "users": [
                         "722d17b9-699b-49d2-8193-be1ac573d3de"
@@ -47330,6 +49998,123 @@
         "x-mcp-exposure": "allow"
       }
     },
+    "/groups/{id}/acl-roles": {
+      "get": {
+        "operationId": "GetGroupAclRoles",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendObjects_Partial_Unbrand_Exclude_XoAclRole._isTemplate-true_____"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      "/rest/v0/acl-roles/9cac02e2-f612-4b71-851e-d28b9c0cda88",
+                      "/rest/v0/acl-roles/784bd959-08de-4b26-b575-92ded5aef872"
+                    ]
+                  },
+                  "Example 2": {
+                    "value": [
+                      {
+                        "id": "9cac02e2-f612-4b71-851e-d28b9c0cda88",
+                        "name": "VMs read only",
+                        "isTemplate": true,
+                        "href": "/rest/v0/acl-roles/9cac02e2-f612-4b71-851e-d28b9c0cda88"
+                      },
+                      {
+                        "id": "784bd959-08de-4b26-b575-92ded5aef872",
+                        "name": "mra-test-read-only",
+                        "href": "/rest/v0/acl-roles/784bd959-08de-4b26-b575-92ded5aef872"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Returns all acl-roles that match the following privilege:\n- resource: acl-role, action: read",
+        "tags": [
+          "rbacs",
+          "groups"
+        ],
+        "security": [
+          {
+            "*": [
+              "acl"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "6c81b5e1-afc1-43ea-8f8d-939ceb5f3f90"
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "id,name,isTemplate"
+          },
+          {
+            "in": "query",
+            "name": "ndjson",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "markdown",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "name:read only"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            },
+            "example": 42
+          }
+        ],
+        "x-mcp-exposure": "allow"
+      }
+    },
     "/events": {
       "get": {
         "operationId": "OpenSseConnection",
@@ -47617,6 +50402,74 @@
           }
         ],
         "x-mcp-exposure": "allow"
+      },
+      "post": {
+        "operationId": "CreateBackupRepository",
+        "responses": {
+          "201": {
+            "description": "Resource created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "id": "677e50c5-8d8a-4c89-b1ac-e2f4593d0ebb"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          }
+        },
+        "description": "Required privilege:\n- resource: backup-repository, action: create",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Unbrand_Parameters_XoApp-at-createRemote__91_0_93__"
+              },
+              "example": {
+                "name": "NFS Remote",
+                "options": "vers=4",
+                "proxy": "722d17b9-699b-59d2-8193-be1ac573d3de",
+                "url": "nfs://192.168.100.225:/media/nfs"
+              }
+            }
+          }
+        }
       }
     },
     "/backup-repositories/{id}": {
@@ -47684,6 +50537,376 @@
           }
         ],
         "x-mcp-exposure": "allow"
+      },
+      "patch": {
+        "operationId": "UpdateBackupRepository",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          }
+        },
+        "description": "Required privileges:\n- resource: backup-repository, action: update (grants all fields)\n- resource: backup-repository, action: update:enabled (if enabled is passed)\n- resource: backup-repository, action: update:name (if name is passed)\n- resource: backup-repository, action: update:options (if options is passed)\n- resource: backup-repository, action: update:proxy (if proxy is passed)\n- resource: backup-repository, action: update:url (if url is passed)",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Unbrand_Parameters_XoApp-at-updateRemote__91_1_93__"
+              },
+              "example": {
+                "enabled": true,
+                "name": "NFS Remote",
+                "options": "vers=4",
+                "proxy": "722d17b9-699b-59d2-8193-be1ac573d3de",
+                "url": "nfs://192.168.100.225:/media/nfs"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/backup-repositories/{id}/actions/forget": {
+      "post": {
+        "operationId": "ForgetBackupRepository",
+        "responses": {
+          "204": {
+            "description": "No content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Forgets a backup repository configuration.\n\nA backup repository cannot be forgotten if it is referenced by any backup job (enabled or disabled).\n\nRequired privilege:\n- resource: backup-repository, action: forget",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/backup-repositories/{id}/health": {
+      "get": {
+        "operationId": "GetBackupRepositoryHealth",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnType_XoApp-at-pingRemote_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "success": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          }
+        },
+        "description": "Pings the backup-repository to check its health\n\nRequired privilege:\n- resource: backup-repository, action: read",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+          }
+        ],
+        "x-mcp-exposure": "allow"
+      }
+    },
+    "/backup-repositories/{id}/actions/benchmark": {
+      "post": {
+        "operationId": "BenchmarkBackupRepository",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_BenchmarkRepositoryResult_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  },
+                  "Example 2": {
+                    "value": {
+                      "success": true,
+                      "readRate": 7999965,
+                      "writeRate": 7767798
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Benchmark failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          },
+          "502": {
+            "description": "Backup repository unreachable"
+          }
+        },
+        "description": "Runs a benchmark for write and read speed on the Backup-repository.\nSaves the benchmark result on the BR and returns the results, speeds are in bytes/sec.\n502 if the BR cannot be reached, 400 if there was a problem during the benchmark with the error.\n\nRequired privilege:\n- resource: backup-repository, action: benchmark",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/backup-repositories/{id}/actions/reclaim-space": {
+      "post": {
+        "operationId": "ReclaimSpaceBackupRepository",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_ReclaimSpaceResult_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  },
+                  "Example 2": {
+                    "value": [
+                      {
+                        "vmUuid": "1dc9a1d4-65bc-4211-9529-4abbd0ff2072",
+                        "success": true,
+                        "merge": true,
+                        "size": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Reclaim space failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal server error, XenServer/XCP-ng error"
+          },
+          "502": {
+            "description": "Backup repository unreachable"
+          }
+        },
+        "description": "Reclaim space from disk when a backup doesnt have its metadata\n\nRequired privilege:\n- resource: backup-repository, action: reclaim-space",
+        "tags": [
+          "backup-repositories"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "c4284e12-37c9-7967-b9e8-83ef229c3e03"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "remove": {
+                    "type": "boolean"
+                  },
+                  "merge": {
+                    "type": "boolean"
+                  },
+                  "vmUuid": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "example": {
+                "vmUuid": "9d0d04f7-bb1f-8292-3294-17c6371827c5",
+                "merge": true,
+                "remove": true
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
       }
     },
     "/backup-logs": {
@@ -49120,6 +52343,187 @@
         "x-mcp-exposure": "allow"
       }
     },
+    "/backup-archives/{id}/actions/mount_live_disk": {
+      "post": {
+        "operationId": "MountLiveDisk",
+        "responses": {
+          "201": {
+            "description": "Resource created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BackupArchiveDiskMount"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "id": "6b1f0e9c2a7d4f83b5c1d9e0a4f76b28",
+                      "srUuid": "9f2d1c74-3b5a-4e18-9c60-1d7ae4f2b301",
+                      "vdiUuid": "c922ef3c-9d76-4482-87f8-a4da5849ee45",
+                      "iqn": "iqn.2026-07.tech.vates.xo:live-mount-6b1f0e9c2a7d4f83b5c1d9e0a4f76b28",
+                      "address": "192.168.0.1",
+                      "port": 44321
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_BackupArchiveDiskMount_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "422": {
+            "description": "Invalid parameters"
+          }
+        },
+        "description": "Restricted to administrators.\n\nServe one disk of this archive as a read-only iSCSI LUN and attach it to a host as an SR, so its\ncontent is readable without being restored. Nothing is copied: the disk is read from the backup\nrepository on demand.\n\nThe returned `id` is the `liveDiskId` to pass to `POST {id}/live_disks/{liveDiskId}/actions/unmount`.",
+        "tags": [
+          "backup-archives"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "231264c3-af43-4ec0-a3be-394c5b1fdbfc/xo-vm-backups/6ef7c09e-677b-1e6f-0546-7ab30413c61c/20250801T080832Z.json"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MountLiveDiskBody"
+              },
+              "example": {
+                "diskId": "/xo-vm-backups/6ef7c09e-677b-1e6f-0546-7ab30413c61c/vdis/8b650248-ddd6-4188-ad8b-c0502865ac6c/f1f3c902-dcaa-4ec6-943e-6162c9d85fb2/20250801T080832Z.vhd",
+                "hostId": "b61a5c92-700e-4966-a13b-00633f03eea8"
+              }
+            }
+          }
+        },
+        "x-mcp-exposure": "confirm"
+      }
+    },
+    "/backup-archives/{id}/live_disks/{liveDiskId}/actions/unmount": {
+      "post": {
+        "operationId": "UnmountLiveDisk",
+        "responses": {
+          "202": {
+            "description": "Action executed asynchronously",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateActionReturnType_void_"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "taskId": "0m7kl0j9l"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Restricted to administrators.\n\nDetach a disk mounted by `POST {id}/actions/mount_live_disk`: the SR is unplugged and forgotten, and the\niSCSI target is stopped.",
+        "tags": [
+          "backup-archives"
+        ],
+        "security": [
+          {
+            "*": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "231264c3-af43-4ec0-a3be-394c5b1fdbfc/xo-vm-backups/6ef7c09e-677b-1e6f-0546-7ab30413c61c/20250801T080832Z.json"
+          },
+          {
+            "in": "path",
+            "name": "liveDiskId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "6b1f0e9c2a7d4f83b5c1d9e0a4f76b28"
+          },
+          {
+            "in": "query",
+            "name": "sync",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "x-mcp-exposure": "confirm"
+      }
+    },
     "/alarms": {
       "get": {
         "operationId": "GetAlarms",
@@ -49500,7 +52904,24 @@
                     "value": {
                       "name": "mra-test-read-only",
                       "description": "Access the whole infra in read-only mode",
-                      "id": "784bd959-08de-4b26-b575-92ded5aef872"
+                      "id": "784bd959-08de-4b26-b575-92ded5aef872",
+                      "userIds": [
+                        "6b017bcf-99e4-40a2-bf64-bf723d6c1994"
+                      ],
+                      "groupIds": [],
+                      "privilegeIds": [
+                        "fe6c806d-c993-4144-9018-d3d0c057fbc1",
+                        "a4e0c8a4-0fe7-47e4-a630-06707b10e672",
+                        "bfce6c26-966c-4a59-a9ca-e11e66139850",
+                        "e759f285-de67-44bf-b030-158211b25504",
+                        "b086d21e-7fbd-46e7-9ae6-60ad77c905eb",
+                        "88d49d33-319a-4af2-866b-1835cda254e6",
+                        "bd59c0bc-2db5-4ccf-a50c-8be94e43324a",
+                        "9e3376ef-cc54-4480-b7b1-cc8b802ed8c0",
+                        "59026b9b-0f07-4735-92b1-fd98fb95306c",
+                        "e395bfc9-747c-43a5-a46d-6abd01a0e96e",
+                        "69fd4212-e0d5-4bac-b453-08377aba48f5"
+                      ]
                     }
                   }
                 }
@@ -50057,6 +53478,246 @@
           }
         ],
         "x-mcp-exposure": "confirm"
+      }
+    },
+    "/acl-roles/{id}/users": {
+      "get": {
+        "operationId": "GetAclRoleUsers",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendObjects_Partial_Unbrand_XoUser___"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      "/rest/v0/users/088124f3-41b6-4258-9653-6eedc7b46111",
+                      "/rest/v0/users/a8715f02-20e7-4881-8b02-28ce2260c39d"
+                    ]
+                  },
+                  "Example 2": {
+                    "value": [
+                      {
+                        "permission": "none",
+                        "name": "testName",
+                        "id": "088124f3-41b6-4258-9653-6eedc7b46111",
+                        "href": "/rest/v0/users/088124f3-41b6-4258-9653-6eedc7b46111"
+                      },
+                      {
+                        "permission": "none",
+                        "id": "a8715f02-20e7-4881-8b02-28ce2260c39d",
+                        "href": "/rest/v0/users/a8715f02-20e7-4881-8b02-28ce2260c39d"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Returns all users that match the following privilege:\n- resource: user, action: read",
+        "tags": [
+          "users",
+          "rbacs"
+        ],
+        "security": [
+          {
+            "*": [
+              "acl"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "426622cc-b2db-4545-a2f0-6ec47b3a6450"
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "permission,name,id"
+          },
+          {
+            "in": "query",
+            "name": "ndjson",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "markdown",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "permission:none"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            },
+            "example": 42
+          }
+        ],
+        "x-mcp-exposure": "allow"
+      }
+    },
+    "/acl-roles/{id}/groups": {
+      "get": {
+        "operationId": "GetAclRoleGroups",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendObjects_Partial_Unbrand_XoGroup___"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      "/rest/v0/groups/7d98fee4-3357-41a7-ac3f-9124212badb7",
+                      "/rest/v0/groups/7981ba62-c395-4546-bfa4-d1261653a77f"
+                    ]
+                  },
+                  "Example 2": {
+                    "value": [
+                      {
+                        "name": "group 1",
+                        "id": "7d98fee4-3357-41a7-ac3f-9124212badb7",
+                        "users": [
+                          "722d17b9-699b-49d2-8193-be1ac573d3de"
+                        ],
+                        "href": "/rest/v0/groups/7d98fee4-3357-41a7-ac3f-9124212badb7"
+                      },
+                      {
+                        "name": "group 2",
+                        "id": "7981ba62-c395-4546-bfa4-d1261653a77f",
+                        "users": [
+                          "722d17b9-699b-49d2-8193-be1ac573d3de",
+                          "088124f3-41b6-4258-9653-6eedc7b46111"
+                        ],
+                        "href": "/rest/v0/groups/7981ba62-c395-4546-bfa4-d1261653a77f"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Resource not found"
+          }
+        },
+        "description": "Returns all groups that match the following privilege:\n- resource: group, action: read",
+        "tags": [
+          "groups",
+          "rbacs"
+        ],
+        "security": [
+          {
+            "*": [
+              "acl"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "426622cc-b2db-4545-a2f0-6ec47b3a6450"
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "name,id,users"
+          },
+          {
+            "in": "query",
+            "name": "ndjson",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "markdown",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "users:length:>0"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            },
+            "example": 42
+          }
+        ],
+        "x-mcp-exposure": "allow"
       }
     },
     "/acl-privileges": {
@@ -50639,7 +54300,7 @@
             "name": "format",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/Exclude_SUPPORTED_VDI_FORMAT.qcow2_"
+              "$ref": "#/components/schemas/SUPPORTED_VDI_FORMAT"
             }
           }
         ],
@@ -50725,6 +54386,879 @@
           "docs"
         ],
         "x-mcp-exposure": "deny"
+      }
+    },
+    "/plugins/ipmi-sensors/hosts/{id}/ipmi": {
+      "get": {
+        "tags": [
+          "ipmi-sensors",
+          "hosts",
+          "external"
+        ],
+        "description": "Get the IPMI inventory of a host: product context and the raw sensor list.\n\nRequired privilege:\n- resource: host, action: read",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "5b2c9e6a-1d3f-4c7b-9f2e-8a1b0c4d5e6f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Raw IPMI sensor inventory with product context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productName": {
+                      "type": "string",
+                      "example": "poweredge r640"
+                    },
+                    "systemManufacturer": {
+                      "type": "string",
+                      "example": "dell inc."
+                    },
+                    "sensors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "Inlet Temp"
+                          },
+                          "value": {
+                            "type": "string",
+                            "example": "23"
+                          },
+                          "event": {
+                            "type": "string",
+                            "example": "ok"
+                          },
+                          "dataType": {
+                            "type": "string",
+                            "enum": [
+                              "totalPower",
+                              "outletTemp",
+                              "bmcStatus",
+                              "inletTemp",
+                              "cpuTemp",
+                              "fanStatus",
+                              "fanSpeed",
+                              "psuStatus",
+                              "psuPower",
+                              "ip",
+                              "unknown"
+                            ],
+                            "example": "inletTemp"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "value",
+                          "event",
+                          "dataType"
+                        ]
+                      },
+                      "example": [
+                        {
+                          "name": "Inlet Temp",
+                          "value": "23",
+                          "event": "ok",
+                          "dataType": "inletTemp"
+                        },
+                        {
+                          "name": "Fan1",
+                          "value": "4800",
+                          "event": "ok",
+                          "dataType": "fanSpeed"
+                        },
+                        {
+                          "name": "Pwr Consumption",
+                          "value": "140",
+                          "event": "ok",
+                          "dataType": "totalPower"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "productName",
+                    "systemManufacturer",
+                    "sensors"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Host not found"
+          },
+          "503": {
+            "description": "The host has no available IPMI device"
+          }
+        }
+      }
+    },
+    "/plugins/audit/records": {
+      "get": {
+        "tags": [
+          "audit",
+          "external"
+        ],
+        "description": "List audit records, newest first",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "FYUYLGWX0uUv6uKyDpc6ftAJhrEB7iuf/BYefEbBLYc="
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "event:apiCall"
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "*"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of audit records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "type": "string",
+                            "example": "vm.start"
+                          },
+                          "params": {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "params"
+                        ]
+                      },
+                      "event": {
+                        "type": "string",
+                        "example": "apiCall"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "FYUYLGWX0uUv6uKyDpc6ftAJhrEB7iuf/BYefEbBLYc="
+                      },
+                      "previousId": {
+                        "type": "string",
+                        "example": "ArU8U8Ck2u4dBBHc3wj0/Ht+SsyU8YKb5RfnFqBLZ2Y="
+                      },
+                      "subject": {
+                        "type": "object",
+                        "properties": {
+                          "userId": {
+                            "type": "string",
+                            "example": "2f8f6c95-2fb7-4b5c-9b6f-8f4e7b6a1c3d"
+                          },
+                          "userIp": {
+                            "type": "string",
+                            "example": "192.168.0.1"
+                          },
+                          "userName": {
+                            "type": "string",
+                            "example": "admin@admin.net"
+                          }
+                        },
+                        "required": [
+                          "userId",
+                          "userIp",
+                          "userName"
+                        ]
+                      },
+                      "time": {
+                        "type": "number",
+                        "example": 1699000000000
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "event",
+                      "id",
+                      "previousId",
+                      "subject",
+                      "time"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/audit/records/{id}": {
+      "get": {
+        "tags": [
+          "audit",
+          "external"
+        ],
+        "description": "Get a single audit record by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "FYUYLGWX0uUv6uKyDpc6ftAJhrEB7iuf/BYefEbBLYc="
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The audit record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "method": {
+                          "type": "string",
+                          "example": "vm.start"
+                        },
+                        "params": {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      },
+                      "required": [
+                        "method",
+                        "params"
+                      ]
+                    },
+                    "event": {
+                      "type": "string",
+                      "example": "apiCall"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "FYUYLGWX0uUv6uKyDpc6ftAJhrEB7iuf/BYefEbBLYc="
+                    },
+                    "previousId": {
+                      "type": "string",
+                      "example": "ArU8U8Ck2u4dBBHc3wj0/Ht+SsyU8YKb5RfnFqBLZ2Y="
+                    },
+                    "subject": {
+                      "type": "object",
+                      "properties": {
+                        "userId": {
+                          "type": "string",
+                          "example": "2f8f6c95-2fb7-4b5c-9b6f-8f4e7b6a1c3d"
+                        },
+                        "userIp": {
+                          "type": "string",
+                          "example": "192.168.0.1"
+                        },
+                        "userName": {
+                          "type": "string",
+                          "example": "admin@admin.net"
+                        }
+                      },
+                      "required": [
+                        "userId",
+                        "userIp",
+                        "userName"
+                      ]
+                    },
+                    "time": {
+                      "type": "number",
+                      "example": 1699000000000
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "event",
+                    "id",
+                    "previousId",
+                    "subject",
+                    "time"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No record found for this ID"
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/networks/{id}/actions/add_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Add a traffic rule to a network.\n\nRequired privilege:\n - resource: network, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule added successfully"
+          },
+          "404": {
+            "description": "No network found for this ID"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "allow": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "direction": {
+                    "type": "string",
+                    "example": "to"
+                  },
+                  "ipRange": {
+                    "type": "string",
+                    "example": "192.168.0.0/24"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "example": "tcp"
+                  },
+                  "port": {
+                    "type": "number",
+                    "example": 443
+                  }
+                },
+                "required": [
+                  "allow",
+                  "direction",
+                  "ipRange",
+                  "protocol"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/networks/{id}/actions/delete_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Delete a traffic rule from a network.\n\nRequired privilege:\n - resource: network, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule deleted successfully"
+          },
+          "404": {
+            "description": "No network found for this ID, or rule not found"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "allow": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "direction": {
+                    "type": "string",
+                    "example": "to"
+                  },
+                  "ipRange": {
+                    "type": "string",
+                    "example": "192.168.0.0/24"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "example": "tcp"
+                  },
+                  "port": {
+                    "type": "number",
+                    "example": 443
+                  }
+                },
+                "required": [
+                  "allow",
+                  "direction",
+                  "ipRange",
+                  "protocol"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/networks/{id}/actions/update_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Update a rule on a network: `oldRule` identifies the rule to update and must be given in full, `newRule` is a partial update where a field set to `null` is removed from the rule.\n\nRequired privilege:\n - resource: network, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule updated successfully"
+          },
+          "404": {
+            "description": "Old rule does not exist on this network"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldRule": {
+                    "type": "object",
+                    "properties": {
+                      "allow": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "direction": {
+                        "type": "string",
+                        "example": "to"
+                      },
+                      "ipRange": {
+                        "type": "string",
+                        "example": "192.168.0.0/24"
+                      },
+                      "protocol": {
+                        "type": "string",
+                        "example": "tcp"
+                      },
+                      "port": {
+                        "type": "number",
+                        "example": 443
+                      }
+                    },
+                    "required": [
+                      "allow",
+                      "direction",
+                      "ipRange",
+                      "protocol"
+                    ]
+                  },
+                  "newRule": {
+                    "type": "object",
+                    "properties": {
+                      "allow": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "direction": {
+                        "type": "string",
+                        "example": "to"
+                      },
+                      "ipRange": {
+                        "type": "string",
+                        "example": "10.0.0.0/8"
+                      },
+                      "protocol": {
+                        "type": "string",
+                        "example": "tcp"
+                      },
+                      "port": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "example": 80
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "oldRule",
+                  "newRule"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/vifs/{id}/actions/add_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Add a traffic rule to a VIF.\n\nRequired privilege:\n - resource: vif, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule added successfully"
+          },
+          "404": {
+            "description": "No VIF found for this ID"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "allow": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "direction": {
+                    "type": "string",
+                    "example": "to"
+                  },
+                  "ipRange": {
+                    "type": "string",
+                    "example": "192.168.0.0/24"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "example": "tcp"
+                  },
+                  "port": {
+                    "type": "number",
+                    "example": 443
+                  }
+                },
+                "required": [
+                  "allow",
+                  "direction",
+                  "ipRange",
+                  "protocol"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/vifs/{id}/actions/delete_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Delete a traffic rule from a VIF.\n\nRequired privilege:\n - resource: vif, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule deleted successfully"
+          },
+          "404": {
+            "description": "No VIF found for this ID, or rule not found"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "allow": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "direction": {
+                    "type": "string",
+                    "example": "to"
+                  },
+                  "ipRange": {
+                    "type": "string",
+                    "example": "192.168.0.0/24"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "example": "tcp"
+                  },
+                  "port": {
+                    "type": "number",
+                    "example": 443
+                  }
+                },
+                "required": [
+                  "allow",
+                  "direction",
+                  "ipRange",
+                  "protocol"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugins/sdn-controller/vifs/{id}/actions/update_traffic_rule": {
+      "post": {
+        "tags": [
+          "sdn-controller",
+          "external"
+        ],
+        "description": "Update a rule on a VIF: `oldRule` identifies the rule to update and must be given in full, `newRule` is a partial update where a field set to `null` is removed from the rule.\n\nRequired privilege:\n - resource: vif, action: update:other_config",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "b97f4e69-d275-4b25-9dc9-c1ac4e9b3fa5"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Rule updated successfully"
+          },
+          "404": {
+            "description": "Old rule does not exist on this VIF"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldRule": {
+                    "type": "object",
+                    "properties": {
+                      "allow": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "direction": {
+                        "type": "string",
+                        "example": "to"
+                      },
+                      "ipRange": {
+                        "type": "string",
+                        "example": "192.168.0.0/24"
+                      },
+                      "protocol": {
+                        "type": "string",
+                        "example": "tcp"
+                      },
+                      "port": {
+                        "type": "number",
+                        "example": 443
+                      }
+                    },
+                    "required": [
+                      "allow",
+                      "direction",
+                      "ipRange",
+                      "protocol"
+                    ]
+                  },
+                  "newRule": {
+                    "type": "object",
+                    "properties": {
+                      "allow": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "direction": {
+                        "type": "string",
+                        "example": "to"
+                      },
+                      "ipRange": {
+                        "type": "string",
+                        "example": "10.0.0.0/8"
+                      },
+                      "protocol": {
+                        "type": "string",
+                        "example": "tcp"
+                      },
+                      "port": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "example": 80
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "oldRule",
+                  "newRule"
+                ]
+              }
+            }
+          }
+        }
       }
     }
   }
