@@ -1,6 +1,6 @@
 # Adding New Endpoints
 
-Custom endpoints override the generic Swagger CRUD routes. The current pattern is established by `POST /rest/v0/vdis`, `POST /rest/v0/vifs`, `POST /rest/v0/vbds`, pool VM creation, and the action endpoints under `vms`, `vbds`, `pbds`, and `srs`.
+Custom endpoints override the generic Swagger CRUD routes. The current pattern is established by `POST /rest/v0/vdis`, `POST /rest/v0/vifs`, `POST /rest/v0/vbds`, pool VM creation, `DELETE`/export of `vm-templates`, and the action endpoints under `vms`, `vbds`, `pbds`, and `srs`.
 
 ## 1. Define the body type in `src/types.ts`
 
@@ -93,7 +93,7 @@ export function registerCustomHandlers(app, dataStore) {
 
 - **Types**: Prefer `Parameters<Xapi['METHOD_NAME']>` so the mock stays aligned with the real API.
 - **Destructuring**: Pull remapped fields out separately from `...rest` before building the stored object.
-- **Validation**: Return `400` for missing required fields, `404` for missing referenced entities, `201` for successful creates, and `202` for async actions.
+- **Validation**: Return `400` for missing required fields, `404` for missing referenced entities, `201` for successful creates, `202` for async actions, `204` for synchronous deletes, and `409` for an incorrect state (e.g. deleting a default template).
 - **Error format**: Use `{ error: string, data: { id, type } }` consistently.
 - **Response format**: Create endpoints return `{ id }`; async actions return `{ taskId }`.
 - **Registration order**: Register custom handlers before the generic Swagger router so they win route matching.
