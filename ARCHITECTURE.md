@@ -21,7 +21,7 @@ sequenceDiagram
   Server->>Handlers: Register custom handlers first
   Handlers-->>Express: POST /vdis, /vifs, /vbds
   Handlers-->>Express: Pool VM create action
-  Handlers-->>Express: VM / VBD / PBD / SR actions
+  Handlers-->>Express: VM / VBD / PBD / SR actions, VM template delete/export
   Handlers-->>Express: Tag endpoints
   Handlers-->>Express: Task sub-resource lookup
   Server->>Routes: Register swagger routes

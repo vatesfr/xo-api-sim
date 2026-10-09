@@ -111,6 +111,8 @@ Custom handlers currently exist for:
 - `POST /rest/v0/vbds`
 - `POST /rest/v0/pools/:id/actions/create_vm`
 - `POST /rest/v0/vms/:id/actions/:action`
+- `DELETE /rest/v0/vm-templates/:id` (deletes the template's disks; default templates are refused with `409`)
+- `GET /rest/v0/vm-templates/:id.:format` (fake `xva`/`ova` export)
 - `POST /rest/v0/vbds/:id/actions/:action`
 - `POST /rest/v0/pbds/:id/actions/:action`
 - `POST /rest/v0/srs/:id/actions/:action`

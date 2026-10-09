@@ -259,7 +259,7 @@ async function* zeroFragments(diskSize: number, fragmentSize: number) {
   }
 }
 
-function createRandomRawStream(size: number) {
+export function createRandomRawStream(size: number) {
   async function* iterator() {
     let remaining = size;
     while (remaining > 0) {

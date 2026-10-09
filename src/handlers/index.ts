@@ -11,6 +11,7 @@ import { registerSRHandlers } from "./srs";
 import { registerPoolHandlers } from "./pools";
 import { registerVbdHandlers } from "./vbds";
 import { registerVmHandlers } from "./vms";
+import { registerVmTemplateHandlers } from "./vm-templates";
 import { registerEventHandlers } from "./events";
 import { registerDashboardHandlers } from "./dashboard";
 
@@ -31,4 +32,5 @@ export function registerCustomHandlers(
   registerPoolHandlers(app, dataStore);
   registerVbdHandlers(app, dataStore);
   registerVmHandlers(app, dataStore);
+  registerVmTemplateHandlers(app, dataStore);
 }
