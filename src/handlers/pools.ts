@@ -60,13 +60,18 @@ function createVm(
   }
 
   // Validate template exists
-  const tpl = dataStore.findById("vm-templates", body.template) as
-    | XoVmTemplate
-    | undefined;
+  // Default templates have a pool-prefixed id, so also match on uuid.
+  const tpl = dataStore
+    .getResource("vm-templates")
+    .find(
+      (t: XoVmTemplate) =>
+        t.id === body.template ||
+        (t.uuid === body.template && t.$pool === pool.id),
+    ) as XoVmTemplate | undefined;
   if (!tpl) {
     return res.status(404).json({
-      error: `no such VM template ${body.template}`,
-      data: { id: body.template, type: "VM_TEMPLATE" },
+      error: `no such VM-template ${body.template}`,
+      data: { id: body.template, type: "VM-template" },
     });
   }
 

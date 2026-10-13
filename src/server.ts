@@ -2,28 +2,25 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "../swagger.json";
 import type { MockDataStore } from "./data-store";
+import type { MockAuthConfig } from "./auth";
+import { loadAuthConfig } from "./auth";
+import { authMiddleware } from "./middleware/auth-middleware";
 import { registerCustomHandlers } from "./handlers";
 import { registerSwaggerRoutes } from "./routes/swagger-routes";
 
-export async function startServer(port: number, dataStore: MockDataStore) {
+export async function startServer(
+  port: number,
+  dataStore: MockDataStore,
+  authConfig: MockAuthConfig = loadAuthConfig(),
+) {
   const app = express();
 
   // Middleware
   app.use(express.json());
 
-  // Authentication middleware (protect only API routes)
-  const authToken = process.env.AUTH_TOKEN || "test-token";
-  app.use("/rest/v0", (req, res, next) => {
-    const auth = req.headers.authorization;
-    if (!auth) {
-      return res.status(401).json({ error: "Missing Authorization header" });
-    }
-    const [type, token] = auth.split(" ");
-    if (type !== "Bearer" || token !== authToken) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-    next();
-  });
+  // Optional token enforcement (no-op unless MOCK_AUTH_ENFORCE=true).
+  app.use(authMiddleware(dataStore, authConfig));
+
   // HTTP request tracing
   app.use((_req, _res, next) => {
     const start = Date.now();
@@ -40,7 +37,12 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   });
 
   // Swagger UI (swagger.json already has servers: [{url: '/rest/v0'}])
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec as any));
+  // @types/swagger-ui-express bundles express 5 types; cast to this app's express 4 handlers.
+  const swaggerServe = swaggerUi.serve as unknown as express.RequestHandler[];
+  const swaggerSetup = swaggerUi.setup(
+    swaggerSpec as any,
+  ) as unknown as express.RequestHandler;
+  app.use("/docs", ...swaggerServe, swaggerSetup);
   app.get("/swagger.json", (_req, res) => res.json(swaggerSpec));
 
   // Basic route for testing
@@ -49,7 +51,7 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   });
 
   // Register custom handlers before swagger routes so they win matching.
-  registerCustomHandlers(app, dataStore);
+  registerCustomHandlers(app, dataStore, authConfig);
 
   // Register all swagger routes
   registerSwaggerRoutes(app, dataStore);
@@ -68,6 +70,18 @@ export async function startServer(port: number, dataStore: MockDataStore) {
   );
 
   console.log("Server configured with swagger routes");
+  console.log(
+    `Auth: issuing tokens at POST /rest/v0/users/me/authentication_tokens ` +
+      `(credentials: ${authConfig.allowAny ? "any accepted" : [...authConfig.credentials.keys()].join(", ") || "none"}, ` +
+      `enforce: ${authConfig.enforce})`,
+  );
+  if (authConfig.enforce && authConfig.staticTokenIsDefault) {
+    console.warn(
+      `WARNING: auth is enforced but AUTH_TOKEN is unset, so the well-known ` +
+        `static token "${authConfig.staticToken}" grants admin access. ` +
+        `Set AUTH_TOKEN to a secret value before exposing this server.`,
+    );
+  }
 
   // Start the server
   return new Promise<void>((resolve, reject) => {
