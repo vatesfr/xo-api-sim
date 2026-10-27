@@ -1,4 +1,28 @@
-import type { Xapi, XoHost, XoVmTemplate, Branded } from "@vates/types";
+import type {
+  Xapi,
+  XoHost,
+  XoRecord,
+  XoVmTemplate,
+  Branded,
+} from "@vates/types";
+
+export type XoResourceType =
+  | Extract<XoRecord, { type: string }>["type"]
+  | "task"
+  | "user"
+  | "group"
+  | "schedule"
+  | "server"
+  | "proxy"
+  | "gui-route"
+  | "restore-log"
+  | "backup-repository"
+  | "backup-log"
+  | "backup-job"
+  | "backup-archive"
+  | "alarm"
+  | "acl-role"
+  | "acl-privilege";
 
 export type {
   Branded,
