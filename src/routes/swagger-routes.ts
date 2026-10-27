@@ -2,6 +2,7 @@ import type express from "express";
 import { v4 as uuid } from "uuid";
 import swagger from "../../swagger.json";
 import type { MockDataStore } from "../data-store";
+import type { XoResourceType } from "../types";
 import {
   applyLimit,
   applyFilter,
@@ -21,53 +22,80 @@ const EXCLUDED_RESOURCES = [
   "sms",
   "backup",
   "restore",
+  "plugins",
 ];
+
+// XO object type for each swagger resource (used in 404 payloads).
+// The data store collection name is always the resource name itself.
+const RESOURCE_TYPES: Record<string, XoResourceType> = {
+  "gui-routes": "gui-route",
+  vms: "VM",
+  "vm-templates": "VM-template",
+  "vm-snapshots": "VM-snapshot",
+  "vm-controllers": "VM-controller",
+  vifs: "VIF",
+  vdis: "VDI",
+  "vdi-snapshots": "VDI-snapshot",
+  vbds: "VBD",
+  users: "user",
+  tasks: "task",
+  srs: "SR",
+  servers: "server",
+  schedules: "schedule",
+  "restore-logs": "restore-log",
+  proxies: "proxy",
+  pools: "pool",
+  pifs: "PIF",
+  pgpus: "PGPU",
+  pcis: "PCI",
+  pbds: "PBD",
+  networks: "network",
+  messages: "message",
+  hosts: "host",
+  groups: "group",
+  "backup-repositories": "backup-repository",
+  "backup-logs": "backup-log",
+  "backup-jobs": "backup-job",
+  "backup-archives": "backup-archive",
+  alarms: "alarm",
+  "acl-roles": "acl-role",
+  "acl-privileges": "acl-privilege",
+};
+
+// Fail at startup if the swagger spec gains a resource we forgot to type.
+function assertResourceTypes(paths: Record<string, unknown>) {
+  for (const path of Object.keys(paths)) {
+    const resourceName = getResourceName(path);
+    if (
+      resourceName &&
+      !EXCLUDED_RESOURCES.includes(resourceName) &&
+      !RESOURCE_TYPES[resourceName]
+    ) {
+      throw new Error(`Missing type for Swagger resource ${resourceName}`);
+    }
+  }
+}
+
+function sendNotFound(
+  res: express.Response,
+  objectType: XoResourceType,
+  id: string,
+) {
+  return res.status(404).json({
+    error: `no such ${objectType} ${id}`,
+    data: { id, type: objectType },
+  });
+}
 
 // Map swagger path params to express params
 function mapPathParams(swaggerPath: string): string {
-  return swaggerPath.replace(/\{([^}]+)\}/g, ":$1");
+  return swaggerPath.replace(/\{([^{}]+)\}/g, ":$1");
 }
 
 // Extract resource name from path
 function getResourceName(path: string): string | null {
-  const match = path.match(/^\/([a-z][a-z0-9-]*)/);
+  const match = /^\/([a-z][a-z0-9-]*)/.exec(path);
   return match ? match[1] : null;
-}
-
-// Get collection name for a resource (already plural from swagger paths)
-function getCollectionName(resourceName: string): string {
-  // Resource names from swagger paths are already plural
-  // Map them to the collection names in our data store
-  const collectionMap: Record<string, string> = {
-    vms: "vms",
-    hosts: "hosts",
-    pools: "pools",
-    networks: "networks",
-    vdis: "vdis",
-    vbds: "vbds",
-    vifs: "vifs",
-    pifs: "pifs",
-    pbds: "pbds",
-    pcis: "pcis",
-    pgpus: "pgpus",
-    srs: "srs",
-    users: "users",
-    groups: "groups",
-    tasks: "tasks",
-    messages: "messages",
-    alarms: "alarms",
-    schedules: "schedules",
-    proxies: "proxies",
-    servers: "servers",
-    "acl-roles": "acl-roles",
-    "acl-privileges": "acl-privileges",
-    "vm-templates": "vm-templates",
-    "vm-snapshots": "vm-snapshots",
-    "vm-controllers": "vm-controllers",
-    "vdi-snapshots": "vdi-snapshots",
-  };
-
-  return collectionMap[resourceName] || resourceName;
 }
 
 // Register all routes from swagger spec
@@ -101,8 +129,7 @@ export function registerSwaggerRoutes(
     res: express.Response,
     resourceName: string,
   ) {
-    const collection = getCollectionName(resourceName);
-    let items = dataStore.getResource(collection);
+    let items = dataStore.getResource(resourceName);
 
     // Apply filter if present
     items = applyFilter(items, req);
@@ -121,14 +148,10 @@ export function registerSwaggerRoutes(
     res: express.Response,
     resourceName: string,
   ) {
-    const collection = getCollectionName(resourceName);
-    const item = dataStore.findById(collection, req.params.id);
+    const item = dataStore.findById(resourceName, req.params.id);
 
     if (!item) {
-      return res.status(404).json({
-        error: `no such ${resourceName} ${req.params.id}`,
-        data: { id: req.params.id, type: resourceName },
-      });
+      return sendNotFound(res, RESOURCE_TYPES[resourceName], req.params.id);
     }
 
     sendObject(res, req, applyFields([item], req)[0]);
@@ -140,7 +163,6 @@ export function registerSwaggerRoutes(
     res: express.Response,
     resourceName: string,
   ) {
-    const collection = getCollectionName(resourceName);
     const { id: clientId, ...body } = req.body;
     if (clientId !== undefined) {
       console.warn(
@@ -151,7 +173,7 @@ export function registerSwaggerRoutes(
       ...body,
       id: uuid(),
     };
-    const created = dataStore.addItem(collection, newItem);
+    const created = dataStore.addItem(resourceName, newItem);
     res.status(201).json(created);
   }
 
@@ -161,14 +183,10 @@ export function registerSwaggerRoutes(
     res: express.Response,
     resourceName: string,
   ) {
-    const collection = getCollectionName(resourceName);
-    const updated = dataStore.updateItem(collection, req.params.id, req.body);
+    const updated = dataStore.updateItem(resourceName, req.params.id, req.body);
 
     if (!updated) {
-      return res.status(404).json({
-        error: `no such ${resourceName} ${req.params.id}`,
-        data: { id: req.params.id, type: resourceName },
-      });
+      return sendNotFound(res, RESOURCE_TYPES[resourceName], req.params.id);
     }
 
     res.json(updated);
@@ -180,14 +198,10 @@ export function registerSwaggerRoutes(
     res: express.Response,
     resourceName: string,
   ) {
-    const collection = getCollectionName(resourceName);
-    const deleted = dataStore.deleteItem(collection, req.params.id);
+    const deleted = dataStore.deleteItem(resourceName, req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({
-        error: `no such ${resourceName} ${req.params.id}`,
-        data: { id: req.params.id, type: resourceName },
-      });
+      return sendNotFound(res, RESOURCE_TYPES[resourceName], req.params.id);
     }
 
     res.json({ success: true });
@@ -213,6 +227,7 @@ export function registerSwaggerRoutes(
   }
   const paths = (swagger as any).paths;
   const basePath = "/rest/v0";
+  assertResourceTypes(paths);
 
   Object.entries(paths).forEach(([path, methods]: [string, any]) => {
     // Skip excluded resources
